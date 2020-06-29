@@ -97,16 +97,16 @@ void mainfunction(TString sample) {
   ptmax.push_back(600.); ptmax.push_back(800.); ptmax.push_back(1200.);
 
   if ( (sample == "tt1L") || (sample=="ttbar1L") ) { std::cout << sample << "\n";
-    makeDataMCFrom2DTemplatesTop("particlenet_bb_t_2016/particlenet_tt1l_bb_t_2016_200to1200_templates.root","particlenet_tt1l_bb_t_2016","pt200to400","w",200,400);
+    makeDataMCFrom2DTemplatesTop("templates2D/particlenet_tt1l_bb_t_2016_200to1200_templates.root","particlenet_tt1l_bb_t_2016","pt200to400","w",200,400);
     for (int i0=0; i0<name.size(); ++i0) {
-      makeDataMCFrom2DTemplatesTop("particlenet_bb_t_2016/particlenet_tt1l_bb_t_2016_200to1200_templates.root","particlenet_tt1l_bb_t_2016",name[i0],"top",ptmin[i0],ptmax[i0]);
+      makeDataMCFrom2DTemplatesTop("templates2D/particlenet_tt1l_bb_t_2016_200to1200_templates.root","particlenet_tt1l_bb_t_2016",name[i0],"top",ptmin[i0],ptmax[i0]);
     } 
   }
   
   if (sample == "zqq") { std::cout << sample<< "\n";
     for (int i0=0; i0<name.size(); ++i0) {
       //      makeDataMCFrom2DTemplates("particlenet_bb_t_2016/particlenet_bb_t_2016_450to1200_templates.root","particlenet_bb_t_2016",name[i0],ptmin[i0],ptmax[i0]);
-      makeDataMCFrom2DTemplates("particlenet_bb_t_2016/particlenet_bb_t_2016_200to1200_templates.root","particlenet_bb_t_2016",name[i0],ptmin[i0],ptmax[i0]);
+      makeDataMCFrom2DTemplates("templates2D/particlenet_bb_t_2016_200to1200_templates.root","particlenet_bb_t_2016",name[i0],ptmin[i0],ptmax[i0]);
     } 
   }
   
