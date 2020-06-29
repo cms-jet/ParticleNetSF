@@ -60,93 +60,7 @@ TH1D *h_qcd_incl_mass_wgt = nullptr;
 float qcd_incl_mass_wgt(float x){ if (!h_qcd_incl_mass_wgt) return 1; return h_qcd_incl_mass_wgt->GetBinContent(h_qcd_incl_mass_wgt->FindFixBin(x)); }
 
 
-void testarea() {
 
-  setTDRStyle();
-  gROOT->SetBatch(false);
-  gStyle->SetOptStat(0);
-  gStyle->SetOptFit(1);
-  gStyle->SetPalette(1);
-  TH1::SetDefaultSumw2(kTRUE);
-
-  TString era = "2016";
-
-  TFile *f_v_ewknlo_wgt = TFile::Open("./corrections/kfactors.root" , "READONLY");
-  TFile *f_w_qcdnlo_wgt = TFile::Open("./corrections/WJets_QCD_NLO.root" , "READONLY");
-  TFile *f_z_qcdnlo_wgt = TFile::Open("./corrections/ZJets_QCD_NLO.root" , "READONLY");
-
-
-  // Z bosons
-  TH1D *h_z_qcdnlo = (TH1D*)f_v_ewknlo_wgt->Get("ZJets_012j_NLO/nominal");
-  TH1D *h_z_ewknlo = (TH1D*)f_v_ewknlo_wgt->Get("EWKcorr/Z");
-  TH1D *h_z_lo     = (TH1D*)f_v_ewknlo_wgt->Get("ZJets_LO/inv_pt");
-  h_z_ewknlo_wgt   = (TH1D*)h_z_ewknlo->Clone("h_z_ewknlo_wgt"); h_z_ewknlo_wgt->Divide(h_z_qcdnlo);
-  h_z_qcdnlo_wgt   = (TH1D*)f_z_qcdnlo_wgt->Get("Z_NLO_QCD_"+era);
-
-  // W bosons
-  TH1D *h_w_qcdnlo = (TH1D*)f_v_ewknlo_wgt->Get("WJets_012j_NLO/nominal");
-  TH1D *h_w_ewknlo = (TH1D*)f_v_ewknlo_wgt->Get("EWKcorr/W");
-  TH1D *h_w_lo     = (TH1D*)f_v_ewknlo_wgt->Get("WJets_LO/inv_pt");
-  h_w_ewknlo_wgt   = (TH1D*)h_w_ewknlo->Clone("h_w_ewknlo_wgt"); h_w_ewknlo_wgt->Divide(h_w_qcdnlo);
-  h_w_qcdnlo_wgt   = (TH1D*)f_w_qcdnlo_wgt->Get("W_NLO_QCD_"+era);
-
-  TString path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2016/20200505/";
-  TFile *f = TFile::Open(path+"z-qq_tree.root" , "READONLY");
-  TTree *t = (TTree*)f->Get("Events");
- 
-  float intLumi = 36.8;
-  ostringstream tmpLumi;
-  tmpLumi << intLumi;
-  TString lumi = tmpLumi.str();
-
-  TString c_match = "(fj_1_nbhadrons>=2)";
-  TString c_p = "(fj_1_ParticleNetMD_XbbVsQCD>=0.93)";
-  TString c_f = "(!"+c_p+")";
-  TString c_p_ext = "(fj_1_ParticleNetMD_XbbVsQCD>=0.54)";
-
-  TString cut_ = "(fj_1_pt>=200 && fj_1_pt<1200)";
-  TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && fj_1_pt<=1200. && fj_1_sdmass>50. && fj_1_sdmass<200. && ht>1000. && met<150000000. && nmb_fj_pihalf==0 && nb_away_fj>=0) && ("+cut_+")";
-  TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && fj_1_pt<=1200. && fj_1_sdmass>50. && fj_1_sdmass<200. && ht>200. && nlb_fj_pihalf>=0) && ("+cut_+")";
-  TString c_incl     = c_base+" && "+cut_;
-
-  TString brX = "fj_1_sdmass"; int binsX=30; float minX = 50;  float maxX=200;
-  //TString brX = "fj_1_sdmass"; int binsX=15; float minX = 50;  float maxX=200;
-  TString brY = "fj_1_pt";     int binsY=40;  float minY = 200; float maxY=1200;
-  
-  TH1D *h_histo       = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& fj_1_isZ<0.8 && ht>1000 && (fj_1_pt>=450 && fj_1_pt<500)",brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
-  h_histo->SetMarkerSize(0.);
-  TH2D *h_histo2d_ext = create2Dhisto("zboson2d_ext",t,lumi,c_base_ext+"&& fj_1_isZ<0.8 &&"+c_p_ext,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
-  TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& fj_1_isZ<0.8 && ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);
-  /*
-  TH1D *h_histo     = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& ht>1000 && "+cut_,brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
-  TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& 0==0 &&"+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
-  TH2D *h_histo2d_b = create2Dhisto("zboson2d_b",t,lumi,c_incl+"&& ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);  
-  */
-
-  //TH2D *h_histo2d_ext_b = correct_2dext_norm(h_histo2d, h_histo2d_ext);
-  h_histo2d_ext = correct_2dext_norm(h_histo2d, h_histo2d_ext);
-
-  TH1D *h1dfrom2d   = h_histo2d->ProjectionX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.),"e");
-  //TH1D *h1dfrom2d   = h_histo2d->ProfileX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(500.),"e");
-  h1dfrom2d->SetLineColor(2); h1dfrom2d->SetMarkerSize(0.);
-  TH1D *h1dfrom2d_ext = h_histo2d_ext->ProjectionX("h1dfrom2d_ext",h_histo2d_ext->GetYaxis()->FindBin(450.),h_histo2d_ext->GetYaxis()->FindBin(499.),"e");
-  h1dfrom2d_ext->SetLineColor(1); h1dfrom2d_ext->SetMarkerSize(0.);
-  //h1dfrom2d_ext->Scale(h_histo2d->Integral()/h1dfrom2d_ext->Integral());
-  //TH1D *h1dfrom2d_ext_b = h_histo2d_ext_b->ProjectionX("h1dfrom2d_ext_b",h_histo2d_ext_b->GetYaxis()->FindBin(450.),h_histo2d_ext_b->GetYaxis()->FindBin(499.),"e");
-  //h1dfrom2d_ext_b->SetLineColor(4); h1dfrom2d_ext_b->SetMarkerSize(0.);
-
-
-  std::cout << h_histo->Integral() << " " << h1dfrom2d->Integral() << " " << h1dfrom2d_ext->Integral() << " " << h_histo2d->Integral() <<  " " 
-	    << h_histo2d->Integral(1,30,h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.)) << " " 
-    
-	    << "\n";
-
-  TCanvas *c_ = new TCanvas("c_","c_",500,500);
-  h_histo->Draw("HIST E0");
-  h1dfrom2d_ext->Draw("HIST E0 sames");
-  h1dfrom2d->Draw("HIST E0 sames");
-  //h1dfrom2d_ext->Draw("HIST E0 sames");
-}
 
 
 void mainfunction(TString sample) {
@@ -174,6 +88,11 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
   if (era == "2016") { path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2016/20200505/"; }
   if (era == "2017") { path = "/eos/uscms/store/group/lpcjme/LGOutputs/20190522_softb_2017/"; }
   if (era == "2018") { path = "/eos/uscms/store/group/lpcjme/LGOutputs/20190522_softb_2018/"; }
+
+  // directory to store the templates
+  //  TString dirname1 = "particlenet_"+cat+"_"+wp+"_"+era;
+  TString dirname1 = "templates2D";
+  TString nameoutfile = "particlenet_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";   
 
   TFile *f_data  = TFile::Open(path+"jetht_tree.root" , "READONLY");
   TFile *f_qcd   = TFile::Open(path+"qcd-mg_tree.root" , "READONLY");
@@ -282,16 +201,7 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
   h_w_p    = correct_2dext_norm(h_w_p_i    , h_w_p   ); 
   h_w_m_p  = correct_2dext_norm(h_w_m_p_i  , h_w_m_p );
   h_w_um_p = correct_2dext_norm(h_w_um_p_i , h_w_um_p);
-  /*
-  float scale_w_p    = h_w_p_i->Integral()/h_w_p->Integral(); h_w_p->Scale(scale_w_p); 
-  float scale_w_m_p  = h_w_m_p_i->Integral()/h_w_m_p->Integral(); h_w_m_p->Scale(scale_w_m_p);
-  float scale_w_um_p = h_w_um_p_i->Integral()/h_w_um_p->Integral(); h_w_um_p->Scale(scale_w_um_p);
 
-  float scale_z_p    = h_z_p_i->Integral()/h_z_p->Integral(); h_z_p->Scale(scale_z_p);
-  //float scale_z_m_p  = h_z_m_p_i->Integral()/h_z_m_p->Integral(); //h_z_m_p->Scale(scale_z_m_p);
-  float scale_z_m_p  = h_z_m_p_i->Integral()/h_z_m_p->Integral(); h_z_m_p->Scale(scale_z_m_p);
-  float scale_z_um_p = h_z_um_p_i->Integral()/h_z_um_p->Integral(); h_z_um_p->Scale(scale_z_um_p);
-  */
 
   // create fail template
   TH2D *h_data_f   = create2Dhisto(name,t_data,lumi,c_incl+"&& ht>1000. && "+c_f,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_data_f",true);
@@ -322,17 +232,6 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
   h_w_m_f  = correct_2dext_norm(h_w_m_f_i  , h_w_m_f );
   h_w_um_f = correct_2dext_norm(h_w_um_f_i , h_w_um_f);
 
-  
- /*
-  float scale_w_f    = h_w_f_i->Integral()/h_w_f->Integral(); h_w_f->Scale(scale_w_f);
-  float scale_w_m_f  = h_w_m_f_i->Integral()/h_w_m_f->Integral(); h_w_m_f->Scale(scale_w_m_f); 
-  float scale_w_um_f = h_w_um_f_i->Integral()/h_w_um_f->Integral(); h_w_um_f->Scale(scale_w_um_f);
-  
-  float scale_z_f    = h_z_f_i->Integral()/h_z_f->Integral(); h_z_f->Scale(scale_z_f);
-  float scale_z_m_f  = h_z_m_f_i->Integral()/h_z_m_f->Integral(); h_z_m_f->Scale(scale_z_m_f); 
-  float scale_z_um_f = h_z_um_f_i->Integral()/h_z_um_f->Integral(); h_z_um_f->Scale(scale_z_um_f);
- */
-  
 
   // Cross check yields
   std::cout << "pass:\n";
@@ -386,12 +285,11 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
    
  }
  
-  // make dir
-  TString dirname1 = "particlenet_"+cat+"_"+wp+"_"+era;
+
+  // make dir to store the templates
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
 
-  TString nameoutfile = "particlenet_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates"; 
   TFile *fout = new TFile("./"+dirname1+"/"+nameoutfile+".root","RECREATE");
 
   h_data_p->Write("data_obs_pass"); 
@@ -759,8 +657,6 @@ TH1D *create1Dhisto(TString sample,TTree *tree,TString intLumi,TString cuts,TStr
   std::cout << "\n";
 
 
-
-
   TH1D *hTemp = new TH1D(name,name,bins,xmin,xmax); //hTemp->SetName(name);
   tree->Project(name,branch,cut);
 
@@ -780,3 +676,94 @@ TH1D *create1Dhisto(TString sample,TTree *tree,TString intLumi,TString cuts,TStr
 
   return hTemp;
 } //~ end of create1Dhisto
+
+
+
+void testarea() {
+
+  setTDRStyle();
+  gROOT->SetBatch(false);
+  gStyle->SetOptStat(0);
+  gStyle->SetOptFit(1);
+  gStyle->SetPalette(1);
+  TH1::SetDefaultSumw2(kTRUE);
+
+  TString era = "2016";
+
+  TFile *f_v_ewknlo_wgt = TFile::Open("./corrections/kfactors.root" , "READONLY");
+  TFile *f_w_qcdnlo_wgt = TFile::Open("./corrections/WJets_QCD_NLO.root" , "READONLY");
+  TFile *f_z_qcdnlo_wgt = TFile::Open("./corrections/ZJets_QCD_NLO.root" , "READONLY");
+
+
+  // Z bosons
+  TH1D *h_z_qcdnlo = (TH1D*)f_v_ewknlo_wgt->Get("ZJets_012j_NLO/nominal");
+  TH1D *h_z_ewknlo = (TH1D*)f_v_ewknlo_wgt->Get("EWKcorr/Z");
+  TH1D *h_z_lo     = (TH1D*)f_v_ewknlo_wgt->Get("ZJets_LO/inv_pt");
+  h_z_ewknlo_wgt   = (TH1D*)h_z_ewknlo->Clone("h_z_ewknlo_wgt"); h_z_ewknlo_wgt->Divide(h_z_qcdnlo);
+  h_z_qcdnlo_wgt   = (TH1D*)f_z_qcdnlo_wgt->Get("Z_NLO_QCD_"+era);
+
+  // W bosons
+  TH1D *h_w_qcdnlo = (TH1D*)f_v_ewknlo_wgt->Get("WJets_012j_NLO/nominal");
+  TH1D *h_w_ewknlo = (TH1D*)f_v_ewknlo_wgt->Get("EWKcorr/W");
+  TH1D *h_w_lo     = (TH1D*)f_v_ewknlo_wgt->Get("WJets_LO/inv_pt");
+  h_w_ewknlo_wgt   = (TH1D*)h_w_ewknlo->Clone("h_w_ewknlo_wgt"); h_w_ewknlo_wgt->Divide(h_w_qcdnlo);
+  h_w_qcdnlo_wgt   = (TH1D*)f_w_qcdnlo_wgt->Get("W_NLO_QCD_"+era);
+
+  TString path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2016/20200505/";
+  TFile *f = TFile::Open(path+"z-qq_tree.root" , "READONLY");
+  TTree *t = (TTree*)f->Get("Events");
+ 
+  float intLumi = 36.8;
+  ostringstream tmpLumi;
+  tmpLumi << intLumi;
+  TString lumi = tmpLumi.str();
+
+  TString c_match = "(fj_1_nbhadrons>=2)";
+  TString c_p = "(fj_1_ParticleNetMD_XbbVsQCD>=0.93)";
+  TString c_f = "(!"+c_p+")";
+  TString c_p_ext = "(fj_1_ParticleNetMD_XbbVsQCD>=0.54)";
+
+  TString cut_ = "(fj_1_pt>=200 && fj_1_pt<1200)";
+  TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && fj_1_pt<=1200. && fj_1_sdmass>50. && fj_1_sdmass<200. && ht>1000. && met<150000000. && nmb_fj_pihalf==0 && nb_away_fj>=0) && ("+cut_+")";
+  TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && fj_1_pt<=1200. && fj_1_sdmass>50. && fj_1_sdmass<200. && ht>200. && nlb_fj_pihalf>=0) && ("+cut_+")";
+  TString c_incl     = c_base+" && "+cut_;
+
+  TString brX = "fj_1_sdmass"; int binsX=30; float minX = 50;  float maxX=200;
+  //TString brX = "fj_1_sdmass"; int binsX=15; float minX = 50;  float maxX=200;
+  TString brY = "fj_1_pt";     int binsY=40;  float minY = 200; float maxY=1200;
+  
+  TH1D *h_histo       = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& fj_1_isZ<0.8 && ht>1000 && (fj_1_pt>=450 && fj_1_pt<500)",brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
+  h_histo->SetMarkerSize(0.);
+  TH2D *h_histo2d_ext = create2Dhisto("zboson2d_ext",t,lumi,c_base_ext+"&& fj_1_isZ<0.8 &&"+c_p_ext,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
+  TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& fj_1_isZ<0.8 && ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);
+  /*
+  TH1D *h_histo     = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& ht>1000 && "+cut_,brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
+  TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& 0==0 &&"+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
+  TH2D *h_histo2d_b = create2Dhisto("zboson2d_b",t,lumi,c_incl+"&& ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);  
+  */
+
+  //TH2D *h_histo2d_ext_b = correct_2dext_norm(h_histo2d, h_histo2d_ext);
+  h_histo2d_ext = correct_2dext_norm(h_histo2d, h_histo2d_ext);
+
+  TH1D *h1dfrom2d   = h_histo2d->ProjectionX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.),"e");
+  //TH1D *h1dfrom2d   = h_histo2d->ProfileX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(500.),"e");
+  h1dfrom2d->SetLineColor(2); h1dfrom2d->SetMarkerSize(0.);
+  TH1D *h1dfrom2d_ext = h_histo2d_ext->ProjectionX("h1dfrom2d_ext",h_histo2d_ext->GetYaxis()->FindBin(450.),h_histo2d_ext->GetYaxis()->FindBin(499.),"e");
+  h1dfrom2d_ext->SetLineColor(1); h1dfrom2d_ext->SetMarkerSize(0.);
+  //h1dfrom2d_ext->Scale(h_histo2d->Integral()/h1dfrom2d_ext->Integral());
+  //TH1D *h1dfrom2d_ext_b = h_histo2d_ext_b->ProjectionX("h1dfrom2d_ext_b",h_histo2d_ext_b->GetYaxis()->FindBin(450.),h_histo2d_ext_b->GetYaxis()->FindBin(499.),"e");
+  //h1dfrom2d_ext_b->SetLineColor(4); h1dfrom2d_ext_b->SetMarkerSize(0.);
+
+
+  std::cout << h_histo->Integral() << " " << h1dfrom2d->Integral() << " " << h1dfrom2d_ext->Integral() << " " << h_histo2d->Integral() <<  " " 
+	    << h_histo2d->Integral(1,30,h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.)) << " " 
+    
+	    << "\n";
+
+  TCanvas *c_ = new TCanvas("c_","c_",500,500);
+  h_histo->Draw("HIST E0");
+  h1dfrom2d_ext->Draw("HIST E0 sames");
+  h1dfrom2d->Draw("HIST E0 sames");
+  //h1dfrom2d_ext->Draw("HIST E0 sames");
+}
+
