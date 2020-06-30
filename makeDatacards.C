@@ -12,11 +12,11 @@ void makeDatacards(TString sample) {
   name.push_back("pt450to600"); name.push_back("pt600to800"); name.push_back("pt800to1200");
 
   if (sample=="zqq") { std::cout << sample << "\n";
-    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacard("../particlenet_sf",name[i0]); }  }
+    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacard("particlenet_sf",name[i0]); }  }
 
   if (sample=="tt1L" || sample=="ttbar1L") {
-    makeOneDatacardTop("../particlenet_sf","pt200to400","w");
-    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacardTop("../particlenet_sf",name[i0],"top"); } }
+    makeOneDatacardTop("particlenet_sf","pt200to400","w");
+    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacardTop("particlenet_sf",name[i0],"top"); } }
 
 }
 
@@ -24,7 +24,7 @@ void makeDatacards(TString sample) {
 
 void makeOneDatacard(std::string inputname, std::string name) {
 
-  std::ofstream out("./fitdir/datacard_"+(TString)name+".txt");
+  std::ofstream out("./"+(TString)inputname+"/fitdir/datacard_"+(TString)name+".txt");
   std::streambuf *coutbuf = std::cout.rdbuf();
   std::cout.rdbuf(out.rdbuf());
   
@@ -133,7 +133,7 @@ void makeOneDatacard(std::string inputname, std::string name) {
 
 void makeOneDatacardTop(std::string inputname, std::string name, TString sample) {
 
-  std::ofstream out("./fitdir/datacard_tt1l_"+(TString)name+".txt");
+  std::ofstream out("./"+(TString)inputname+"/fitdir/datacard_tt1l_"+(TString)name+".txt");
   std::streambuf *coutbuf = std::cout.rdbuf();
   std::cout.rdbuf(out.rdbuf());
   TString p2name;

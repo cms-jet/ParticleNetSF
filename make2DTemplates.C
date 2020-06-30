@@ -326,6 +326,10 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   if (era == "2017") { path = "/eos/uscms/store/group/lpcjme/LGOutputs/20190522_softb_2017/"; }
   if (era == "2018") { path = "/eos/uscms/store/group/lpcjme/LGOutputs/20190522_softb_2018/"; }
 
+  // directory to store the templates   
+  TString dirname1 = "templates2D";
+  TString nameoutfile = "particlenet_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
+
   TFile *f_data  = TFile::Open(path+"singlemu_tree.root"       , "READONLY");
   TFile *f_tt    = TFile::Open(path+"ttbar-powheg_tree.root" , "READONLY");
   TFile *f_st    = TFile::Open(path+"singletop_tree.root" , "READONLY");
@@ -456,11 +460,9 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
 }
  
   // make dir
-  TString dirname1 = "particlenet_"+cat+"_"+wp+"_"+era;
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
-
-  TString nameoutfile = "particlenet_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates"; 
+ 
   TFile *fout = new TFile("./"+dirname1+"/"+nameoutfile+".root","RECREATE");
 
   h_data_p->Write("data_obs_pass");
