@@ -1,5 +1,5 @@
 ## Create 2D histograms pT(jet) vs m(jet) from the trees
-# [this is to speed up the process]:
+ [this is to speed up the process]:
 
 `root [0] .L make2DTemplates.C` 
 
