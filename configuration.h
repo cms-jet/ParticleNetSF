@@ -36,7 +36,7 @@ namespace conf {
 
     algo      = "particlenetmd";
     score_def = jet_prefix+"ParticleNetMD_XbbVsQCD";
-    binsX = 20; minX = 15;  maxX = 200.;
+    binsX = 30; minX = 50;  maxX = 200.;
     binsY = 40; minY = 200; maxY = 1200.;
    
     // =================== end of area to modify - tune ===================== //
@@ -95,6 +95,13 @@ namespace conf {
     other.color       = 6;
  
   }   
+
+  TString convertFloatToTString(float input) {
+    ostringstream tmpInputStr;
+    tmpInputStr << input;
+    TString inputStr = tmpInputStr.str();
+    return inputStr;
+  }
 
 } 
 

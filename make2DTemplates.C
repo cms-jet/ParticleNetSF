@@ -300,11 +300,12 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   // Directory to store the templates   
   TString dirname1 = "templates2D";
   TString name0;
-  if (score.Contains("tau21DDT"))      { name0 = "tau21ddt"; }
-  if (score.Contains("DeepAK8_"))      { name0 = "dak8"; }
-  if (score.Contains("DeepAK8MD"))     { name0 = "dak8md"; }
-  if (score.Contains("DeepAK8DDT"))    { name0 = "dak8ddt"; }
-  if (score.Contains("ParticleNetMD")) { name0 = "particlenetmd"; }
+  if      (score.Contains("tau21DDT"))      { name0 = "tau21ddt"; }
+  else if (score.Contains("DeepAK8_"))      { name0 = "dak8"; }
+  else if (score.Contains("DeepAK8MD"))     { name0 = "dak8md"; }
+  else if (score.Contains("DeepAK8DDT"))    { name0 = "dak8ddt"; }
+  else if (score.Contains("ParticleNetMD")) { name0 = "particlenetmd"; }
+  else if (score.Contains("ParticleNet"))   { name0 = "particlenet"; }
   //TString nameoutfile = name0+"_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
   TString nameoutfile = conf::algo+"_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
   std::cout << " 2D templates name: " << nameoutfile << "\n";
@@ -319,8 +320,8 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   TString cut_ = "(passmetfilters && passMuTrig && n_ak8>=1 && ak8_1_pt>="+cutmin+" && ak8_1_pt<"+cutmax+")";
   //  TString c_base     = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_corr_sdmass>50. && ak8_1_corr_sdmass<200. && leptonicW-pt>100.) && ("+cut_+")";
   //  TString c_base_ext = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_corr_sdmass>50. && ak8_1_corr_sdmass<200. && leptonicW-pt>100.)";
-  TString c_base     = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_mass>30. && ak8_1_mass<250. && leptonicW_pt>150.) && ("+cut_+")";
-  TString c_base_ext = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_mass>30. && ak8_1_mass<250. && leptonicW_pt>150.)";
+  TString c_base     = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
+  TString c_base_ext = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
   TString c_incl     = c_base+" && "+cut_;
   
   TString c_p3 = "( (ak8_1_dr_fj_top_wqmax<0.8) && (ak8_1_dr_fj_top_b<0.8) )";
