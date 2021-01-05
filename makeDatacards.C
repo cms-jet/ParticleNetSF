@@ -1,34 +1,38 @@
 //#include <iostream>   // std::cout
 #include <string>     // std::string, std::stof
+#include "configuration.h"
+
 void makeOneDatacard(TString inputname, TString category, TString wp, std::string name_, TString sample, TString era);
 void makeOneDatacardTop(TString inputname, TString category, TString wp, TString name, TString sample, TString era);
 
 void makeDatacards(TString era, TString sample, TString category, TString wp) {
+  conf::configuration(sample);
 
-  std::vector<std::string> name;
-  // from ggH
-  //  name.push_back("pt200to450"); name.push_back("pt450to500"); name.push_back("pt500to550"); name.push_back("pt550to600"); name.push_back("pt600to675"); name.push_back("pt675to800"); name.push_back("pt800to1200");
-  name.push_back("pt200to450"); //name.push_back("pt450to600"); name.push_back("pt600to800"); name.push_back("pt800to1200");
-  //name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
-  if (sample=="zqq") { std::cout << sample << "\n";
-    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacard("particlenet_sf",category,wp,name[i0],sample,era); }  }
+  std::vector<TString> name  = conf::name;
+
+  if (sample=="zqq") { 
+    std::cout << sample << "\n";
+    for (int i0=0; i0<name.size(); ++i0) { 
+      makeOneDatacard("particlenet_sf",category,wp,(std::string)name[i0],sample,era); 
+    }  
+  }
   
-  if (sample == "tt1lw") { makeOneDatacardTop("particlenet_sf",category,wp,"pt200to450",sample,era); }
+  if (sample == "tt1lw") { 
+    makeOneDatacardTop("particlenet_sf",category,wp,"pt200to450",sample,era); 
+  }
 
   if (sample=="tt1L" || sample=="ttbar1L" || (sample=="ttbar1l") || (sample=="tt1l") ) {
-    //for (int i0=0; i0<name.size(); ++i0) { makeOneDatacardTop("particlenet_sf",name[i0],"top"); } }
-    for (int i0=0; i0<name.size(); ++i0) { 
-      //makeOneDatacardTop("dak8ddt_sf",category,wp,name[i0],sample,era);
-      makeOneDatacardTop("particlenet_sf",category,wp,name[i0],sample,era);
+    for (int i0=0; i0<name.size(); ++i0) {
+      makeOneDatacardTop(conf::algo+"_sf",category,wp,name[i0],sample,era);
     }
-    //    for (int i0=0; i0<name.size(); ++i0) { makeOneDatacardTop("tau21ddt_sf",category,wp,name[i0],sample,era); }
-    //for (int i0=0; i0<name.size(); ++i0) { makeOneDatacardTop("particlenet_sf","bb_l",name[i0],"top","2016"); } }
   }
+
 }
 
 
 void makeOneDatacard(TString inputname, TString category, TString wp, std::string name_, TString sample, TString era) {
 //void makeOneDatacard(TString inputname, TString category, TString wp, std::string name, TString sample, TString era) {
+  conf::configuration(sample);
 
   TString label0;
   TString name = (TString)name_;
@@ -158,17 +162,18 @@ void makeOneDatacard(TString inputname, TString category, TString wp, std::strin
 
 
 void makeOneDatacardTop(TString inputname, TString category, TString wp, TString name_, TString sample, TString era) {
+  conf::configuration(sample);
 
   std::cout << "makeData card : " << name_ << "\n"; 
 
   TString label0;
   TString name = (TString)name_;
   TString inputname_ = (TString)inputname;
-  if (inputname_.Contains("tau21ddt"))    { label0 = "tau21ddt"; }
-  if (inputname_.Contains("dak8"))        { label0 = "dak8"; }
-  if (inputname_.Contains("dak8md"))      { label0 = "dak8md"; }
-  if (inputname_.Contains("dak8ddt"))     { label0 = "dak8ddt"; }
-  if (inputname_.Contains("particlenet")) { label0 = "particlenet"; }
+  if      (inputname_.Contains("tau21ddt"))      { label0 = "tau21ddt"; }
+  else if (inputname_.Contains("dak8"))          { label0 = "dak8"; }
+  else if (inputname_.Contains("dak8md"))        { label0 = "dak8md"; }
+  else if (inputname_.Contains("dak8ddt"))       { label0 = "dak8ddt"; }
+  else if (inputname_.Contains("particlenetmd")) { label0 = "particlenetmd"; }
   std::cout << label0 << "\n";
   
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");
@@ -263,21 +268,23 @@ void makeOneDatacardTop(TString inputname, TString category, TString wp, TString
 
 
   // for tt/W SF
+  std::cout << "vjms        shape    - 1 - -     - 1 - - \n";
+  std::cout << "vjmsp       shape    - 1 - -     - - - - \n";
+  std::cout << "vjmsf       shape    - - - -     - 1 - - \n";
+  /*
   std::cout << "p3jmsp      shape    1 - - -     - - - - \n";
   std::cout << "p3jmsf      shape    - - - -     1 - - - \n";
-  std::cout << "wjmsp       shape    - 1 - -     - - - - \n";
-  std::cout << "wjmsf       shape    - - - -     - 1 - - \n";
   std::cout << "p1jmsp      shape    - - 1 -     - - - - \n";
   std::cout << "p1jmsf      shape    - - - -     - - 1 - \n";
   std::cout << "ojmsp       shape    - - - 1     - - - - \n";
   std::cout << "ojmsf       shape    - - - -     - - - 1 \n";
-
+  */
   //  std::cout << "wjmsf       shape    - - - -     - 1 - - \n";
   //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
   //std::cout << "jmsf       shape    - - - -     - 1 - - \n";
   //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
-  std::cout << "wjmrp       shape    - 1 - -     - - - - \n";
-  std::cout << "wjmrf       shape    - - - -     - 1 - - \n";
+  std::cout << "vjmrp       shape    - 1 - -     - - - - \n";
+  std::cout << "vjmrf       shape    - - - -     - 1 - - \n";
   //std::cout << "wjmrp       shape    - 1 - -     - - - - \n";
   std::cout << "pu          shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "jes         shape    1 1 1 1     1 1 1 1 \n";

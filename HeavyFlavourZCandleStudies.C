@@ -110,16 +110,17 @@ void HeavyFlavourZCandleStudies(TString era, TString sample, TString category, T
   }
   */
     
-  std::vector<TString> name;
-  std::vector<double>  ptmin;
-  std::vector<double>  ptmax;    
+  std::vector<TString> name  = conf::name;
+  std::vector<double>  ptmin = conf::ptmin;
+  std::vector<double>  ptmax = conf::ptmax;    
 
   if ( (category=="bb") || (category=="cc") ) {
     /*
     name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
     ptmin.push_back(200.); ptmin.push_back(300.); ptmin.push_back(400.);
     ptmax.push_back(300.); ptmax.push_back(400.); ptmax.push_back(800.);*/
-    name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);
+    //conf::name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);
+    
     
     //    name.push_back("pt200to450"); name.push_back("pt450to600"); name.push_back("pt600to800"); name.push_back("pt800to1200");
     //    ptmin.push_back(200.); ptmin.push_back(450.); ptmin.push_back(600.); ptmin.push_back(800.);
@@ -186,8 +187,8 @@ void HeavyFlavourZCandleStudies(TString era, TString sample, TString category, T
 	//			     "dak8ddt_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
 
 
-	makeDataMCFrom2DTemplatesTop("templates2D/particlenet_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",                      
-				     "particlenet_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
+	makeDataMCFrom2DTemplatesTop("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",                      
+				     conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
       } 
     }
   
@@ -553,11 +554,11 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 
   // prepare directories
   TString dirname1;
-  if (path2file.Contains("tau21ddt"))      { dirname1 = "tau21ddt_sf";      }
-  if (path2file.Contains("dak8md"))        { dirname1 = "dak8md_sf";        }
-  if (path2file.Contains("dak8ddt"))       { dirname1 = "dak8ddt_sf";       }
-  if (path2file.Contains("particlenetmd")) { dirname1 = "particlenetmd_sf"; }
-  if (path2file.Contains("particlenet"))   { dirname1 = "particlenet_sf";   }
+  if      (path2file.Contains("tau21ddt"))      { dirname1 = "tau21ddt_sf";      }
+  else if (path2file.Contains("dak8md"))        { dirname1 = "dak8md_sf";        }
+  else if (path2file.Contains("dak8ddt"))       { dirname1 = "dak8ddt_sf";       }
+  else if (path2file.Contains("particlenetmd")) { dirname1 = "particlenetmd_sf"; }
+  else if (path2file.Contains("particlenet"))   { dirname1 = "particlenet_sf";   }
 
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
@@ -772,8 +773,8 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
     hist_out_f[i0]->Write(hist_out_f[i0]->GetName());
   }
   // jms for softdrop corrections
-  h_tt_p2_massscale_up_f->Write(processes_out[1]+"_vjmsUp");
-  h_tt_p2_massscale_down_f->Write(processes_out[1]+"_vjmsDown");
+  //h_tt_p2_massscale_up_f->Write(processes_out[1]+"_vjmsUp");
+  //h_tt_p2_massscale_down_f->Write(processes_out[1]+"_vjmsDown");
   fout_f->Close();
   
   hist_out_p.clear(); hist_out_nom_p.clear();
@@ -786,8 +787,8 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   //system("python jetMassSmearing.py "+inFileNameF+" "+processes_out[1]+" f");
 
   // JMS and JMR
-  float smearVal = 0.15;
-  float scaleVal = 5.; // GeV
+  TString smearVal = "0.15";
+  TString scaleVal = "5."; // GeV
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix p3");
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix p3");
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix v");

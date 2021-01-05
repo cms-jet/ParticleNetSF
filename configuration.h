@@ -1,6 +1,14 @@
 #ifndef CONFIGURATION_INCLUDE
 #define CONFIGURATION_INCLUDE
 
+#include <vector>
+#include <string>
+#include <unistd.h>
+#include <iostream>
+#include <bits/stdc++.h>
+#include <unistd.h>
+#include "TString.h"
+
 namespace conf {
 
   struct process {
@@ -13,8 +21,12 @@ namespace conf {
   
   TString brX; int binsX; float minX, maxX;
   TString brY; int binsY; float minY, maxY;
-  TString algo; 
+  TString algo;
   TString score_def; 
+
+  std::vector<TString> name; 
+  std::vector<double>  ptmin; 
+  std::vector<double>  ptmax;
   
   void configuration(TString sample) {
 
@@ -39,6 +51,9 @@ namespace conf {
     binsX = 30; minX = 50;  maxX = 200.;
     binsY = 40; minY = 200; maxY = 1200.;
    
+
+    name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);  
+
     // =================== end of area to modify - tune ===================== //
 
 
@@ -101,6 +116,13 @@ namespace conf {
     tmpInputStr << input;
     TString inputStr = tmpInputStr.str();
     return inputStr;
+  }
+
+  std::string convertTStringToString(TString input) {
+    std::string output;
+    //output = input.Data();
+    output = (string)input;
+    return output;
   }
 
 } 

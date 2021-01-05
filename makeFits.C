@@ -1,33 +1,26 @@
 #include <bits/stdc++.h>
 #include <string>
 #include <unistd.h>
+#include "configuration.h"
 
 void makeOneFit(std::string era, std::string category, std::string wp, std::string name, std::string name1);
 void makeOneFitTop(std::string era, std::string category, std::string wp, std::string name, std::string name1);
 void makeCombFit(std::string era, std::string category, std::string wp, std::string name, std::string name1);
 
 void makeFits(std::string era, std::string category, std::string wp, TString sample) {
-  
-  std::vector<std::string> name;
-  // from ggH
-  //  name.push_back("pt450to500"); name.push_back("pt500to550"); name.push_back("pt550to600"); name.push_back("pt600to675"); name.push_back("pt675to800"); name.push_back("pt800to1200");
-  name.push_back("pt200to450"); 
-  //name.push_back("pt450to600"); 
-  //  name.push_back("pt600to800"); 
-  //  name.push_back("pt800to1200");
-  //  name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
+  conf::configuration(sample);
+
+  std::vector<TString> name  = conf::name;
 
   if (sample=="zqq") {
-    for (int i0=0; i0<name.size(); ++i0) { makeOneFit(era,category,wp,name[i0],"particlenet"); } }
+    for (int i0=0; i0<name.size(); ++i0) { makeOneFit(era,category,wp,(std::string)name[i0],"particlenet"); } }
   
   if (sample=="tt1L" || sample=="ttbar1L" || (sample=="ttbar1l") || (sample=="tt1l")) {
-    //for (int i0=0; i0<name.size(); ++i0) { makeOneFitTop(name[i0],"dak8"); } }
-    //std::cout << "makeFit : " << name[i0] << "\n";
-    for (int i0=0; i0<name.size(); ++i0) { makeOneFitTop(era,category,wp,name[i0],"particlenet"); } }
-    //for (int i0=0; i0<name.size(); ++i0) { makeOneFitTop(era,category,wp,name[i0],"dak8ddt"); } }
+    for (int i0=0; i0<name.size(); ++i0) { makeOneFitTop(era,category,wp,(std::string)name[i0],(std::string)conf::algo); } 
+  }
 
   if (sample=="comb") {
-    for (int i0=0; i0<name.size(); ++i0) { makeCombFit(era,category,wp,name[i0],"particlenet"); } }
+    for (int i0=0; i0<name.size(); ++i0) { makeCombFit(era,category,wp,(std::string)name[i0],"particlenet"); } }
 
 }
 
@@ -96,7 +89,8 @@ void makeOneFitTop(std::string era, std::string category, std::string wp, std::s
   //  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1,other";//tp1";//,other";
   //   std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1";
   //std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1";
-  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".txt --PO categories=wqq,tqq,tp1,other";
+  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+"
+.txt --PO categories=wqq,tqq,tp1,other";
   std::string multidimfit       = "combine -M MultiDimFit -m 125 "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".root  --algo=singles --robustFit=1 --cminDefaultMinimizerTolerance 5.";
   std::string fitdiagnostics    = "combine -M FitDiagnostics -m 125 "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".root --saveShapes --saveWithUncertainties --robustFit=1 --cminDefaultMinimizerTolerance 5.";
   std::string mvmultidimfitfile = "mv higgsCombineTest.MultiDimFit.mH125.root "+name1+"_sf/fitdir/multidimfit_"+name1+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".root";

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import ROOT as r,sys,math,array,os
+import ROOT as r,sys,math,array,os,TH1F
 from hist import hist
 from optparse import OptionParser
 
@@ -48,23 +48,19 @@ def smear(iVar,iDataHist,iScale=0.1):
 def fixEdgeZeroBins(iDataHist):
    
     for ibin in range(iDataHist.GetNbinsX()):
-        print " ", ibin, " ", iDataHist.GetBinContent(ibin)
+        
         if iDataHist.GetBinContent(ibin)<=0 and ibin<(0.5*iDataHist.GetNbinsX()):
             if (iDataHist.GetBinContent(ibin+1)>0.):
                 iDataHist.SetBinContent(ibin,iDataHist.GetBinContent(ibin+1))
-                print " ", ibin, " ", iDataHist.GetBinContent(ibin)
             else:
                 iDataHist.SetBinContent(ibin,iDataHist.GetBinContent(ibin+2))
-                print " ", ibin, " ", iDataHist.GetBinContent(ibin)
+        
 
         if iDataHist.GetBinContent(ibin)<=0 and ibin>=(0.5*iDataHist.GetNbinsX()):
-            print " ", ibin, " ", iDataHist.GetBinContent(ibin)
             if (iDataHist.GetBinContent(ibin-1)>0.):
                 iDataHist.SetBinContent(ibin,iDataHist.GetBinContent(ibin-1))
-                print " ", ibin, " ", iDataHist.GetBinContent(ibin)
             else:
                 iDataHist.SetBinContent(ibin,iDataHist.GetBinContent(ibin-2))
-                print " ", ibin, " ", iDataHist.GetBinContent(ibin)
     return iDataHist
         
 
@@ -76,8 +72,7 @@ def create(options):
     sample = str(options.sample)
     suffix = str(options.suffix)
 
-    pOrF_   = ""
-   
+    pOrF_   = ""   
     if int(options.pOrF) == 1:
         pOrF_  = "p"
     if int(options.pOrF) == -1:
@@ -114,8 +109,8 @@ def create(options):
     scale_opt = options.scale
     #hmatchedsys_shift = hist_container.shift(hmatched_new_central, scale_opt)
     hmatchedsys_shift = hist_container.shift(lHSig, scale_opt)
-    hmatchedsys_shift[0].SetName(sample+"_lg"+suffix+"jms"+pOrF_+"Up");   hmatchedsys_shift[0].SetTitle(sample+"_lg"+suffix+"jms"+pOrF_+"Up")
-    hmatchedsys_shift[1].SetName(sample+"_lg"+suffix+"jms"+pOrF_+"Down"); hmatchedsys_shift[1].SetTitle(sample+"_lg"+suffix+"jms"+pOrF_+"Down");
+    hmatchedsys_shift[0].SetName(sample+"_"+suffix+"jms"+pOrF_+"Up");   hmatchedsys_shift[0].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Up")
+    hmatchedsys_shift[1].SetName(sample+"_"+suffix+"jms"+pOrF_+"Down"); hmatchedsys_shift[1].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Down");
 
     fixEdgeZeroBins(hmatchedsys_shift[0])
     fixEdgeZeroBins(hmatchedsys_shift[1])
@@ -126,8 +121,8 @@ def create(options):
     smear_opt = options.smear
     #hmatchedsys_smear = hist_container.smear(hmatched_new_central, smear_opt)
     hmatchedsys_smear = hist_container.smear(lHSig, smear_opt)
-    hmatchedsys_smear[0].SetName(sample+"_lg"+suffix+"jmr"+pOrF_+"Up");   hmatchedsys_smear[0].SetTitle(sample+"_lg"+suffix+"jmr"+pOrF_+"Up");
-    hmatchedsys_smear[1].SetName(sample+"_lg"+suffix+"jmr"+pOrF_+"Down"); hmatchedsys_smear[1].SetTitle(sample+"_lg"+suffix+"jmr"+pOrF_+"Down");
+    hmatchedsys_smear[0].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Up");   hmatchedsys_smear[0].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Up");
+    hmatchedsys_smear[1].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Down"); hmatchedsys_smear[1].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Down");
 
     fixEdgeZeroBins(hmatchedsys_smear[0]) 
     fixEdgeZeroBins(hmatchedsys_smear[1])
@@ -136,8 +131,8 @@ def create(options):
     # clone and save up and down variations in .root file
     lOutFile  = r.TFile.Open(options.ifile , "UPDATE");
     #hmatched_new_central.Write();
-    lHSig.Write();
-    hmatchedsys_shift[0].Write();
+    #lHSig.Write();
+    TH1D(hmatchedsys_shift[0]).Write();
     hmatchedsys_shift[1].Write();
     hmatchedsys_smear[0].Write();
     hmatchedsys_smear[1].Write();
