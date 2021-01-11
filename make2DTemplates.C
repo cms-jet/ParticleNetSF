@@ -23,7 +23,7 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
 		    TString branchX,int binsX,float minX,float maxX,TString branchY,int binsY,float minY,float maxY,
 		    bool useLog,TString name,bool data);
 void makeTemplates(TString path2file, TString era, TString cat, TString wp, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none");
-void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none");
+void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin, TString wpmax, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none");
 TH2D *correct_2dext_norm(TH2D *h_nom, TH2D *h_ext);
 void makeMCHistos(TString name, TString path, TString path2file, TString sys, TString sysType, TString wgts, std::vector<TString> cuts,
 		  TString brX, int binsX, float minX, float maxX, TString brY, int binsY, float minY, float maxY, TFile *f_);
@@ -100,23 +100,23 @@ double rewgtfuncDAK8DDT_w_0p50(double rho, double pt){
 
 
 
-void mainfunction(TString sample, TString era, TString wp) {
+void mainfunction(TString sample, TString era, TString wpmin, TString wpmax) {
   
   conf::configuration(sample);
   
   if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) { 
     std::cout << " In sample " << sample << " making 2D templates \n";
-    makeTemplatesTop(sample,era,"bb",wp,conf::score_def,"200","1200");    
+    makeTemplatesTop(sample,era,"bb",wpmin,wpmax,conf::score_def,"200","1200");    
 
   }
 
   if (sample == "zqq") { 
     std::cout << " In sample " << sample << " making 2D templates \n";
-    makeTemplates(sample,era,"bb",wp,conf::score_def,"200","1200"); 
+    makeTemplates(sample,era,"bb",wpmin,conf::score_def,"200","1200"); 
   }
 }
 
-void makeTemplates(TString path2file, TString era, TString cat, TString wp, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none") {
+void makeTemplates(TString path2file, TString era, TString cat, TString wp,  TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none") {
 
   setTDRStyle();
   gROOT->SetBatch(true);
@@ -191,19 +191,7 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
 
 
   // baseline selection
-  TString wp_val = wp;/*
-  if (cat == "bb") { 
-    if (wp == "t") { wp_val = "0.93"; }
-    if (wp == "m") { wp_val = "0.84"; }
-    if (wp == "l") { wp_val = "0.54"; }
-  }
-  if (cat == "cc") { 
-    if (wp == "t") { wp_val = "0.94"; }
-    if (wp == "m") { wp_val = "0.90"; }
-    if (wp == "l") { wp_val = "0.76"; }
-    }  */
-  //TString c_p = "("+score+">="+wp_val+")";
-  //TString c_f = "(!"+c_p+")";
+  TString wp_val = wp;
   TString c_p = "("+score+">="+wp+")";
   TString c_f = "(!"+c_p+")";
   TString c_p_ext = "("+score+">=0.54)";
@@ -255,7 +243,8 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp, TStr
 }
 
 
-void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cutmin="0==0", TString cutmax="0==0", TString suffix="none") {
+void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin, TString wpmax, TString score="fj_1_ParticleNetMD_XbbVsQCD", 
+		      TString cutmin="0==0", TString cutmax="0==0", TString suffix="none") {
 
   setTDRStyle();
   gROOT->SetBatch(true);
@@ -306,8 +295,8 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   else if (score.Contains("DeepAK8DDT"))    { name0 = "dak8ddt"; }
   else if (score.Contains("ParticleNetMD")) { name0 = "particlenetmd"; }
   else if (score.Contains("ParticleNet"))   { name0 = "particlenet"; }
-  //TString nameoutfile = name0+"_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
-  TString nameoutfile = conf::algo+"_tt1l_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
+
+  TString nameoutfile = conf::algo+"_tt1l_"+cat+"_"+wpmin+"to"+wpmax+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
   std::cout << " 2D templates name: " << nameoutfile << "\n";
   
   const int dir_err = system("mkdir -p ./"+dirname1);
@@ -350,65 +339,35 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   TH2D *h_dak8ddt_w_0p20 = (TH2D*)f_dak8ddt_w_0p20->Get("DeepBoosted_WvsQCD_MD_v_rho_v_pT_scaled_yx_0p20");
   hrwgt_dak8ddt_w_0p20 = (TH2D*)h_dak8ddt_w_0p20->Clone("hrwgt_dak8ddt_w_0p20");
 
-  /*
-  TFile *f_dak8ddt_w_0p20 = TFile::Open("./corrections/ddt_dec2020/WvsQCD_ddt_0p20rho.root" , "READONLY");
-  TH2D *h_dak8ddt_w_0p20 = (TH2D*)f_dak8ddt_w_0p20->Get("DeepBoosted_WvsQCD_v_rho_v_pT_scaled_yx");
-  hrwgt_dak8ddt_w_0p20 = (TH2D*)h_dak8ddt_w_0p20->Clone("hrwgt_dak8ddt_w_0p20");
-
-  TFile *f_dak8ddt_w_0p30 = TFile::Open("./corrections/ddt_dec2020/WvsQCD_ddt_0p30rho.root" , "READONLY");
-  TH2D *h_dak8ddt_w_0p30 = (TH2D*)f_dak8ddt_w_0p30->Get("DeepBoosted_WvsQCD_v_rho_v_pT_scaled_yx");
-  hrwgt_dak8ddt_w_0p30 = (TH2D*)h_dak8ddt_w_0p30->Clone("hrwgt_dak8ddt_w_0p30");
-
-  TFile *f_dak8ddt_w_0p50 = TFile::Open("./corrections/ddt_dec2020/WvsQCD_ddt_0p50rho.root" , "READONLY");
-  TH2D *h_dak8ddt_w_0p50 = (TH2D*)f_dak8ddt_w_0p50->Get("DeepBoosted_WvsQCD_v_rho_v_pT_scaled_yx");
-  hrwgt_dak8ddt_w_0p50 = (TH2D*)h_dak8ddt_w_0p50->Clone("hrwgt_dak8ddt_w_0p50");
-  */
   // WP selection
   TString wp_val;
-  if (cat == "bb") {
-    if (wp == "t") { wp_val = "0.93"; } //pnet
-    //if (wp == "t") { wp_val = "0.9"; }
-    if (wp == "m") { wp_val = "0.84"; }
-    if (wp == "l") { wp_val = "0.54"; }
-  }
-  if (cat == "cc") {
-    if (wp == "t") { wp_val = "0.94"; }
-    if (wp == "m") { wp_val = "0.90"; }
-    if (wp == "l") { wp_val = "0.76"; }
-  }
-  if (cat == "w") {
-    if (wp == "t") { wp_val = "0.94"; }
-    if (wp == "m") { wp_val = "0.90"; }
-    if (wp == "l") { wp_val = "0.50"; }
-  }
-  
-  //  TString c_p = "("+score+">="+wp_val+")";
-  TString c_p = "("+score+">="+wp+")";
+
+  TString c_p = "("+score+">"+wpmin+" && "+score+"<="+wpmax+")";
   TString c_f = "(!"+c_p+")";
 
   TString score_0p05, score_0p10, score_0p20;
   if (score.Contains("DeepAK8DDT")) {
-    if (wp == "0p05") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p05((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
-    if (wp == "0p10") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p10((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
-    if (wp == "0p20") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p20((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
-    if (wp == "0p30") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p30((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
-    if (wp == "0p50") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p50((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
+    if (wpmin == "0p05") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p05((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
+    if (wpmin == "0p10") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p10((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
+    if (wpmin == "0p20") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p20((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
+    if (wpmin == "0p30") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p30((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
+    if (wpmin == "0p50") { score = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p50((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
 
     c_p = "("+score+">=0)";
  
-    if (wp == "0p10b") {
+    if (wpmin == "0p10b") {
       score_0p05 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p05((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       score_0p10 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p10((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       c_p   = "("+score_0p10+">=0 && "+score_0p05+"<0)";     
     }
 
-   if (wp == "0p05f") {
+   if (wpmin == "0p05f") {
       score_0p05 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p05((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       score_0p20 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p20((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       c_p   = "("+score_0p20+">=0 && "+score_0p05+"<0)";     
    }
 
-   if (wp == "0p10f") {
+   if (wpmin == "0p10f") {
       score_0p10 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p10((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       score_0p20 = "(ak8_1_DeepAK8MD_WvsQCD-rewgtfuncDAK8DDT_w_0p20((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))";
       c_p   = "("+score_0p20+">=0 && "+score_0p10+"<0)";     
@@ -429,7 +388,7 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wp, T
   // Fit variables and axis ranges
   TString brX = conf::brX; int binsX = conf::binsX; float minX = conf::minX;  float maxX = conf::maxX;
   TString brY = conf::brY; int binsY = conf::binsY; float minY = conf::minY;  float maxY = conf::maxY;
-  TString name = path2file+"_"+name0+"_"+cat+"_"+wp+"_"+era;
+  TString name = path2file+"_"+name0+"_"+cat+"_"+wpmin+"to"+wpmax+"_"+era;
 
 
   // Data histograms 

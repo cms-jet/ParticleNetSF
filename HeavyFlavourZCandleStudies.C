@@ -43,7 +43,8 @@ void makePlotDataMC(TString name, TString dir,
                     std::vector<TTree*> trees, std::vector<TString> names, TString lumi,std::vector<TString> cuts, TString addcut,
                     TString var,int nbins,float xmin,float xmax,TString xaxisname,
                     std::vector<TString> legends, std::vector<int> colors, bool logy, int norm);
-void makeDataMCPlotFromCombine(TString path2file, TString era, TString category, TString category_extra, TString wp,TString name, TString passOrFail, float xmin, float xmax, int nbins,TString xaxisname, bool log, TString sample);
+void makeDataMCPlotFromCombine(TString path2file, TString era, TString category, TString category_extra, TString wpmin, TString wpmax, TString name, TString passOrFail, 
+			       float xmin, float xmax, int nbins,TString xaxisname, bool log, TString sample);
 void getSampleComposition(TString path2file, TString filename, TString score, TString year, TString ptrange, TString category);
 TH1D *h1DHistoFrom2DTemplates(TString path2file,TString h2dname,TString name,double ymin, double ymax,int color,bool isdata);
 TCanvas *makeCanvasWithRatio(std::vector<TH1D*> h1d, TString dir, TString name, TString xname, TString yname, TLegend *leg);
@@ -85,119 +86,38 @@ double rewgtfuncDAK8DDT_w_0p30(double rho, double pt){
 }
 
 
-// sample = tt1l, category = w, wp t or 0p05, .... 
-void HeavyFlavourZCandleStudies(TString era, TString sample, TString category, TString wp, bool postfit=false, TString passOrFail="pass", TString category_extra="") {
+void HeavyFlavourZCandleStudies(TString era, TString sample, TString category, TString wpmin, TString wpmax, bool postfit=false, TString passOrFail="pass", TString category_extra="") {
   conf::configuration(sample);
-
-  //TString era = (TString)era_;
-  /*
-  TString directory = "particlenet_bb_t_2016";
-  getSampleComposition(directory,"particlenet_bb","t","2016","lowpt","p");
-  getSampleComposition(directory,"particlenet_bb","t","2016","lowmedpt","p");
-  getSampleComposition(directory,"particlenet_bb","t","2016","medpt","p");
-  getSampleComposition(directory,"particlenet_bb","t","2016","medhipt","p");
-  getSampleComposition(directory,"particlenet_bb","t","2016","hipt","p");
-  */
-
-  /*
-  std::vector<std::string> name;
-  // from ggH
-  name.push_back("pt450to500"); name.push_back("pt500to550"); name.push_back("pt550to600"); name.push_back("pt600to675"); name.push_back("pt675to800"); name.push_back("pt800to1200");
-
-  for (int i0=0; i0<name.size(); ++i0) { 
-    makeDataMCPlotFromCombine("testarea/fitdir/",name[i0],"pass",40.,201.,23,"m_{SD} [GeV]",false);
-    makeDataMCPlotFromCombine("testarea/fitdir/",name[i0],"fail",40.,201.,23,"m_{SD} [GeV]",false);
-  }
-  */
     
   std::vector<TString> name  = conf::name;
   std::vector<double>  ptmin = conf::ptmin;
   std::vector<double>  ptmax = conf::ptmax;    
 
-  if ( (category=="bb") || (category=="cc") ) {
-    /*
-    name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
-    ptmin.push_back(200.); ptmin.push_back(300.); ptmin.push_back(400.);
-    ptmax.push_back(300.); ptmax.push_back(400.); ptmax.push_back(800.);*/
-    //conf::name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);
-    
-    
-    //    name.push_back("pt200to450"); name.push_back("pt450to600"); name.push_back("pt600to800"); name.push_back("pt800to1200");
-    //    ptmin.push_back(200.); ptmin.push_back(450.); ptmin.push_back(600.); ptmin.push_back(800.);
-    //    ptmax.push_back(450.); ptmax.push_back(600.); ptmax.push_back(800.); ptmax.push_back(1200.);
-    //    name.push_back("pt450to600"); ptmin.push_back(450.); ptmax.push_back(600.);
-  }
-
-  if ( (category=="w") || (category=="top") ) {
-    name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
-    ptmin.push_back(200.); ptmin.push_back(300.); ptmin.push_back(400.);
-    ptmax.push_back(300.); ptmax.push_back(400.); ptmax.push_back(800.);
-    //name.push_back("pt200to450"); name.push_back("pt450to600"); name.push_back("pt600to800"); name.push_back("pt800to1200");
-    //ptmin.push_back(200.); ptmin.push_back(450.); ptmin.push_back(600.); ptmin.push_back(800.);
-    //ptmax.push_back(450.); ptmax.push_back(600.); ptmax.push_back(800.); ptmax.push_back(1200.);
-    //name.push_back("pt450to600"); ptmin.push_back(450.); ptmax.push_back(600.);
-  }
-
-
   if (postfit) {
 
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") || (sample == "comb")) { 
-      std::cout << "postfit: " << sample << " " << category << " " << wp << " " << passOrFail << "\n";
+      std::cout << "postfit: " << sample << " " << category << " " << wpmin << "to" << wpmax << " " << passOrFail << "\n";
       for (int i0=0; i0<name.size(); ++i0) { 
-	//makeDataMCPlotFromCombine("dak8ddt",era,category,wp,name[i0],passOrFail,conf::minX,conf::maxX,conf::binsX,"m_{SD} [GeV]",false,sample);
-	makeDataMCPlotFromCombine(conf::algo,era,category,category_extra,wp,name[i0],passOrFail,conf::minX,conf::maxX,conf::binsX,"m_{SD} [GeV]",false,sample); 
-
+	makeDataMCPlotFromCombine(conf::algo,era,category,category_extra,wpmin,wpmax,name[i0],passOrFail,conf::minX,conf::maxX,conf::binsX,"m_{SD} [GeV]",false,sample); 
       }
     }
-    
-
 
   }
 
   if (!postfit) {
 
-  /*
-  // from ggH
-  name.push_back("pt200toInf"); 
-  name.push_back("pt450to500"); name.push_back("pt500to550"); name.push_back("pt550to600"); name.push_back("pt600to675"); name.push_back("pt675to800"); name.push_back("pt800to1200");
-  ptmin.push_back(200.);  ptmin.push_back(450.); ptmin.push_back(500.); ptmin.push_back(550.); ptmin.push_back(600.); ptmin.push_back(675.); ptmin.push_back(800.);
-  ptmax.push_back(1200.); ptmax.push_back(500.); ptmax.push_back(550.); ptmax.push_back(600.); ptmax.push_back(675.); ptmax.push_back(800.); ptmax.push_back(1200.);
-  */  
-  //  name.push_back("pt200toInf"); 
-
-  /*
-  name.push_back("pt200to300"); name.push_back("pt300to400"); name.push_back("pt400to800");
-  ptmin.push_back(200.); ptmin.push_back(300.); ptmin.push_back(400.);
-  ptmax.push_back(300.); ptmax.push_back(400.); ptmax.push_back(800.); 
-  */
-
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) { std::cout << sample << "\n";
 
-      //      makeDataMCFrom2DTemplatesTop("templates2D/particlenet_tt1l_bb_l_2016_200to1200_templates.root","particlenet_tt1l_bb_l_2016","pt200to400","w",200,400);
-      for (int i0=0; i0<name.size(); ++i0) {
-      //makeDataMCFrom2DTemplatesTop("templates2D/particlenet_tt1l_bb_t_2016_200to1200_templates.root","particlenet_tt1l_bb_t_2016",name[i0],"top",ptmin[i0],ptmax[i0]);
-      //      makeDataMCFrom2DTemplatesTop("templates2D/dak8_tt1l_bb_t_2018_200to1200_templates.root","dak8_tt1l_bb_t_2018",name[i0],"top",ptmin[i0],ptmax[i0]);
-      //  makeDataMCFrom2DTemplatesTop("templates2D/dak8ddt_tt1l_bb_m_2018_200to1200_templates.root","dak8ddt_tt1l_bb_m_2018",name[i0],"top",ptmin[i0],ptmax[i0]);
-	//makeDataMCFrom2DTemplatesTop(sample,"templates2D/particlenet_tt1l_bb_l_2016_200to1200_templates.root","particlenet_tt1l_bb_l_2016",name[i0],"top",ptmin[i0],ptmax[i0]);
-	//makeDataMCFrom2DTemplatesTop("templates2D/dak8ddt_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",
-	//			     "dak8ddt_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);  
-	//	makeDataMCFrom2DTemplatesTop("templates2D/dak8md_tt1l_w_t_2016_200to1200_templates.root","dak8md_tt1l_w_t_2016",name[i0],"w",ptmin[i0],ptmax[i0]);
-	
-	//	makeDataMCFrom2DTemplatesTop("templates2D/dak8ddt_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",                      
-	//			     "dak8ddt_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
-
-
-	makeDataMCFrom2DTemplatesTop("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",                      
-				     conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
+      for (int i0=0; i0<name.size(); ++i0) { std::cout << sample<< "\n";
+	makeDataMCFrom2DTemplatesTop("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_200to1200_templates.root",                      
+				     conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
       } 
     }
   
     if (sample == "zqq") { std::cout << sample<< "\n";
       for (int i0=0; i0<name.size(); ++i0) {
-	//      makeDataMCFrom2DTemplates("particlenet_bb_t_2016/particlenet_bb_t_2016_450to1200_templates.root","particlenet_bb_t_2016",name[i0],ptmin[i0],ptmax[i0]);
-	//      makeDataMCFrom2DTemplates("templates2D/particlenet_bb_t_2016_200to1200_templates.root","particlenet_bb_t_2016",name[i0],ptmin[i0],ptmax[i0]);
-	makeDataMCFrom2DTemplates("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era+"_200to1200_templates.root",
-				  conf::algo+"_"+sample+"_"+category+"_"+wp+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
+	makeDataMCFrom2DTemplates("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_200to1200_templates.root",
+				  conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
       } 
     }
   }
@@ -226,9 +146,9 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
   nameoutfile = nameoutfile+"_"+name;
 
-  // MC templates                                                                                                                                                                                                     
+  // MC templates           
   std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur","lhepdf"};
-  //  std::vector<TString> syst = {"_"};                                                                                                                                                                              
+  //  std::vector<TString> syst = {"_"};
   std::vector<TString> processes_in = {"tt_p3","st_p3","ttv_p3","tt_p2","st_p2","ttv_p2","tt_p1","st_p1","ttv_p1","wqq","vv"};
 
 
@@ -805,6 +725,15 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix v");
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
   system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
+
+  // convert TH1F to TH1D\'HeavyFlavourZCandleStudies.C(\" \")\'"
+  //\'HeavyFlavourZCandleStudies.C(\"'"+(TString)era+"'\",\"zqq\",\"'"+(TString)category+"'\",\"'"+(TString)wp+"'\",true,\"pass\")\'");
+  //system("root -l -q \'HeavyFlavourZCandleStudies.C(\"'"+(TString)era+"'\",\"zqq\",\"'"+(TString)category+"'\",\"'"+(TString)wp+"'\",true,\"pass\")\'");  
+
+  system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
+  system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
+
+
 
   fout_p->Close();
   fout_f->Close();
@@ -1495,7 +1424,7 @@ void getSampleComposition(TString path2file, TString filename, TString score, TS
 }
 
 
-void makeDataMCPlotFromCombine(TString path2file, TString era, TString category, TString category_extra, TString wp, TString name, TString passOrFail, 
+void makeDataMCPlotFromCombine(TString path2file, TString era, TString category, TString category_extra, TString wpmin, TString wpmax, TString name, TString passOrFail, 
 			       float xmin, float xmax, int nbins,TString xaxisname, bool log, TString sample ="") {
 
   std::cout << " In makeDataMCPlotFromCombine\n";
@@ -1513,7 +1442,7 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   const int dir_err = system("mkdir -p ./"+(TString)path2file+"_sf/plots_postfit");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); } 
 
-  TString fdiag_ = "./"+path2file+"_sf/fitdir/fitdiagnostics_"+path2file+"_"+sample+"_"+category+"_"+wp+"_"+era+"_"+name+".root";
+  TString fdiag_ = "./"+path2file+"_sf/fitdir/fitdiagnostics_"+path2file+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root";
   std::cout << " Opening fitdiagnostics: " << fdiag_ << "\n";
   TFile *fdiag = TFile::Open(fdiag_, "READONLY" );
 
@@ -1682,12 +1611,12 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   c->RedrawAxis();
  
   if (log) {
-    c->Print(path2file+"_sf/plots_datamc/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wp+"_"+passOrFail+"_log.pdf");
-    c->Print(path2file+"_sf/plots_datamc/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wp+"_"+passOrFail+"_log.png");
+    c->Print(path2file+"_sf/plots_datamc/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wpmin+"to"+wpmax+"_"+passOrFail+"_log.pdf");
+    c->Print(path2file+"_sf/plots_datamc/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wpmin+"to"+wpmax+"_"+passOrFail+"_log.png");
   } 
   else {
-    c->Print(path2file+"_sf/plots_postfit/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wp+"_"+passOrFail+"_lin.pdf");
-    c->Print(path2file+"_sf/plots_postfit/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wp+"_"+passOrFail+"_lin.png");
+    c->Print(path2file+"_sf/plots_postfit/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wpmin+"to"+wpmax+"_"+passOrFail+"_lin.pdf");
+    c->Print(path2file+"_sf/plots_postfit/"+path2file+"_"+sample+"_"+era+"_"+name+"_"+category+"_"+wpmin+"to"+wpmax+"_"+passOrFail+"_lin.png");
   }
 
 } // end of makeDataMCPlotsFromCombine

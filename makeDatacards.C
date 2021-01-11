@@ -2,10 +2,10 @@
 #include <string>     // std::string, std::stof
 #include "configuration.h"
 
-void makeOneDatacard(TString inputname, TString category, TString wp, std::string name_, TString sample, TString era);
-void makeOneDatacardTop(TString inputname, TString category, TString wp, TString name, TString sample, TString era);
+void makeOneDatacard(TString inputname, TString category, TString wpmin, TString wpmax, std::string name_, TString sample, TString era);
+void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TString wpmax,TString name, TString sample, TString era);
 
-void makeDatacards(TString era, TString sample, TString category, TString wp) {
+void makeDatacards(TString era, TString sample, TString category, TString wpmin, TString wpmax) {
   conf::configuration(sample);
 
   std::vector<TString> name  = conf::name;
@@ -13,24 +13,24 @@ void makeDatacards(TString era, TString sample, TString category, TString wp) {
   if (sample=="zqq") { 
     std::cout << sample << "\n";
     for (int i0=0; i0<name.size(); ++i0) { 
-      makeOneDatacard("particlenet_sf",category,wp,(std::string)name[i0],sample,era); 
+      makeOneDatacard("particlenet_sf",category,wpmin,wpmax,(std::string)name[i0],sample,era); 
     }  
   }
   
   if (sample == "tt1lw") { 
-    makeOneDatacardTop("particlenet_sf",category,wp,"pt200to450",sample,era); 
+    makeOneDatacardTop("particlenet_sf",category,wpmin,wpmax,"pt200to450",sample,era); 
   }
 
   if (sample=="tt1L" || sample=="ttbar1L" || (sample=="ttbar1l") || (sample=="tt1l") ) {
     for (int i0=0; i0<name.size(); ++i0) {
-      makeOneDatacardTop(conf::algo+"_sf",category,wp,name[i0],sample,era);
+      makeOneDatacardTop(conf::algo+"_sf",category,wpmin,wpmax,name[i0],sample,era);
     }
   }
 
 }
 
 
-void makeOneDatacard(TString inputname, TString category, TString wp, std::string name_, TString sample, TString era) {
+void makeOneDatacard(TString inputname, TString category, TString wpmin, TString wpmax, std::string name_, TString sample, TString era) {
 //void makeOneDatacard(TString inputname, TString category, TString wp, std::string name, TString sample, TString era) {
   conf::configuration(sample);
 
@@ -47,7 +47,7 @@ void makeOneDatacard(TString inputname, TString category, TString wp, std::strin
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
 
-  std::ofstream out("./"+inputname_+"/fitdir/datacard_"+label0+"_zqq_"+category+"_"+wp+"_"+era+"_"+name+".txt");
+  std::ofstream out("./"+inputname_+"/fitdir/datacard_"+label0+"_zqq_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt");
   std::streambuf *coutbuf = std::cout.rdbuf();
   std::cout.rdbuf(out.rdbuf());
 
@@ -67,14 +67,14 @@ void makeOneDatacard(TString inputname, TString category, TString wp, std::strin
   // ----
 
   // pass
-  TFile *f_p = TFile::Open((TString)inputname+"/"+label0+"_zqq_"+category+"_"+wp+"_"+era+"_"+name+"_templates_p.root","READONLY");
+  TFile *f_p = TFile::Open((TString)inputname+"/"+label0+"_zqq_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+"_templates_p.root","READONLY");
   TH1D  *h_obs_p = (TH1D*)f_p->Get("data_obs"); 
   TH1D  *h_qcd_p = (TH1D*)f_p->Get("qcd");
   TH1D  *h_tt_p  = (TH1D*)f_p->Get("tqq");
   TH1D  *h_w_p  = (TH1D*)f_p->Get("wqq");
   TH1D  *h_z_p  = (TH1D*)f_p->Get("zqq");
   
-  TFile *f_f = TFile::Open((TString)inputname+"/"+label0+"_zqq_"+category+"_"+wp+"_"+era+"_"+name+"_templates_f.root","READONLY");
+  TFile *f_f = TFile::Open((TString)inputname+"/"+label0+"_zqq_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+"_templates_f.root","READONLY");
   TH1D  *h_obs_f = (TH1D*)f_f->Get("data_obs");
   TH1D  *h_qcd_f = (TH1D*)f_f->Get("qcd");
   TH1D  *h_tt_f  = (TH1D*)f_f->Get("tqq");
@@ -87,8 +87,8 @@ void makeOneDatacard(TString inputname, TString category, TString wp, std::strin
   std::cout << "kmax *  number of nuisance parameters (sources of systematical uncertainties)\n";
   std::cout << "------------\n";
 
-  std::cout << "shapes  *  pass  " << (TString)inputname << "/"+label0+"_zqq_"+category+"_"+wp+"_"+era+"_" << name << "_templates_p.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
-  std::cout << "shapes  *  fail  " << (TString)inputname << "/"+label0+"_zqq_"+category+"_"+wp+"_"+era+"_" << name << "_templates_f.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
+  std::cout << "shapes  *  pass  " << (TString)inputname << "/"+label0+"_zqq_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_" << name << "_templates_p.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
+  std::cout << "shapes  *  fail  " << (TString)inputname << "/"+label0+"_zqq_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_" << name << "_templates_f.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
   std::cout << "------------\n";
 
 
@@ -161,7 +161,7 @@ void makeOneDatacard(TString inputname, TString category, TString wp, std::strin
 }
 
 
-void makeOneDatacardTop(TString inputname, TString category, TString wp, TString name_, TString sample, TString era) {
+void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TString wpmax, TString name_, TString sample, TString era) {
   conf::configuration(sample);
 
   std::cout << "makeData card : " << name_ << "\n"; 
@@ -179,7 +179,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wp, TString
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
 
-  std::ofstream out("./"+inputname_+"/fitdir/datacard_"+label0+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+".txt");
+  std::ofstream out("./"+inputname_+"/fitdir/datacard_"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt");
   std::streambuf *coutbuf = std::cout.rdbuf();
   std::cout.rdbuf(out.rdbuf());
   TString p2name;
@@ -204,14 +204,14 @@ void makeOneDatacardTop(TString inputname, TString category, TString wp, TString
   }
   
   // pass 
-  TFile *f_p = TFile::Open((TString)inputname+"/"+label0+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+"_templates_p.root","READONLY");
+  TFile *f_p = TFile::Open((TString)inputname+"/"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+"_templates_p.root","READONLY");
   TH1D  *h_obs_p    = (TH1D*)f_p->Get("data_obs"); 
   TH1D  *h_top_p1_p = (TH1D*)f_p->Get("tp1");
   TH1D  *h_top_p2_p = (TH1D*)f_p->Get(p2name);
   TH1D  *h_top_p3_p = (TH1D*)f_p->Get(p3name);
   TH1D  *h_other_p  = (TH1D*)f_p->Get("other");
   
-  TFile *f_f = TFile::Open((TString)inputname+"/"+label0+"_tt1l_"+category+"_"+wp+"_"+era+"_"+name+"_templates_f.root","READONLY");
+  TFile *f_f = TFile::Open((TString)inputname+"/"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+"_templates_f.root","READONLY");
   TH1D  *h_obs_f    = (TH1D*)f_f->Get("data_obs");   
   TH1D  *h_top_p1_f = (TH1D*)f_f->Get("tp1");
   TH1D  *h_top_p2_f = (TH1D*)f_f->Get(p2name);
@@ -223,8 +223,8 @@ void makeOneDatacardTop(TString inputname, TString category, TString wp, TString
   std::cout << "kmax *  number of nuisance parameters (sources of systematical uncertainties)\n";
   std::cout << "------------\n";
 
-  std::cout << "shapes  *  pass  " << (TString)inputname << "/"+label0+"_tt1l_"+category+"_"+wp+"_"+era+"_" << name << "_templates_p.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
-  std::cout << "shapes  *  fail  " << (TString)inputname << "/"+label0+"_tt1l_"+category+"_"+wp+"_"+era+"_" << name << "_templates_f.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
+  std::cout << "shapes  *  pass  " << (TString)inputname << "/"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_" << name << "_templates_p.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
+  std::cout << "shapes  *  fail  " << (TString)inputname << "/"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_" << name << "_templates_f.root  $PROCESS $PROCESS_$SYSTEMATIC\n";
   std::cout << "------------\n";
 
 
@@ -268,7 +268,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wp, TString
 
 
   // for tt/W SF
-  std::cout << "vjms        shape    - 1 - -     - 1 - - \n";
+  //  std::cout << "vjms        shape    - 1 - -     - 1 - - \n";
   std::cout << "vjmsp       shape    - 1 - -     - - - - \n";
   std::cout << "vjmsf       shape    - - - -     - 1 - - \n";
   /*

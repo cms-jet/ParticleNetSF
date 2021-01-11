@@ -52,7 +52,8 @@ namespace conf {
     binsY = 40; minY = 200; maxY = 1200.;
    
 
-    name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);  
+    name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);
+    //name.push_back("pt300to450"); ptmin.push_back(300.); ptmax.push_back(450.);  
 
     // =================== end of area to modify - tune ===================== //
 

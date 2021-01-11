@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import ROOT as r,sys,math,array
+from ROOT import TH1D
 
 class hist:
     def __init__( self , iVars, iHists):

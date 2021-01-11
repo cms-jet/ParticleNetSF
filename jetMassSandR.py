@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import ROOT as r,sys,math,array,os,TH1F
+import ROOT as r,sys,math,array,os
+from ROOT import TH1D
 from hist import hist
 from optparse import OptionParser
 
@@ -109,8 +110,8 @@ def create(options):
     scale_opt = options.scale
     #hmatchedsys_shift = hist_container.shift(hmatched_new_central, scale_opt)
     hmatchedsys_shift = hist_container.shift(lHSig, scale_opt)
-    hmatchedsys_shift[0].SetName(sample+"_"+suffix+"jms"+pOrF_+"Up");   hmatchedsys_shift[0].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Up")
-    hmatchedsys_shift[1].SetName(sample+"_"+suffix+"jms"+pOrF_+"Down"); hmatchedsys_shift[1].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Down");
+    hmatchedsys_shift[0].SetName(sample+"_"+suffix+"jms"+pOrF_+"Up_tmp");   hmatchedsys_shift[0].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Up_tmp")
+    hmatchedsys_shift[1].SetName(sample+"_"+suffix+"jms"+pOrF_+"Down_tmp"); hmatchedsys_shift[1].SetTitle(sample+"_"+suffix+"jms"+pOrF_+"Down_tmp");
 
     fixEdgeZeroBins(hmatchedsys_shift[0])
     fixEdgeZeroBins(hmatchedsys_shift[1])
@@ -121,8 +122,8 @@ def create(options):
     smear_opt = options.smear
     #hmatchedsys_smear = hist_container.smear(hmatched_new_central, smear_opt)
     hmatchedsys_smear = hist_container.smear(lHSig, smear_opt)
-    hmatchedsys_smear[0].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Up");   hmatchedsys_smear[0].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Up");
-    hmatchedsys_smear[1].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Down"); hmatchedsys_smear[1].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Down");
+    hmatchedsys_smear[0].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Up_tmp");   hmatchedsys_smear[0].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Up_tmp");
+    hmatchedsys_smear[1].SetName(sample+"_"+suffix+"jmr"+pOrF_+"Down_tmp"); hmatchedsys_smear[1].SetTitle(sample+"_"+suffix+"jmr"+pOrF_+"Down_tmp");
 
     fixEdgeZeroBins(hmatchedsys_smear[0]) 
     fixEdgeZeroBins(hmatchedsys_smear[1])
@@ -132,7 +133,7 @@ def create(options):
     lOutFile  = r.TFile.Open(options.ifile , "UPDATE");
     #hmatched_new_central.Write();
     #lHSig.Write();
-    TH1D(hmatchedsys_shift[0]).Write();
+    hmatchedsys_shift[0].Write();
     hmatchedsys_shift[1].Write();
     hmatchedsys_smear[0].Write();
     hmatchedsys_smear[1].Write();
