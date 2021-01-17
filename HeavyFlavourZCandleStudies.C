@@ -492,9 +492,11 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   // MC templates
   //  std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur","lhepdf"};
   //std::vector<TString> syst = {"_","pu","jes","jer","met"};
-  std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur"};
+  //std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur"};
+  std::vector<TString> syst = conf::syst;
   //  std::vector<TString> syst = {"_"};
-  std::vector<TString> processes_in = {"tt_p3","st_p3","ttv_p3","tt_p2","st_p2","ttv_p2","tt_p1","st_p1","ttv_p1","wqq","vv"};
+  //std::vector<TString> processes_in = {"tt_p3","st_p3","ttv_p3","tt_p2","st_p2","ttv_p2","tt_p1","st_p1","ttv_p1","wqq","vv"};
+  std::vector<TString> processes_in = conf::processes_in;
 
   std::vector<TString> processes_out;
   if (sample == "top") { processes_out.push_back("tqq"); processes_out.push_back("tp2"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
@@ -566,54 +568,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   } // end of category loop 
 
 
-  
-  // Additional systematics 
-  /*
-  // jet mass scale
-  TH1D *h_tt_p3_massscale_up_p   = h1dShift("h_tt_p3_massscale_up_p",hist_out_p[0],1,true);    h_tt_p3_massscale_up_p->SetName(processes_out[0]+"_p3jmspUp");      
-  TH1D *h_tt_p3_massscale_down_p = h1dShift("h_tt_p3_massscale_down_p",hist_out_p[0],1,false); h_tt_p3_massscale_down_p->SetName(processes_out[0]+"_p3jmspDown"); 
-  TH1D *h_tt_p3_massscale_up_f   = h1dShift("h_tt_p3_massscale_up_f",hist_out_f[0],1,true);    h_tt_p3_massscale_up_f->SetName(processes_out[0]+"_p3jmsfUp");
-  TH1D *h_tt_p3_massscale_down_f = h1dShift("h_tt_p3_massscale_down_f",hist_out_f[0],1,false); h_tt_p3_massscale_down_f->SetName(processes_out[0]+"_p3jmsfDown");
-
-  TH1D *h_tt_p2_massscale_up_p   = h1dShift("h_tt_p2_massscale_up_p",hist_out_p[1],1,true);    h_tt_p2_massscale_up_p->SetName(processes_out[1]+"_vjmspUp"); 
-  TH1D *h_tt_p2_massscale_down_p = h1dShift("h_tt_p2_massscale_down_p",hist_out_p[1],1,false); h_tt_p2_massscale_down_p->SetName(processes_out[1]+"_vjmspDown");
-  TH1D *h_tt_p2_massscale_up_f   = h1dShift("h_tt_p2_massscale_up_f",hist_out_f[1],1,true);    h_tt_p2_massscale_up_f->SetName(processes_out[1]+"_vjmsfUp");
-  TH1D *h_tt_p2_massscale_down_f = h1dShift("h_tt_p2_massscale_down_f",hist_out_f[1],1,false); h_tt_p2_massscale_down_f->SetName(processes_out[1]+"_vjmsfDown");
-
-  TH1D *h_tt_p1_massscale_up_p   = h1dShift("h_tt_p1_massscale_up_p",hist_out_p[2],1,true);    h_tt_p1_massscale_up_p->SetName(processes_out[2]+"_p1jmspUp");  
-  TH1D *h_tt_p1_massscale_down_p = h1dShift("h_tt_p1_massscale_down_p",hist_out_p[2],1,false); h_tt_p1_massscale_down_p->SetName(processes_out[2]+"_p1jmspDown");
-  TH1D *h_tt_p1_massscale_up_f   = h1dShift("h_tt_p1_massscale_up_f",hist_out_f[2],1,true);    h_tt_p1_massscale_up_f->SetName(processes_out[2]+"_p1jmsfUp");
-  TH1D *h_tt_p1_massscale_down_f = h1dShift("h_tt_p1_massscale_down_f",hist_out_f[2],1,false); h_tt_p1_massscale_down_f->SetName(processes_out[2]+"_p1jmsfDown");
-
-  TH1D *h_tt_other_massscale_up_p   = h1dShift("h_tt_other_massscale_up_p",hist_out_p[3],1,true);    h_tt_other_massscale_up_p->SetName(processes_out[3]+"_ojmspUp"); 
-  TH1D *h_tt_other_massscale_down_p = h1dShift("h_tt_other_massscale_down_p",hist_out_p[3],1,false); h_tt_other_massscale_down_p->SetName(processes_out[3]+"_ojmspDown");
-  TH1D *h_tt_other_massscale_up_f   = h1dShift("h_tt_other_massscale_up_f",hist_out_f[3],1,true);    h_tt_other_massscale_up_f->SetName(processes_out[3]+"_ojmsfUp");
-  TH1D *h_tt_other_massscale_down_f = h1dShift("h_tt_other_massscale_down_f",hist_out_f[3],1,false); h_tt_other_massscale_down_f->SetName(processes_out[3]+"_ojmsfDown");
-  
-
-  // store them
-  hist_out_p.push_back(h_tt_p3_massscale_up_p);
-  hist_out_p.push_back(h_tt_p3_massscale_down_p);
-  hist_out_p.push_back(h_tt_p2_massscale_up_p);
-  hist_out_p.push_back(h_tt_p2_massscale_down_p);
-  hist_out_p.push_back(h_tt_p1_massscale_up_p);
-  hist_out_p.push_back(h_tt_p1_massscale_down_p);
-  hist_out_p.push_back(h_tt_other_massscale_up_p);
-  hist_out_p.push_back(h_tt_other_massscale_down_p);
-  
-  hist_out_f.push_back(h_tt_p3_massscale_up_f);
-  hist_out_f.push_back(h_tt_p3_massscale_down_f);
-  hist_out_f.push_back(h_tt_p2_massscale_up_f);
-  hist_out_f.push_back(h_tt_p2_massscale_down_f);
-  hist_out_f.push_back(h_tt_p1_massscale_up_f);
-  hist_out_f.push_back(h_tt_p1_massscale_down_f);
-  hist_out_f.push_back(h_tt_other_massscale_up_f);
-  hist_out_f.push_back(h_tt_other_massscale_down_f);
-  */
-
-  
-
-
   /*
   // Additional systematics: Herwig
   TH1D *h_tt_herwig_p1_p_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p1_pass",name,ymin,ymax,4,false); h_tt_herwig_p1_p_up->SetName("h_tt_herwig_p1_p_up"); 
@@ -680,11 +634,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   h_data_p->Write("data_obs");
   for (unsigned int i0=0; i0<hist_out_p.size(); ++i0) {
     hist_out_p[i0]->Write(hist_out_p[i0]->GetName()); std::cout << hist_out_p[i0]->GetName() << "\n";
-  }
-  // jms for softdrop corrections
-  //  h_tt_p2_massscale_up_p->Write(processes_out[1]+"_vjmsUp");
-  //  h_tt_p2_massscale_down_p->Write(processes_out[1]+"_vjmsDown");
-  
+  }  
   fout_p->Close();
 
   TFile *fout_f = new TFile("./"+dirname1+"/"+nameoutfile+"_templates_f.root","RECREATE");
@@ -692,9 +642,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   for (unsigned int i0=0; i0<hist_out_f.size(); ++i0) {
     hist_out_f[i0]->Write(hist_out_f[i0]->GetName());
   }
-  // jms for softdrop corrections
-  //h_tt_p2_massscale_up_f->Write(processes_out[1]+"_vjmsUp");
-  //h_tt_p2_massscale_down_f->Write(processes_out[1]+"_vjmsDown");
   fout_f->Close();
   
   hist_out_p.clear(); hist_out_nom_p.clear();
@@ -703,8 +650,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   // jet mass resolution
   TString inFileNameP = "./"+dirname1+"/"+nameoutfile+"_templates_p.root";
   TString inFileNameF = "./"+dirname1+"/"+nameoutfile+"_templates_f.root";    
-  //system("python jetMassSmearing.py "+inFileNameP+" "+processes_out[1]+" p");
-  //system("python jetMassSmearing.py "+inFileNameF+" "+processes_out[1]+" f");
 
   // JMS and JMR
   TString smearVal = "0.15";
@@ -726,20 +671,12 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
   system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
 
-  // convert TH1F to TH1D\'HeavyFlavourZCandleStudies.C(\" \")\'"
-  //\'HeavyFlavourZCandleStudies.C(\"'"+(TString)era+"'\",\"zqq\",\"'"+(TString)category+"'\",\"'"+(TString)wp+"'\",true,\"pass\")\'");
-  //system("root -l -q \'HeavyFlavourZCandleStudies.C(\"'"+(TString)era+"'\",\"zqq\",\"'"+(TString)category+"'\",\"'"+(TString)wp+"'\",true,\"pass\")\'");  
-
   system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
   system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
-
-
 
   fout_p->Close();
   fout_f->Close();
   
-
-
 }
 
 

@@ -23,10 +23,16 @@ namespace conf {
   TString brY; int binsY; float minY, maxY;
   TString algo;
   TString score_def; 
-
+  TString category;
+  
   std::vector<TString> name; 
   std::vector<double>  ptmin; 
   std::vector<double>  ptmax;
+  std::vector<TString> processes;
+  std::vector<TString> process_names;
+  std::vector<TString> syst;
+  std::vector<TString> processes_in;
+
   
   void configuration(TString sample) {
 
@@ -38,7 +44,27 @@ namespace conf {
       jet_prefix = "ak8_1_";
       brX = jet_prefix+"corr_sdmass"; // brX = "ak8_1_mass";
       brY = jet_prefix+"pt";
+      category = "w";
+ 
+     // for make2DTemplates
+      processes.push_back("ttbar-powheg"); process_names.push_back("tt"); 
+      processes.push_back("singletop");    process_names.push_back("st");
+      processes.push_back("ttv");          process_names.push_back("ttv");
+      processes.push_back("w");            process_names.push_back("wqq");
+      processes.push_back("diboson");      process_names.push_back("vv");
+
+      // keep this format - pretify later
+      processes_in.push_back("tt_p3"); processes_in.push_back("st_p3"); processes_in.push_back("ttv_p3");
+      processes_in.push_back("tt_p2"); processes_in.push_back("st_p2"); processes_in.push_back("ttv_p2"); 
+      processes_in.push_back("tt_p1"); processes_in.push_back("st_p1"); processes_in.push_back("ttv_p1");
+      processes_in.push_back("wqq");   processes_in.push_back("vv");
+
+      // list of systematic uncertainties
+      syst.push_back("_"); syst.push_back("pu"); syst.push_back("jes"); syst.push_back("jer"); syst.push_back("met"); 
+      syst.push_back("lhescalemuf"); syst.push_back("lhescalemur"); //syst.push_back("lhepdf");
+
     }
+
 
     if (sample == "zqq") {
       jet_prefix = "fj_1_";
@@ -46,8 +72,8 @@ namespace conf {
       brY = jet_prefix+"pt";
     }
 
-    algo      = "particlenetmd";
-    score_def = jet_prefix+"ParticleNetMD_XbbVsQCD";
+    algo      = "dak8ddt"; // deepak8ddt particlenetmd 
+    score_def = jet_prefix+"DeepAK8DDT"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
     binsX = 30; minX = 50;  maxX = 200.;
     binsY = 40; minY = 200; maxY = 1200.;
    

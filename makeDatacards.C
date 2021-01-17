@@ -18,7 +18,7 @@ void makeDatacards(TString era, TString sample, TString category, TString wpmin,
   }
   
   if (sample == "tt1lw") { 
-    makeOneDatacardTop("particlenet_sf",category,wpmin,wpmax,"pt200to450",sample,era); 
+    makeOneDatacardTop(conf::algo+"_sf",category,wpmin,wpmax,"pt200to450",sample,era); 
   }
 
   if (sample=="tt1L" || sample=="ttbar1L" || (sample=="ttbar1l") || (sample=="tt1l") ) {
@@ -169,11 +169,11 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   TString label0;
   TString name = (TString)name_;
   TString inputname_ = (TString)inputname;
-  if      (inputname_.Contains("tau21ddt"))      { label0 = "tau21ddt"; }
-  else if (inputname_.Contains("dak8"))          { label0 = "dak8"; }
-  else if (inputname_.Contains("dak8md"))        { label0 = "dak8md"; }
-  else if (inputname_.Contains("dak8ddt"))       { label0 = "dak8ddt"; }
-  else if (inputname_.Contains("particlenetmd")) { label0 = "particlenetmd"; }
+  if (inputname_.Contains("tau21ddt"))                                                           { label0 = "tau21ddt"; }
+  if (inputname_.Contains("dak8ddt"))                                                            { label0 = "dak8ddt"; }
+  if (inputname_.Contains("dak8md"))                                                             { label0 = "dak8md"; }
+  if (inputname_.Contains("dak8") && !(inputname_.Contains("md") || inputname_.Contains("ddt"))) { label0 = "dak8"; }
+  if (inputname_.Contains("particlenetmd"))                                                      { label0 = "particlenetmd"; }
   std::cout << label0 << "\n";
   
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");

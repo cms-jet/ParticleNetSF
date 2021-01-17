@@ -106,13 +106,13 @@ void mainfunction(TString sample, TString era, TString wpmin, TString wpmax) {
   
   if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) { 
     std::cout << " In sample " << sample << " making 2D templates \n";
-    makeTemplatesTop(sample,era,"bb",wpmin,wpmax,conf::score_def,"200","1200");    
+    makeTemplatesTop(sample,era,conf::category,wpmin,wpmax,conf::score_def,"200","1200");    
 
   }
 
   if (sample == "zqq") { 
     std::cout << " In sample " << sample << " making 2D templates \n";
-    makeTemplates(sample,era,"bb",wpmin,conf::score_def,"200","1200"); 
+    makeTemplates(sample,era,conf::category,wpmin,conf::score_def,"200","1200"); 
   }
 }
 
@@ -258,8 +258,11 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   if (score == "ak8_1_ParticleNetMD_XbbVsQCD") { score = "ak8_1_ParticleNetMD_Xbb/(ak8_1_ParticleNetMD_Xbb+ak8_1_ParticleNetMD_QCD)"; }
 
   // Processes, paths and lumi for each era
-  vector<TString> processes     = {"ttbar-powheg","singletop","ttv","w","diboson"};
-  vector<TString> process_names = {"tt","st","ttv","wqq","vv"};
+  //vector<TString> processes     = {"ttbar-powheg","singletop","ttv","w","diboson"};
+  //vector<TString> process_names = {"tt","st","ttv","wqq","vv"};
+  vector<TString> processes     = conf::processes;
+  vector<TString> process_names = conf::process_names;
+
   TString path;
   float intLumi;
   if (era == "2016") { 
@@ -401,8 +404,22 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   h_data_p->Write("data_obs_pass");
   h_data_f->Write("data_obs_fail");
 
-
+  
   // MC templates
+  std::vector<TString> syst = conf::syst;
+  TString name_, namesys_;
+  for (int i0=0; i0<syst.size(); ++i0) {
+    name_ = syst.at(i0); namesys_ = "";
+    if (syst.at(i0)=="_")  { name_ = "nom"; namesys_ = "nom"; }
+    if (syst.at(i0)=="pu") { namesys_ = "pu"; }
+    
+    if (syst.at(i0)=="_") { makeMCHistosTop(name,path,processes,process_names,name_,namesys_,lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout); }
+    else {
+      makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+      makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+    }
+  }
+  /*
   makeMCHistosTop(name,path,processes,process_names,"nom","nom",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
   makeMCHistosTop(name,path,processes,process_names,"pu","puUp",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
   makeMCHistosTop(name,path,processes,process_names,"pu","puDown",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
@@ -417,7 +434,7 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   makeMCHistosTop(name,path,processes,process_names,"lhescalemur","Up",lumi+"*LHEScaleWeight[7]*LHEScaleWeightNorm[7]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
   makeMCHistosTop(name,path,processes,process_names,"lhescalemur","Down",lumi+"*LHEScaleWeight[1]*LHEScaleWeightNorm[1]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
   //makeMCHistosLHEPDFTop(name,path,processes,process_names,"lhepdf","nom",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-
+  */
   /*
   // tt-herwig
   TFile *f_tt_h  = TFile::Open(path+"ttbar-herwig_tree.root" , "READONLY");
