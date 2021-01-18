@@ -671,8 +671,8 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
   system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
 
-  system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
-  system("root -l \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
+  system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
+  system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
 
   fout_p->Close();
   fout_f->Close();

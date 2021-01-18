@@ -100,7 +100,7 @@ double rewgtfuncDAK8DDT_w_0p50(double rho, double pt){
 
 
 
-void mainfunction(TString sample, TString era, TString wpmin, TString wpmax) {
+void make2DTemplates(TString sample, TString era, TString wpmin, TString wpmax) {
   
   conf::configuration(sample);
   
