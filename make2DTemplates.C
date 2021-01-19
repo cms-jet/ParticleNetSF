@@ -137,7 +137,7 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp,  TSt
     //    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/2016/"; 
     //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs_NEW_30Jan/2016/";
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2016/20200505/";
-    //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
+  //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
     intLumi= 36.8;
   }
   if (era == "2017") { 
@@ -271,17 +271,20 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
     //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2016_Muon_Channel/";
     //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
     //    path = "/uscmst1b_scratch/lpc1/3DayLifetime/loukas/particlenet_ak8_20200914_muon_2016/";
-    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
+    //    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
+    path = conf::path_2016;
     intLumi= 36.8;
   }
   if (era == "2017") { 
     //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2017_Muon_Channel/"; 
-    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/"; 
+    //path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
+    path = conf::path_2017;
     intLumi= 44.98;
   }
   if (era == "2018") { 
     //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2018_Muon_Channel/"; 
-    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
+    //path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
+    path = conf::path_2018;
     intLumi= 63.67;
   }
   ostringstream tmpLumi;

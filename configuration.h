@@ -33,7 +33,10 @@ namespace conf {
   std::vector<TString> syst;
   std::vector<TString> processes_in;
 
-  
+  TString path_2016;
+  TString path_2017;
+  TString path_2018;
+
   void configuration(TString sample) {
 
     TString jet_prefix;
@@ -41,6 +44,11 @@ namespace conf {
     // =================== area to modify - tune ===================== //
    
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") || (sample == "tt1lw") ) {
+
+      path_2016 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
+      path_2017 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
+      path_2018 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
+
       jet_prefix = "ak8_1_";
       brX = jet_prefix+"corr_sdmass"; // brX = "ak8_1_mass";
       brY = jet_prefix+"pt";
@@ -62,7 +70,6 @@ namespace conf {
       // list of systematic uncertainties
       syst.push_back("_"); syst.push_back("pu"); syst.push_back("jes"); syst.push_back("jer"); syst.push_back("met"); 
       syst.push_back("lhescalemuf"); syst.push_back("lhescalemur"); //syst.push_back("lhepdf");
-
     }
 
 

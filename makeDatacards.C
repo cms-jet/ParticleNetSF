@@ -269,8 +269,8 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
 
   // for tt/W SF
   //  std::cout << "vjms        shape    - 1 - -     - 1 - - \n";
-  std::cout << "vjmsp       shape    - 1 - -     - - - - \n";
-  std::cout << "vjmsf       shape    - - - -     - 1 - - \n";
+  std::cout << "vjmsp       shapeU    - 1 - -     - - - - \n";
+  std::cout << "vjmsf       shapeU    - - - -     - 1 - - \n";
   /*
   std::cout << "p3jmsp      shape    1 - - -     - - - - \n";
   std::cout << "p3jmsf      shape    - - - -     1 - - - \n";
@@ -283,8 +283,8 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
   //std::cout << "jmsf       shape    - - - -     - 1 - - \n";
   //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
-  std::cout << "vjmrp       shape    - 1 - -     - - - - \n";
-  std::cout << "vjmrf       shape    - - - -     - 1 - - \n";
+  std::cout << "vjmrp       shapeU    - 1 - -     - - - - \n";
+  std::cout << "vjmrf       shapeU    - - - -     - 1 - - \n";
   //std::cout << "wjmrp       shape    - 1 - -     - - - - \n";
   std::cout << "pu          shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "jes         shape    1 1 1 1     1 1 1 1 \n";
