@@ -99,6 +99,13 @@ double rewgtfuncDAK8DDT_w_0p50(double rho, double pt){
 }
 
 
+double massScale(double mass, double scaleVal=1.05) { return scaleVal*mass; }
+
+double massSmear(double mass, unsigned long lumi, unsigned long event, double sigma=0.1) {
+  TRandom3 rnd((lumi << 10) + event);
+  return rnd.Gaus(1, sigma)*mass; 
+}
+
 
 void make2DTemplates(TString sample, TString era, TString wpmin, TString wpmax) {
   
@@ -667,10 +674,8 @@ void makeMCHistosTop(TString name, TString path, std::vector<TString> processes,
   TString sys_type = "/";
   if ( sysType == "Up" ) { sys_type = "_up/"; } if ( sysType == "Down" ) { sys_type ="_down/"; }
 		    
-  TString sys_dir;  
-  //  if      ( (sys == "nom") || (sys == "pu") )               { sys_dir = "/REPO_mc/mc_nom/"; } 
-  if      ( (sys == "nom") || (sys == "pu") )               { sys_dir = "/mc_nom/"; } 
-  //if      ( (sys == "nom") || (sys == "pu") )               { sys_dir = "/"; } 
+  TString sys_dir; 
+  if      ( (sys == "nom") || (sys == "pu") || (sys == "jms") || (sys == "jmr") ) { sys_dir = "/mc_nom/"; }  
   else if ( (sys.Contains("lhe")) || (sys.Contains("ps")) ) { sys_dir = "/LHEWeight/"; }
   else                                                      { sys_dir = "/"+sys+sys_type; }
 
@@ -868,11 +873,12 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
                     bool useLog,TString name,bool data) {
 
   TH1::SetDefaultSumw2(kTRUE);
-
+  
   TString puWgt;
   if (name.Contains("puUp"))        { puWgt = "puWeightUp"; }
   else if (name.Contains("puDown")) { puWgt = "puWeightDown"; }
   else                              { puWgt = "puWeight"; }
+
 
   TString genWgt = "xsecWeight*genWeight";
 
@@ -881,18 +887,14 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   TString zBosonWgt = "(z_qcdnlo_wgt_func(fj_1_pt)*z_ewknlo_wgt_func(fj_1_pt))"; //NLOQCD=1.45 for 2016
   std::cout << " Z W weights = " << zBosonWgt << " " << wBosonWgt << "\n";
 
-  //  if (sample.Contains("2017") || sample.Contains("2018")) { wBosonWgt = "1."; zBosonWgt = "1."; } std::cout << wBosonWgt << " " << zBosonWgt << "\n";
-  //TString qcdWgt    = "qcd_incl_mass_wgt(fj_1_sdmass)";
-  //TString qcdWgt    = "qcd_incl_mass_wgt(fj_1_pt)";
   TString qcdWgt    = "1.";
   TString ttWgt     = "1."; if (sample.Contains("tt1L") || sample.Contains("ttbar1L") || sample.Contains("tt1l")) { ttWgt = "topptWeight"; };
-  // ttbar: add top-pt reweighting
 
+  conf::configuration(sample);
   TString cut;
   if (data) { cut ="("+cuts+")"; } 
-  //  if (data) { cut ="( (pass_mutrig || pass_eltrig) && "+cuts+")"; } 
   else {
-      //if (name.Contains("qcd"))           { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+")"; }
+    //if (name.Contains("qcd"))           { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+")"; }
     if (name.Contains("qcd_0"))         { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType==0)"; }
     if (name.Contains("qcd_1") || name.Contains("qcd_2") ) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType>0)"; }
     else if (name.Contains("qcherwig")) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+")*("+cuts+")"; }
@@ -909,9 +911,15 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   std::cout << "Cut = " << cut << "\n";
   std::cout << "\n";
 
-
+  
   TH2D *hTemp = new TH2D(name,name,binsX,minX,maxX,binsY,minY,maxY); //hTemp->SetName(name);
-  tree->Project(name,branchY+":"+branchX,cut);
+
+  TString massScaleVal_ = "1.05"; if (name.Contains("Down")) { massScaleVal_ = "0.95"; }
+  TString massSmearVal_ = "0.10"; if (name.Contains("Down")) { massSmearVal_ = "0."; }
+  if (name.Contains("jms")) { std::cout << tree->Project(name,branchY+":(massScale("+branchX+","+massScaleVal_+"))",cut); }
+  //if (name.Contains("jms"))      { std::cout << " In jms \n"; tree->Project(name,branchY+":(*"+branchX+")",cut); }
+  else if (name.Contains("jmr")) { std::cout << " In jmr \n"; tree->Project(name,branchY+":(massSmear("+branchX+",luminosityBlock,event,"+massSmearVal_+"))",cut); }
+  else                           { std::cout << " In else \n"; tree->Project(name,branchY+":"+branchX,cut); }
 
   // ad overflow bin
   for (unsigned int i0y=0; i0y<hTemp->GetNbinsY(); ++i0y) {

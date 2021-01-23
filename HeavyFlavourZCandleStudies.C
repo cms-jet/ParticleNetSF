@@ -647,6 +647,10 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   hist_out_p.clear(); hist_out_nom_p.clear();
   hist_out_f.clear(); hist_out_nom_f.clear();
 
+  /*
+  // alternative implementation
+  // remove it now for consistency 
+  // with VHcc analysis
   // jet mass resolution
   TString inFileNameP = "./"+dirname1+"/"+nameoutfile+"_templates_p.root";
   TString inFileNameF = "./"+dirname1+"/"+nameoutfile+"_templates_f.root";    
@@ -676,7 +680,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 
   fout_p->Close();
   fout_f->Close();
-  
+  */
 }
 
 

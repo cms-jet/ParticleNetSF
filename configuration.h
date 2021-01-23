@@ -69,6 +69,7 @@ namespace conf {
 
       // list of systematic uncertainties
       syst.push_back("_"); syst.push_back("pu"); syst.push_back("jes"); syst.push_back("jer"); syst.push_back("met"); 
+      syst.push_back("jms"); syst.push_back("jmr");
       syst.push_back("lhescalemuf"); syst.push_back("lhescalemur"); //syst.push_back("lhepdf");
     }
 
@@ -79,8 +80,8 @@ namespace conf {
       brY = jet_prefix+"pt";
     }
 
-    algo      = "dak8ddt"; // deepak8ddt particlenetmd 
-    score_def = jet_prefix+"DeepAK8DDT"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
+    algo      = "particlenetmd"; // deepak8ddt particlenetmd 
+    score_def = jet_prefix+"ParticleNetMD_XbbVsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
     binsX = 30; minX = 50;  maxX = 200.;
     binsY = 40; minY = 200; maxY = 1200.;
    
