@@ -97,7 +97,7 @@ namespace aux {
         h_r[i0]->GetXaxis()->SetTitle(xname);
         h_r[i0]->GetYaxis()->SetTitle("Ratio");
         h_r[i0]->GetYaxis()->SetRangeUser(0.3,1.7);
-        h_r[i0]->Draw("HIST E0");
+        h_r[i0]->Draw("HIST");
       }
       else { h_r[i0]->Draw("HIST E0 sames"); }
     }
