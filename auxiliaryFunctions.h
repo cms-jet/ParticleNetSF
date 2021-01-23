@@ -89,6 +89,7 @@ namespace aux {
       }
       else { h1d[i0]->Draw("HIST E0 sames"); }
     }
+    leg->Draw("sames");
     
     pRatio->cd();
     for (int i0=0; i0<h_r.size(); ++i0) {

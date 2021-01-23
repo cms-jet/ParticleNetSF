@@ -25,24 +25,23 @@ void jmRegressionStudies() {
   gStyle->SetOptStat(0);
   gStyle->SetOptFit(0);
   gStyle->SetPalette(1);
-  //  conf::configuration(path2file); 
- 
-  TFile *f_ = new TFile("/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/mc_nom/ttbar-powheg_tree.root","READONLY");
+
+  TFile *f_ = new TFile("/eos/uscms/store/user/hqu/NanoTrees/20210109_VH_2018_0L/mc/zh-z2nn-h2cc_tree.root","READONLY");
   TTree *t_ = (TTree*)f_->Get("Events");
 
 
   // jet mass vs tagger score
-  TString cut = "0==0";
+  TString cut = "dr_ak15_hdaus<1.5 && ak15_pt>200. && ak15_pt<300";
   
   std::vector<TString> wp;  wp.clear();
   std::vector<TString> leg; leg.clear();
-  wp.push_back("ak8_1_ParticleNetMD_Xcc>0.8");  leg.push_back("cc>0.8");
-  wp.push_back("ak8_1_ParticleNetMD_Xcc>0.9");  leg.push_back("cc>0.9");
-  wp.push_back("ak8_1_ParticleNetMD_Xcc>0.95"); leg.push_back("cc>0.95");
+  wp.push_back("ak15_ParticleNetMD_HccVsQCD>0.99"); leg.push_back("ParticleNet-MD(cc)>0.99");
+  wp.push_back("ak15_ParticleNetMD_HccVsQCD>0.96"); leg.push_back("ParticleNet-MD(cc)>0.96");
+  wp.push_back("ak15_ParticleNetMD_HccVsQCD>0.90"); leg.push_back("ParticleNet-MD(cc)>0.90");
 
   TString gen_match = "0==0";
  
-  jetMassVsTaggerScore("jms_vs_tagger_particlenet_cc",t_,gen_match,wp,cut,"ak8_1_corr_sdmass","mass [GeV]","a. u.",leg);
+  jetMassVsTaggerScore("jms_vs_tagger_particlenet_cc",t_,gen_match,wp,cut,"ak15_regressed_mass","mass [GeV]","a. u.",leg);
  
 }
 
