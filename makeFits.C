@@ -88,7 +88,7 @@ void makeOneFitTop(std::string era, std::string category, std::string wpmin, std
      
   //  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1,other";//tp1";//,other";
   //   std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1";
-  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=wqq,tp3,tp1";
+  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=wqq,tqq,tp1";
   //  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=wqq,tqq,tp1,other";
   std::string multidimfit       = "combine -M MultiDimFit -m 125 "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root  --algo=singles --robustFit=1 --cminDefaultMinimizerTolerance 5.";
   std::string fitdiagnostics    = "combine -M FitDiagnostics -m 125 "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root --saveShapes --saveWithUncertainties --robustFit=1 --cminDefaultMinimizerTolerance 5.";
@@ -117,7 +117,7 @@ void makeOneFitTop(std::string era, std::string category, std::string wpmin, std
   std::string impacts_6 = "mv impacts.json "+name1+"_sf/fitdir/impacts_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".json";
   std::string impacts_7 = "mv combine_logger.out "+name1+"_sf/fitdir/combine_logger_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".out";
   //std::string impacts_8 = "mv impacts.pdf "+name1+"_sf/fitdir/impacts_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".pdf";
-  std::string impacts_8 = "python ../HiggsAnalysis/CombinedLimit/data/tutorials/diffNuisances.py "+name1+"_sf/fitdir/fitdiagnostics_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root -A -g plots.root";
+  std::string impacts_8 = "python ../../CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit/data/tutorials/diffNuisances.py "+name1+"_sf/fitdir/fitdiagnostics_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root -A -g plots.root";
   std::string impacts_9 = "mv plots.root "+name1+"_sf/fitdir/impact_plots_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root";
   
   const char *command_impacts1 = impacts_1.c_str();

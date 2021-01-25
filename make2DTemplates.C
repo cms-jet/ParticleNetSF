@@ -273,24 +273,14 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   TString path;
   float intLumi;
   if (era == "2016") { 
-    //    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/2016/"; 
-    //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs_NEW_30Jan/2016/";
-    //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2016_Muon_Channel/";
-    //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
-    //    path = "/uscmst1b_scratch/lpc1/3DayLifetime/loukas/particlenet_ak8_20200914_muon_2016/";
-    //    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
     path = conf::path_2016;
     intLumi= 36.8;
   }
   if (era == "2017") { 
-    //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2017_Muon_Channel/"; 
-    //path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
     path = conf::path_2017;
     intLumi= 44.98;
   }
   if (era == "2018") { 
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2018_Muon_Channel/"; 
-    //path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
     path = conf::path_2018;
     intLumi= 63.67;
   }
@@ -408,7 +398,6 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
   // Data histograms 
   TFile *f_data  = TFile::Open(path+"/data/singlemu_tree.root" , "READONLY");
-  //TFile *f_data  = TFile::Open(path+"/singlemu_tree.root" , "READONLY");
   TTree *t_data  = (TTree*)f_data->Get("Events");
   TH2D *h_data_p = create2Dhisto(name,t_data,lumi,cuts[0]+" && "+cuts[4],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_data_p",true);
   TH2D *h_data_f = create2Dhisto(name,t_data,lumi,cuts[0]+" && "+cuts[5],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_data_f",true);
@@ -431,22 +420,7 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
       makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
     }
   }
-  /*
-  makeMCHistosTop(name,path,processes,process_names,"nom","nom",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"pu","puUp",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"pu","puDown",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"jes","Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"jes","Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"jer","Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"jer","Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"met","Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"met","Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"lhescalemuf","Up",lumi+"*LHEScaleWeight[5]*LHEScaleWeightNorm[5]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"lhescalemuf","Down",lumi+"*LHEScaleWeight[3]*LHEScaleWeightNorm[3]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"lhescalemur","Up",lumi+"*LHEScaleWeight[7]*LHEScaleWeightNorm[7]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  makeMCHistosTop(name,path,processes,process_names,"lhescalemur","Down",lumi+"*LHEScaleWeight[1]*LHEScaleWeightNorm[1]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  //makeMCHistosLHEPDFTop(name,path,processes,process_names,"lhepdf","nom",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  */
+
   /*
   // tt-herwig
   TFile *f_tt_h  = TFile::Open(path+"ttbar-herwig_tree.root" , "READONLY");

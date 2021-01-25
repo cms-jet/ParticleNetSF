@@ -68,12 +68,13 @@ namespace conf {
       processes.push_back("ttv");          process_names.push_back("ttv");
       processes.push_back("w");            process_names.push_back("wqq");
       processes.push_back("diboson");      process_names.push_back("vv");
+      processes.push_back("qcd-mg");       process_names.push_back("qcd");
 
-      // keep this format - pretify later
+      // keep this format - pretify later - need to keep this order
       processes_in.push_back("tt_p3"); processes_in.push_back("st_p3"); processes_in.push_back("ttv_p3");
       processes_in.push_back("tt_p2"); processes_in.push_back("st_p2"); processes_in.push_back("ttv_p2"); 
       processes_in.push_back("tt_p1"); processes_in.push_back("st_p1"); processes_in.push_back("ttv_p1");
-      processes_in.push_back("wqq");   processes_in.push_back("vv");
+      processes_in.push_back("wqq");   processes_in.push_back("vv");    processes_in.push_back("qcd"); 
 
       // list of systematic uncertainties
       syst.push_back("_"); syst.push_back("pu"); syst.push_back("jes"); syst.push_back("jer"); syst.push_back("met"); 
@@ -89,7 +90,7 @@ namespace conf {
     }
 
     algo      = "particlenetmd"; // deepak8ddt particlenetmd 
-    score_def = jet_prefix+"ParticleNetMD_XbbVsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
+    score_def = jet_prefix+"ParticleNetMD_XccVsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
     binsX = 30; minX = 50;  maxX = 200.;
     binsY = 40; minY = 200; maxY = 1200.;
    
