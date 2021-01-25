@@ -319,15 +319,17 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
 
   // Cuts and matching definition
-  TString cut_ = "(passmetfilters && passMuTrig && n_ak8>=1 && ak8_1_pt>="+cutmin+" && ak8_1_pt<"+cutmax+")";
-  //  TString c_base     = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_corr_sdmass>50. && ak8_1_corr_sdmass<200. && leptonicW-pt>100.) && ("+cut_+")";
-  //  TString c_base_ext = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && ak8_1_corr_sdmass>50. && ak8_1_corr_sdmass<200. && leptonicW-pt>100.)";
-  TString c_base     = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
-  TString c_base_ext = "(abs(ak8_1_eta)<2.4 && ak8_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
+  TString cut_ = "(passmetfilters && passMuTrig && fj_1_pt>="+cutmin+" && fj_1_pt<"+cutmax+")";
+  TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
+  TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
   TString c_incl     = c_base+" && "+cut_;
-  
-  TString c_p3 = "( (ak8_1_dr_fj_top_wqmax<0.8) && (ak8_1_dr_fj_top_b<0.8) )";
-  TString c_p2 = "( (!"+c_p3+") && (ak8_1_dr_fj_top_wqmax<0.8) && (ak8_1_dr_fj_top_b>0.8) )";
+  /*  
+  TString c_p3 = "( (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b<jetR) )";
+  TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b>jetR) )";
+  TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
+  */
+  TString c_p3 = "( (fj_1_dr_T<jetR) && (fj_1_dr_T_Wq_max<jetR) && (fj_1_dr_T_b<jetR) )";
+  TString c_p2 = "( (!"+c_p3+") && (fj_1_T_Wq_max_pdgId<jetR) && (fj_1_dr_T_b>=jetR) )";
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
 
   std::vector<TString> cuts; cuts.clear();
@@ -675,7 +677,7 @@ void makeMCHistosTop(TString name, TString path, std::vector<TString> processes,
   if ( sysType == "Up" ) { sys_type = "_up/"; } if ( sysType == "Down" ) { sys_type ="_down/"; }
 		    
   TString sys_dir; 
-  if      ( (sys == "nom") || (sys == "pu") || (sys == "jms") || (sys == "jmr") ) { sys_dir = "/mc_nom/"; }  
+  if      ( (sys == "nom") || (sys == "pu") || (sys == "jms") || (sys == "jmr") ) { sys_dir = "/mc/"; }  
   else if ( (sys.Contains("lhe")) || (sys.Contains("ps")) ) { sys_dir = "/LHEWeight/"; }
   else                                                      { sys_dir = "/"+sys+sys_type; }
 

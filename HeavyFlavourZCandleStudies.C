@@ -490,18 +490,14 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   TH1D *h_data_f  = h1DHistoFrom2DTemplates(path2file,"data_obs_fail",name,ymin,ymax,1,true);
 
   // MC templates
-  //  std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur","lhepdf"};
-  //std::vector<TString> syst = {"_","pu","jes","jer","met"};
-  //std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur"};
   std::vector<TString> syst = conf::syst;
-  //  std::vector<TString> syst = {"_"};
-  //std::vector<TString> processes_in = {"tt_p3","st_p3","ttv_p3","tt_p2","st_p2","ttv_p2","tt_p1","st_p1","ttv_p1","wqq","vv"};
   std::vector<TString> processes_in = conf::processes_in;
 
   std::vector<TString> processes_out;
   if (sample == "top") { processes_out.push_back("tqq"); processes_out.push_back("tp2"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   if (sample == "w")   { processes_out.push_back("tp3"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   if (sample == "bb")  { processes_out.push_back("tqq"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
+  if (sample == "cc")  { processes_out.push_back("tqq"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   std::vector<int>     colors    = {conf::tp3.color,conf::tp2.color,conf::tp1.color,conf::other.color};
   std::vector<TString> legends   = {conf::tp3.legend_name,conf::tp2.legend_name,conf::tp1.legend_name,conf::other.legend_name};
 
@@ -514,23 +510,24 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   category.push_back("pass"); 
   category.push_back("fail");
   
+  // LG: this part needs to be cleaned
   for (unsigned int ic=0; ic<category.size(); ++ic) {
     TString catstr_; if (category[ic] == "pass") { catstr_ = "pass"; } else { catstr_ = "fail"; }
     
     for (unsigned int is=0; is<syst.size(); ++is) {
 
       int count = 0;
-      //      for (unsigned int ip=0; ip<processes_in.size(); ip+=3) {
       for (unsigned int ip=0; ip<processes_in.size(); ip+=1) {
 	if (syst[is]=="_") {
 	  std::cout << processes_in[ip] << " " << ip << "\n";
 	  TH1D *h_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	  h_->Add(h__);
-	  if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
-	    TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	    h_->Add(h___);
-	  }
+	  TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+	  h_->Add(h__); h_->Add(h___);
+	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
+	  //  TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+	  //  h_->Add(h___);
+	  //}
 	  h_->SetName(processes_out[count]); h_->SetLineColor(colors[count]); h_->SetFillColor(colors[count]);
 	 
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_); hist_out_nom_p.push_back(h_); }
@@ -542,26 +539,27 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	  TH1D *h_up_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_up__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  h_up_->Add(h_up__);
-	  if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
-	    TH1D *h_up___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
-	    h_up_->Add(h_up___); 
-	  }
+	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
+	  TH1D *h_up___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
+	  h_up_->Add(h_up___); 
+	  //}
 	  h_up_->SetName(processes_out[count]+"_"+syst[is]+"Up"); h_up_->SetLineColor(colors[count]); h_up_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_up_); } else { hist_out_f.push_back(h_up_); }
 
 	  TH1D *h_down_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_down__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
-	  h_down_->Add(h_down__);
-	  if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
-	    TH1D *h_down___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
-	    h_down_->Add(h_down___);
-	  }
+	  h_down_->Add(h_down__); 
+	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
+	  TH1D *h_down___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
+	  h_down_->Add(h_down___);
+	  //}
 	  h_down_->SetName(processes_out[count]+"_"+syst[is]+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_down_); } else { hist_out_f.push_back(h_down_); }
 	}
-	if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) { ip = ip+2; }
-	if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("vv")) )                                         { ip = ip+1; }
-      
+	//if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) { ip = ip+2; }
+	//if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("vv")) )                                         { ip = ip+1; }
+	ip = ip+2;
+
       ++count;
       }
     } // end of looping over the syst 
@@ -648,10 +646,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   hist_out_f.clear(); hist_out_nom_f.clear();
 
   /*
-  // alternative implementation
-  // remove it now for consistency 
-  // with VHcc analysis
-  // jet mass resolution
+  // alternative implementation; remove it now for consistency with VHcc analysis
   TString inFileNameP = "./"+dirname1+"/"+nameoutfile+"_templates_p.root";
   TString inFileNameF = "./"+dirname1+"/"+nameoutfile+"_templates_f.root";    
 
@@ -660,20 +655,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   TString scaleVal = "5."; // GeV
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix p3");
   system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix p3");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix v");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix v");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix p1");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix p1");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[3]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix o");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[3]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix o");
-
-  // m(SD) corrections
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p3");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p3");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix v");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[1]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix v");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
-  system("python jetMassSandR.py --ifile "+inFileNameF+" --sample "+processes_out[2]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 0 --suffix p1");
 
   system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
   system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
@@ -1415,6 +1396,14 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
     legends.push_back("Total SM");
   }
 
+  if ( (category == "cc") ) {
+    std::cout << " sample = " << sample << " , category = " << category << "\n";
+    processes.push_back("tp1"); processes.push_back("wqq"); processes.push_back("tqq"); processes.push_back("other"); processes.push_back("total");
+    colors.push_back(conf::tp1.color); colors.push_back(conf::wqq.color); colors.push_back(conf::tqq.color); colors.push_back(conf::other.color); colors.push_back(602);
+    legends.push_back(conf::tp1.legend_name); legends.push_back(conf::wqq.legend_name); legends.push_back(conf::tqq.legend_name); legends.push_back(conf::other.legend_name); \
+    legends.push_back("Total SM");
+  }
+
   TString extra_ = "/"; if (sample == "comb") { extra_ = "/ch2_"; } 
 
   // get prefit histograms
@@ -1534,7 +1523,8 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   pt_cms->Draw("sames");
   pt_preliminary->Draw("sames");
   std::cout << " i m here 12-d\n";
-  pt_lumi.DrawLatexNDC(0.64,0.93,longstring);
+  //pt_lumi.DrawLatexNDC(0.64,0.93,longstring);
+  //pt_lumi.DrawLatex(0.64,0.93,longstring);
   std::cout << " i m here 12-e\n";
   c->RedrawAxis();
   pRatio->cd();

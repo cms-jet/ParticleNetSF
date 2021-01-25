@@ -37,6 +37,8 @@ namespace conf {
   TString path_2017;
   TString path_2018;
 
+  TString jetCone;
+
   void configuration(TString sample) {
 
     TString jet_prefix;
@@ -44,15 +46,21 @@ namespace conf {
     // =================== area to modify - tune ===================== //
    
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") || (sample == "tt1lw") ) {
-
+      /*
       path_2016 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
       path_2017 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
       path_2018 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
-
-      jet_prefix = "ak8_1_";
-      brX = jet_prefix+"corr_sdmass"; // brX = "ak8_1_mass";
+      */
+      path_2016 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2016/";
+      path_2017 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2017/";
+      path_2018 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2018/";
+      
+      jetCone    = "ak15";
+      jet_prefix = "fj_1_";
+      
+      brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
       brY = jet_prefix+"pt";
-      category = "w";
+      category = "cc";
  
      // for make2DTemplates
       processes.push_back("ttbar-powheg"); process_names.push_back("tt"); 
