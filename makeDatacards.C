@@ -250,45 +250,22 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "wqq_xsec     lnN      - 1.10 - -    - 1.10 - - \n";
   std::cout << "tp1_xsec     lnN      - - 1.10 -    - - 1.10 - \n";
   //std::cout << "other_xsec   lnU      - - - 5.00    - - - 5.00 \n";
-  std::cout << "other_xsec   lnN      - - - 10    - - - - \n";
+  std::cout << "other_xsec   lnN      - - - 5    - - - 5 \n";
   
-  //std::cout << "other_xsec   lnN      - - - 1.30    - - - 1.30 \n";
-  //std::cout << "other_xsec   lnN      - - - -    - - - 1.10 \n";
+
   std::cout << "\n";
 
-  //  std::cout << "other_sf   lnN      - - - 1.2     - - - 0.8 \n";
-  //  std::cout << "other_sfp   lnN      - - - 1.20     - - - - \n";
-  //  std::cout << "other_sff   lnN      - - - -     - - - 1.20 \n";
 
-  //  std::cout << "other_sfp   lnN      - - - 1.20     - - - 0.80 \n";
+  std::cout << "tqqjms       shapeU    1 - - -     1 - - - \n";  
+  std::cout << "vqqjms       shapeU    - 1 - -     - 1 - - \n";
+  std::cout << "tp1jms       shapeU    - - 1 -     - - 1 - \n";
+  std::cout << "otherjms       shapeU    - - - 1     - - - 1 \n";
 
-  //  std::cout << "other_sfp   lnN      - - 1.5 1.5     - - - - \n";
-  //  std::cout << "other_sff   lnN      - - - -     - - 1.5 1.5 \n";
-
-  //  std::cout << "tp1_sfp   lnN      - - 1.20 -     - - 0.80 - \n";
-
-
-  // for tt/W SF
-  //  std::cout << "vjms        shape    - 1 - -     - 1 - - \n";
-  //std::cout << "vjmsp       shapeU    - 1 - -     - - - - \n";
-  //std::cout << "vjmsf       shapeU    - - - -     - 1 - - \n";
-  std::cout << "jms       shapeU    - 1 - -     - 1 - - \n";
-  /*
-  std::cout << "p3jmsp      shape    1 - - -     - - - - \n";
-  std::cout << "p3jmsf      shape    - - - -     1 - - - \n";
-  std::cout << "p1jmsp      shape    - - 1 -     - - - - \n";
-  std::cout << "p1jmsf      shape    - - - -     - - 1 - \n";
-  std::cout << "ojmsp       shape    - - - 1     - - - - \n";
-  std::cout << "ojmsf       shape    - - - -     - - - 1 \n";
-  */
-  //  std::cout << "wjmsf       shape    - - - -     - 1 - - \n";
-  //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
-  //std::cout << "jmsf       shape    - - - -     - 1 - - \n";
-  //std::cout << "jmsp       shape    - 1 - -     - - - - \n";
-  //std::cout << "vjmrp       shapeU    - 1 - -     - - - - \n";
-  //std::cout << "vjmrf       shapeU    - - - -     - 1 - - \n";
-  //std::cout << "wjmrp       shape    - 1 - -     - - - - \n";
-  std::cout << "jmr       shapeU    - 1 - -     - 1 - - \n";
+  std::cout << "tqqjmr       shapeU    1 - - -     1 - - - \n";  
+  std::cout << "vqqjmr       shapeU    - 1 - -     - 1 - - \n";
+  std::cout << "tp1jmr       shapeU    - - 1 -     - - 1 - \n";
+  std::cout << "otherjmr       shapeU    - - - 1     - - - 1 \n";
+  
   std::cout << "pu          shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "jes         shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "jer         shape    1 1 1 1     1 1 1 1 \n";

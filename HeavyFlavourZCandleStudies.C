@@ -535,6 +535,13 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	}
       
 	else {
+
+	  TString nameSyst = syst[is];
+	  if ( (syst[is].Contains("jms")) || (syst[is].Contains("jmr")) ) {
+	    nameSyst = processes_out[count]+syst[is];
+	    if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("zqq")) || (processes_in[ip].Contains("tt_p2")) ) { nameSyst = "vqq"+syst[is]; }
+	    if ( (processes_in[ip].Contains("wll")) || (processes_in[ip].Contains("qcd")) ) { nameSyst = "other"+syst[is]; } 
+	  }
 	  
 	  TH1D *h_up_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_up__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
@@ -543,7 +550,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	  TH1D *h_up___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  h_up_->Add(h_up___); 
 	  //}
-	  h_up_->SetName(processes_out[count]+"_"+syst[is]+"Up"); h_up_->SetLineColor(colors[count]); h_up_->SetFillColor(colors[count]);
+	  h_up_->SetName(processes_out[count]+"_"+nameSyst+"Up"); h_up_->SetLineColor(colors[count]); h_up_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_up_); } else { hist_out_f.push_back(h_up_); }
 
 	  TH1D *h_down_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
@@ -553,7 +560,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	  TH1D *h_down___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
 	  h_down_->Add(h_down___);
 	  //}
-	  h_down_->SetName(processes_out[count]+"_"+syst[is]+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
+	  h_down_->SetName(processes_out[count]+"_"+nameSyst+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_down_); } else { hist_out_f.push_back(h_down_); }
 	}
 	//if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) { ip = ip+2; }

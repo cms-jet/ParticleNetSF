@@ -262,31 +262,18 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   conf::configuration(path2file);
 
   // hack - it will not be needed in the new verison of ntuples
-  if (score == "ak8_1_ParticleNetMD_XbbVsQCD") { score = "ak8_1_ParticleNetMD_Xbb/(ak8_1_ParticleNetMD_Xbb+ak8_1_ParticleNetMD_QCD)"; }
+  //if (score == "ak8_1_ParticleNetMD_XbbVsQCD") { score = "ak8_1_ParticleNetMD_Xbb/(ak8_1_ParticleNetMD_Xbb+ak8_1_ParticleNetMD_QCD)"; }
 
   // Processes, paths and lumi for each era
-  //vector<TString> processes     = {"ttbar-powheg","singletop","ttv","w","diboson"};
-  //vector<TString> process_names = {"tt","st","ttv","wqq","vv"};
   vector<TString> processes     = conf::processes;
   vector<TString> process_names = conf::process_names;
 
   TString path;
   float intLumi;
-  if (era == "2016") { 
-    path = conf::path_2016;
-    intLumi= 36.8;
-  }
-  if (era == "2017") { 
-    path = conf::path_2017;
-    intLumi= 44.98;
-  }
-  if (era == "2018") { 
-    path = conf::path_2018;
-    intLumi= 63.67;
-  }
-  ostringstream tmpLumi;
-  tmpLumi << intLumi;
-  TString lumi = tmpLumi.str();
+  if (era == "2016") { path = conf::path_2016; intLumi= 36.8;  }
+  if (era == "2017") { path = conf::path_2017; intLumi= 44.98; }
+  if (era == "2018") { path = conf::path_2018; intLumi= 63.67; }
+  ostringstream tmpLumi; tmpLumi << intLumi; TString lumi = tmpLumi.str();
 
 
   // Directory to store the templates   
@@ -870,9 +857,9 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   TString cut;
   if (data) { cut ="("+cuts+")"; } 
   else {
-    //if (name.Contains("qcd"))           { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+")"; }
-    if (name.Contains("qcd_0"))         { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType==0)"; }
-    if (name.Contains("qcd_1") || name.Contains("qcd_2") ) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType>0)"; }
+    if (name.Contains("qcd"))           { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+")"; }
+    //if (name.Contains("qcd_0"))         { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType==0)"; }
+    //if (name.Contains("qcd_1") || name.Contains("qcd_2") ) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType>0)"; }
     else if (name.Contains("qcherwig")) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+")*("+cuts+")"; }
     else if (name.Contains("wboson"))   { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+wBosonWgt+")*("+cuts+")"; }
     else if (name.Contains("zboson"))   { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+zBosonWgt+")*("+cuts+")"; }
