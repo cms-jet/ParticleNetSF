@@ -297,8 +297,10 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
   // Cuts and matching definition
   TString cut_ = "(passmetfilters && passMuTrig && fj_1_pt>="+cutmin+" && fj_1_pt<"+cutmax+")";
-  TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
-  TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
+  //TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
+  //TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
+  TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.) && ("+cut_+")";
+  TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.)";
   TString c_incl     = c_base+" && "+cut_;
   /*  
   TString c_p3 = "( (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b<jetR) )";
@@ -306,7 +308,8 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
   */
   TString c_p3 = "( (fj_1_dr_T<jetR) && (fj_1_dr_T_Wq_max<jetR) && (fj_1_dr_T_b<jetR) )";
-  TString c_p2 = "( (!"+c_p3+") && (fj_1_T_Wq_max_pdgId<jetR) && (fj_1_dr_T_b>=jetR) )";
+  //TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_T_Wq_max<jetR) && (fj_1_dr_T_b>=jetR) )";
+  TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<jetR) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=jetR && fj_1_dr_T_Wq_max<jetR))";
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
 
   std::vector<TString> cuts; cuts.clear();
@@ -883,20 +886,20 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   //if (name.Contains("jms"))      { std::cout << " In jms \n"; tree->Project(name,branchY+":(*"+branchX+")",cut); }
   else if (name.Contains("jmr")) { std::cout << " In jmr \n"; tree->Project(name,branchY+":(massSmear("+branchX+",luminosityBlock,event,"+massSmearVal_+"))",cut); }
   else                           { std::cout << " In else \n"; tree->Project(name,branchY+":"+branchX,cut); }
-
+  
   // ad overflow bin
-  for (unsigned int i0y=0; i0y<hTemp->GetNbinsY(); ++i0y) {
+  /*for (unsigned int i0y=0; i0y<hTemp->GetNbinsY(); ++i0y) {
     double error =0.; double integral = hTemp->IntegralAndError(hTemp->GetNbinsX(),hTemp->GetNbinsX()+1,i0y+1,i0y+1,error);
     hTemp->SetBinContent(hTemp->GetNbinsX(),i0y+1,integral);
     hTemp->SetBinError(hTemp->GetNbinsX(),i0y+1,error);
-  }
-
+    }*/
+  
   for (unsigned int i0x=0; i0x<hTemp->GetNbinsX(); ++i0x) {
     double error =0.; double integral = hTemp->IntegralAndError(i0x+1,i0x+1,hTemp->GetNbinsY(),hTemp->GetNbinsY()+1,error);
     hTemp->SetBinContent(i0x+1,hTemp->GetNbinsY(),integral);
     hTemp->SetBinError(i0x+1,hTemp->GetNbinsY(),error);
   } 
-
+  
   return hTemp;
 }
 

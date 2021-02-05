@@ -246,11 +246,13 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "lumi            lnN      1.025 1.025 1.025 1.025     1.025 1.025 1.025 1.025 \n";
   std::cout << "\n";
     
-  std::cout << "tqq_xsec     lnN      1.10 - - -    1.10 - - - \n";
-  std::cout << "wqq_xsec     lnN      - 1.10 - -    - 1.10 - - \n";
-  std::cout << "tp1_xsec     lnN      - - 1.10 -    - - 1.10 - \n";
-  //std::cout << "other_xsec   lnU      - - - 5.00    - - - 5.00 \n";
-  std::cout << "other_xsec   lnN      - - - 5    - - - 5 \n";
+  std::cout << "tqq_xsec     lnN      1.05 - - -    1.05 - - - \n";
+  std::cout << "wqq_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
+  std::cout << "tp1_xsec     lnN      - - 1.05 -    - - 1.05 - \n";
+  //std::cout << "other_xsec   lnU      - - - 2.00    - - - - \n";
+  
+  // std::cout << "\n";
+  // std::cout << "other_sf   lnN      - - - -    - - - 5.00 \n";
   
 
   std::cout << "\n";

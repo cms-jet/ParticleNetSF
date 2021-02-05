@@ -91,7 +91,8 @@ namespace conf {
 
     algo      = "particlenetmd"; // deepak8ddt particlenetmd 
     score_def = jet_prefix+"ParticleNetMD_XccVsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
-    binsX = 30; minX = 50;  maxX = 200.;
+    //    binsX = 30; minX = 50;  maxX = 200.;
+    binsX = 32; minX = 60;  maxX = 220.;
     binsY = 40; minY = 200; maxY = 1200.;
    
 
