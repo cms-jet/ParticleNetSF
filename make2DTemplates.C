@@ -306,11 +306,17 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   TString c_p3 = "( (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b<jetR) )";
   TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b>jetR) )";
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
-  */
-  TString c_p3 = "( (fj_1_dr_T<jetR) && (fj_1_dr_T_Wq_max<jetR) && (fj_1_dr_T_b<jetR) )";
-  //TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_T_Wq_max<jetR) && (fj_1_dr_T_b>=jetR) )";
-  TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<jetR) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=jetR && fj_1_dr_T_Wq_max<jetR))";
+  
+  TString c_p3 = "( (fj_1_dr_T<0.8) && (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b<0.8) )";
+  TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b>0.8) )";
+  //TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<0.8) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=0.8 && fj_1_dr_T_Wq_max<0.8))";
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
+  */
+
+  TString c_p3 = "( (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b<0.8) )";
+  TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<0.8) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=0.8 && fj_1_dr_T_Wq_max<0.8))";     
+  TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
+
 
   std::vector<TString> cuts; cuts.clear();
   cuts.push_back(c_incl);
@@ -641,9 +647,9 @@ void makeMCHistosTop(TString name, TString path, std::vector<TString> processes,
   if ( sysType == "Up" ) { sys_type = "_up/"; } if ( sysType == "Down" ) { sys_type ="_down/"; }
 		    
   TString sys_dir; 
-  if      ( (sys == "nom") || (sys == "pu") || (sys == "jms") || (sys == "jmr") ) { sys_dir = "/mc/"; }  
-  else if ( (sys.Contains("lhe")) || (sys.Contains("ps")) ) { sys_dir = "/LHEWeight/"; }
-  else                                                      { sys_dir = "/"+sys+sys_type; }
+  if      ( (sys == "nom") || (sys == "pu") || (sys == "jms") || (sys == "jmr") ) { sys_dir = "/mc_nom/"; }  
+  else if ( (sys.Contains("lhe")) || (sys.Contains("ps")) ) { sys_dir = "/mc_sys/LHEWeight/"; }
+  else                                                      { sys_dir = "/mc_sys/"+sys+sys_type; }
 
   if ( (sys == "nom") || (sys == "pu") ) { name = name+"_"+sys; }
   else                                   { name = name+"_"+sys+sysType; }

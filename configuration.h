@@ -53,14 +53,16 @@ namespace conf {
       */
       path_2016 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2016/";
       path_2017 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2017/";
-      path_2018 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2018/";
+      path_2018 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV8_For_Copy/2018/";
       
-      jetCone    = "ak15";
+      jetCone    = "ak8";
       jet_prefix = "fj_1_";
       
-      brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
+      //Pantelis brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
+      brX = jet_prefix+"sdmass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
       brY = jet_prefix+"pt";
-      category = "cc";
+      category = "top";
+      //category = "w";
  
      // for make2DTemplates
       processes.push_back("ttbar-powheg"); process_names.push_back("tt"); 
@@ -89,16 +91,27 @@ namespace conf {
       brY = jet_prefix+"pt";
     }
 
-    algo      = "particlenetmd"; // deepak8ddt particlenetmd 
-    score_def = jet_prefix+"ParticleNetMD_XccVsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
+    //algo      = "particlenetmd"; // deepak8ddt particlenetmd 
+    algo      = "particlenet"; // deepak8ddt particlenetmd 
+    score_def = jet_prefix+"ParticleNet_TvsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
+    //score_def = jet_prefix+"ParticleNet_WvsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
+    //score_def = "(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq)/(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq+fj_1_ParticleNetMD_QCD)";
     //    binsX = 30; minX = 50;  maxX = 200.;
-    binsX = 32; minX = 60;  maxX = 220.;
+    //Pantelis binsX = 32; minX = 60;  maxX = 220.;
+    binsX = 34; minX = 50;  maxX = 220.;
     binsY = 40; minY = 200; maxY = 1200.;
-   
-
-    name.push_back("pt200to450"); ptmin.push_back(200.); ptmax.push_back(450.);
-    //name.push_back("pt300to450"); ptmin.push_back(300.); ptmax.push_back(450.);  
-
+       
+     // Top
+    name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);
+    name.push_back("pt400to480"); ptmin.push_back(400.); ptmax.push_back(480.);  
+    name.push_back("pt480to600"); ptmin.push_back(480.); ptmax.push_back(600.);   
+    name.push_back("pt600to1200"); ptmin.push_back(600.); ptmax.push_back(1200.);
+    
+     //W
+    //name.push_back("pt200to300"); ptmin.push_back(200.); ptmax.push_back(300.);
+    //name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);  
+    //name.push_back("pt400to800"); ptmin.push_back(400.); ptmax.push_back(800.);   
+    
     // =================== end of area to modify - tune ===================== //
 
 

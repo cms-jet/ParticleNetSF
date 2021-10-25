@@ -41,7 +41,8 @@ void makeOneDatacard(TString inputname, TString category, TString wpmin, TString
   if (inputname_.Contains("dak8"))        { label0 = "dak8"; }
   if (inputname_.Contains("dak8md"))      { label0 = "dak8md"; }
   if (inputname_.Contains("dak8ddt"))     { label0 = "dak8ddt"; }
-  if (inputname_.Contains("particlenet")) { label0 = "particlenet"; }
+  if (inputname_.Contains("particlenetmd")) { label0 = "particlenetmd"; }
+  if (inputname_.Contains("particlenet_")) { label0 = "particlenet"; }  
   std::cout << label0 << "\n";
 
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");
@@ -175,6 +176,8 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   if (inputname_.Contains("dak8md"))                                                             { label0 = "dak8md"; }
   if (inputname_.Contains("dak8") && !(inputname_.Contains("md") || inputname_.Contains("ddt"))) { label0 = "dak8"; }
   if (inputname_.Contains("particlenetmd"))                                                      { label0 = "particlenetmd"; }
+  if (inputname_.Contains("particlenet_"))                                                        { label0 = "particlenet"; }
+  
   std::cout << label0 << "\n";
   
   const int dir_err = system("mkdir -p ./"+inputname_+"/fitdir/");
@@ -188,12 +191,12 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   TString othername;
   if (category == "top") {
     p2name = "tp2";
-    p3name = "tqq";
+    p3name = "tp3";
     //   othername = "qcd";
     othername = "other";
   }
   if (category == "w") {
-    p2name = "wqq";
+    p2name = "tp2";
     p3name = "tp3";
     othername ="other";
   }
@@ -246,10 +249,11 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "lumi            lnN      1.025 1.025 1.025 1.025     1.025 1.025 1.025 1.025 \n";
   std::cout << "\n";
     
-  std::cout << "tqq_xsec     lnN      1.05 - - -    1.05 - - - \n";
-  std::cout << "wqq_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
+  std::cout << "tp3_xsec     lnN      1.05 - - -    1.05 - - - \n";
+  //Pantelis std::cout << "wqq_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
+  std::cout << "tp2_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
   std::cout << "tp1_xsec     lnN      - - 1.05 -    - - 1.05 - \n";
-  //std::cout << "other_xsec   lnU      - - - 2.00    - - - - \n";
+  std::cout << "other_xsec   lnU      - - - 2.00    - - - 2.00 \n";
   
   // std::cout << "\n";
   // std::cout << "other_sf   lnN      - - - -    - - - 5.00 \n";
@@ -258,12 +262,12 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "\n";
 
 
-  std::cout << "tqqjms       shapeU    1 - - -     1 - - - \n";  
+  std::cout << "tp3jms       shapeU    1 - - -     1 - - - \n";  
   std::cout << "vqqjms       shapeU    - 1 - -     - 1 - - \n";
   std::cout << "tp1jms       shapeU    - - 1 -     - - 1 - \n";
   std::cout << "otherjms       shapeU    - - - 1     - - - 1 \n";
 
-  std::cout << "tqqjmr       shapeU    1 - - -     1 - - - \n";  
+  std::cout << "tp3jmr       shapeU    1 - - -     1 - - - \n";  
   std::cout << "vqqjmr       shapeU    - 1 - -     - 1 - - \n";
   std::cout << "tp1jmr       shapeU    - - 1 -     - - 1 - \n";
   std::cout << "otherjmr       shapeU    - - - 1     - - - 1 \n";
@@ -272,8 +276,8 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "jes         shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "jer         shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "met         shape    1 1 1 1     1 1 1 1 \n";
-  //std::cout << "lhescalemuf shape    1 1 1 1     1 1 1 1 \n";
-  //std::cout << "lhescalemur shape    1 1 1 1     1 1 1 1 \n";
+  std::cout << "lhescalemuf shape    1 1 1 1     1 1 1 1 \n";
+  std::cout << "lhescalemur shape    1 1 1 1     1 1 1 1 \n";
   //std::cout << "lhepdf      shape    1 1 1 1     1 1 1 1 \n";
 
 

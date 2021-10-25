@@ -494,8 +494,8 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   std::vector<TString> processes_in = conf::processes_in;
 
   std::vector<TString> processes_out;
-  if (sample == "top") { processes_out.push_back("tqq"); processes_out.push_back("tp2"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
-  if (sample == "w")   { processes_out.push_back("tp3"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
+  if (sample == "top") { processes_out.push_back("tp3"); processes_out.push_back("tp2"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
+  if (sample == "w")   { processes_out.push_back("tp3"); processes_out.push_back("tp2"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   if (sample == "bb")  { processes_out.push_back("tqq"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   if (sample == "cc")  { processes_out.push_back("tqq"); processes_out.push_back("wqq"); processes_out.push_back("tp1"); processes_out.push_back("other"); }
   std::vector<int>     colors    = {conf::tp3.color,conf::tp2.color,conf::tp1.color,conf::other.color};
@@ -1381,10 +1381,18 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) {
     if (category == "w") { 
       std::cout << " sample = " << sample << " , category = " << category << "\n";
-      processes.push_back("tp3"); processes.push_back("wqq"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
+      //Pantelis processes.push_back("tp3"); processes.push_back("wqq"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
+      processes.push_back("tp3"); processes.push_back("tp2"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
       colors.push_back(conf::tp3.color); colors.push_back(conf::tp2.color); colors.push_back(conf::tp1.color); colors.push_back(conf::other.color); colors.push_back(602);
       legends.push_back(conf::tp3.legend_name); legends.push_back(conf::tp2.legend_name); legends.push_back(conf::tp1.legend_name); legends.push_back(conf::other.legend_name); legends.push_back("Total SM");
     }
+    else if (category == "top"){ //Pantelis
+      std::cout << " sample = " << sample << " , category = " << category << "\n";
+      processes.push_back("tp3"); processes.push_back("tp2"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
+      colors.push_back(conf::tp3.color); colors.push_back(conf::tp2.color); colors.push_back(conf::tp1.color); colors.push_back(conf::other.color); colors.push_back(602);
+      legends.push_back(conf::tp3.legend_name); legends.push_back(conf::tp2.legend_name); legends.push_back(conf::tp1.legend_name); legends.push_back(conf::other.legend_name); legends.push_back("Total SM");
+    }
+
   }
 
   if ( (category == "bb") && (category_extra == "") ){
