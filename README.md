@@ -1,3 +1,9 @@
+## Run the full chain for the SF extraction
+
+./runFullChain.sh <object> [T|W] <year> [2016|2017|2018] <version> ["Nominal"|"MD"]
+
+N.B.: Small tweaks are needed to be done inside the "configuration.h" and "makeFits.C" according to the object/version selected for the SF extraction.
+
 ## Setup CMSSW and combine
 
 

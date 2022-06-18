@@ -270,9 +270,10 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
   TString path;
   float intLumi;
-  if (era == "2016") { path = conf::path_2016; intLumi= 36.8;  }
-  if (era == "2017") { path = conf::path_2017; intLumi= 44.98; }
-  if (era == "2018") { path = conf::path_2018; intLumi= 63.67; }
+  if (era == "2016") { path = conf::path_2016; intLumi= 19.52;  }
+  //if (era == "2016") { path = conf::path_2016; intLumi= 16.81;  }
+  if (era == "2017") { path = conf::path_2017; intLumi= 41.53; }
+  if (era == "2018") { path = conf::path_2018; intLumi= 59.74; }
   ostringstream tmpLumi; tmpLumi << intLumi; TString lumi = tmpLumi.str();
 
 
@@ -297,9 +298,11 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
   // Cuts and matching definition
   TString cut_ = "(passmetfilters && passMuTrig && fj_1_pt>="+cutmin+" && fj_1_pt<"+cutmax+")";
-  //TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.) && ("+cut_+")";
-  //TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && "+conf::brX+">"+conf::convertFloatToTString(conf::minX)+" && "+conf::brX+"<"+conf::convertFloatToTString(conf::maxX)+" && leptonicW_pt>150.)";
+
   TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.) && ("+cut_+")";
+  //TString c_base     = "(abs(fj_1_eta)>1.4 && abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.) && ("+cut_+")";  
+  //
+  //TString c_base_ext = "(abs(fj_1_eta)>1.4 && abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.)";
   TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.)";
   TString c_incl     = c_base+" && "+cut_;
   /*  
@@ -412,8 +415,19 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
     
     if (syst.at(i0)=="_") { makeMCHistosTop(name,path,processes,process_names,name_,namesys_,lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout); }
     else {
-      makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-      makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+      
+      if(name_ == "lhescalemuf"){
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Up",lumi+"*(LHEScaleWeight[5]*LHEScaleWeightNorm[5])/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi+"*(LHEScaleWeight[3]*LHEScaleWeightNorm[3])/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+      }
+      else if(name_ == "lhescalemur"){
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Up",lumi+"*(LHEScaleWeight[7]*LHEScaleWeightNorm[7])/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi+"*LHEScaleWeight[1]*LHEScaleWeightNorm[1]/(LHEScaleWeight[4]*LHEScaleWeightNorm[4])",cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+      }                
+      else{     
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Up",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+          makeMCHistosTop(name,path,processes,process_names,name_,namesys_+"Down",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
+      }
     }
   }
 

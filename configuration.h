@@ -46,19 +46,17 @@ namespace conf {
     // =================== area to modify - tune ===================== //
    
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") || (sample == "tt1lw") ) {
-      /*
-      path_2016 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
-      path_2017 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
-      path_2018 = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
-      */
-      path_2016 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2016/";
-      path_2017 = "/eos/cms/store/cmst3/group/vhcc/hrtTrees/20210119_VH_PNV02_MREGV01_ak15_muon_2017/";
-      path_2018 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV8_For_Copy/2018/";
+
+      path_2016 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV9_For_Copy/2016/from_Huilin/20211212_NanoAODv9_ak8_muon_2015/";
+      //path_2016 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV9_For_Copy/2016/from_Huilin/20211212_NanoAODv9_ak8_muon_2016/";
+      path_2017 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV9_For_Copy/2017/from_Huilin/20211212_NanoAODv9_ak8_muon_2017/";
+      //path_2018 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV9_For_Copy/2018/";
+      path_2018 = "/eos/uscms/store/user/pakontax/ParticleNET_UL_NanoV9_For_Copy/2018/from_Huilin/20211212_NanoAODv9_ak8_muon_2018/";
       
       jetCone    = "ak8";
       jet_prefix = "fj_1_";
       
-      //Pantelis brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
+      // brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
       brX = jet_prefix+"sdmass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
       brY = jet_prefix+"pt";
       category = "top";
@@ -70,13 +68,13 @@ namespace conf {
       processes.push_back("ttv");          process_names.push_back("ttv");
       processes.push_back("w");            process_names.push_back("wll");
       processes.push_back("diboson");      process_names.push_back("vv");
-      processes.push_back("qcd-mg");       process_names.push_back("qcd");
+      //processes.push_back("qcd-mg");       process_names.push_back("qcd");
 
       // keep this format - pretify later - need to keep this order
       processes_in.push_back("tt_p3"); processes_in.push_back("st_p3"); processes_in.push_back("ttv_p3");
       processes_in.push_back("tt_p2"); processes_in.push_back("st_p2"); processes_in.push_back("ttv_p2"); 
       processes_in.push_back("tt_p1"); processes_in.push_back("st_p1"); processes_in.push_back("ttv_p1");
-      processes_in.push_back("wll");   processes_in.push_back("vv");    processes_in.push_back("qcd"); 
+      processes_in.push_back("wll");   processes_in.push_back("vv");    //processes_in.push_back("qcd"); 
 
       // list of systematic uncertainties
       syst.push_back("_"); syst.push_back("pu"); syst.push_back("jes"); syst.push_back("jer"); syst.push_back("met"); 
@@ -97,14 +95,16 @@ namespace conf {
     //score_def = jet_prefix+"ParticleNet_WvsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
     //score_def = "(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq)/(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq+fj_1_ParticleNetMD_QCD)";
     //    binsX = 30; minX = 50;  maxX = 200.;
-    //Pantelis binsX = 32; minX = 60;  maxX = 220.;
+    //binsX = 32; minX = 60;  maxX = 220.;
     binsX = 34; minX = 50;  maxX = 220.;
+    //binsX = 36; minX = 40;  maxX = 220.;
+
     binsY = 40; minY = 200; maxY = 1200.;
        
      // Top
-    name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);
-    name.push_back("pt400to480"); ptmin.push_back(400.); ptmax.push_back(480.);  
-    name.push_back("pt480to600"); ptmin.push_back(480.); ptmax.push_back(600.);   
+    //name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);
+    //name.push_back("pt400to480"); ptmin.push_back(400.); ptmax.push_back(480.);  
+    //name.push_back("pt480to600"); ptmin.push_back(480.); ptmax.push_back(600.);   
     name.push_back("pt600to1200"); ptmin.push_back(600.); ptmax.push_back(1200.);
     
      //W

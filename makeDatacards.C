@@ -192,7 +192,6 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   if (category == "top") {
     p2name = "tp2";
     p3name = "tp3";
-    //   othername = "qcd";
     othername = "other";
   }
   if (category == "w") {
@@ -214,7 +213,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   TH1D  *h_top_p2_p = (TH1D*)f_p->Get(p2name);
   TH1D  *h_top_p3_p = (TH1D*)f_p->Get(p3name);
   TH1D  *h_other_p  = (TH1D*)f_p->Get("other");
-  
+  // fail
   TFile *f_f = TFile::Open((TString)inputname+"/"+label0+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+"_templates_f.root","READONLY");
   TH1D  *h_obs_f    = (TH1D*)f_f->Get("data_obs");   
   TH1D  *h_top_p1_f = (TH1D*)f_f->Get("tp1");
@@ -250,7 +249,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "\n";
     
   std::cout << "tp3_xsec     lnN      1.05 - - -    1.05 - - - \n";
-  //Pantelis std::cout << "wqq_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
+  //std::cout << "wqq_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
   std::cout << "tp2_xsec     lnN      - 1.05 - -    - 1.05 - - \n";
   std::cout << "tp1_xsec     lnN      - - 1.05 -    - - 1.05 - \n";
   std::cout << "other_xsec   lnU      - - - 2.00    - - - 2.00 \n";

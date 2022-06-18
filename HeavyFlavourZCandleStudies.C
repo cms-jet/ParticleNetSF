@@ -515,15 +515,28 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
     TString catstr_; if (category[ic] == "pass") { catstr_ = "pass"; } else { catstr_ = "fail"; }
     
     for (unsigned int is=0; is<syst.size(); ++is) {
-
+      //cout<<"syst[is]: "<<syst[is]<<endl;
       int count = 0;
       for (unsigned int ip=0; ip<processes_in.size(); ip+=1) {
 	if (syst[is]=="_") {
 	  std::cout << processes_in[ip] << " " << ip << "\n";
-	  TH1D *h_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	  TH1D *h__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	  TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	  h_->Add(h__); h_->Add(h___);
+          /////////////////////////////////////////////////////////////////////////
+          
+          TH1D *h_;
+          if (ip>8){
+               h_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+               TH1D *h__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+               h_->Add(h__);
+          }
+          else if(ip<=8){       
+	       h_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+	       TH1D *h__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+	       TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
+	       h_->Add(h__); h_->Add(h___);
+          }
+          
+          /////////////////////////////////////////////////////////////////////////
+          //
 	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
 	  //  TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
 	  //  h_->Add(h___);
@@ -542,7 +555,21 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	    if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("zqq")) || (processes_in[ip].Contains("tt_p2")) ) { nameSyst = "vqq"+syst[is]; }
 	    if ( (processes_in[ip].Contains("wll")) || (processes_in[ip].Contains("qcd")) ) { nameSyst = "other"+syst[is]; } 
 	  }
-	  
+          if (ip>8){
+          TH1D *h_up_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
+          TH1D *h_up__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
+          h_up_->Add(h_up__);
+          h_up_->SetName(processes_out[count]+"_"+nameSyst+"Up"); h_up_->SetLineColor(colors[count]); h_up_->SetFillColor(colors[count]);
+          if (category[ic] == "pass") { hist_out_p.push_back(h_up_); } else { hist_out_f.push_back(h_up_); }
+
+          TH1D *h_down_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
+          TH1D *h_down__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
+          h_down_->Add(h_down__); 
+          h_down_->SetName(processes_out[count]+"_"+nameSyst+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
+          if (category[ic] == "pass") { hist_out_p.push_back(h_down_); } else { hist_out_f.push_back(h_down_); }
+
+          }
+	  else if (ip<=8){
 	  TH1D *h_up_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_up__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  h_up_->Add(h_up__);
@@ -563,6 +590,7 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	  h_down_->SetName(processes_out[count]+"_"+nameSyst+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_down_); } else { hist_out_f.push_back(h_down_); }
 	}
+        }
 	//if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) { ip = ip+2; }
 	//if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("vv")) )                                         { ip = ip+1; }
 	ip = ip+2;
@@ -1381,12 +1409,12 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) {
     if (category == "w") { 
       std::cout << " sample = " << sample << " , category = " << category << "\n";
-      //Pantelis processes.push_back("tp3"); processes.push_back("wqq"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
+      //processes.push_back("tp3"); processes.push_back("wqq"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
       processes.push_back("tp3"); processes.push_back("tp2"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
       colors.push_back(conf::tp3.color); colors.push_back(conf::tp2.color); colors.push_back(conf::tp1.color); colors.push_back(conf::other.color); colors.push_back(602);
       legends.push_back(conf::tp3.legend_name); legends.push_back(conf::tp2.legend_name); legends.push_back(conf::tp1.legend_name); legends.push_back(conf::other.legend_name); legends.push_back("Total SM");
     }
-    else if (category == "top"){ //Pantelis
+    else if (category == "top"){ 
       std::cout << " sample = " << sample << " , category = " << category << "\n";
       processes.push_back("tp3"); processes.push_back("tp2"); processes.push_back("tp1"); processes.push_back("other"); processes.push_back("total");
       colors.push_back(conf::tp3.color); colors.push_back(conf::tp2.color); colors.push_back(conf::tp1.color); colors.push_back(conf::other.color); colors.push_back(602);
@@ -1498,7 +1526,8 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
 
   TLatex pt_lumi;
   const char *longstring;
-  if (path2file.Contains("2016")) { longstring = "35.9 fb^{-1} (13 TeV)"; }
+  if (path2file.Contains("2016")) { longstring = "19.52 fb^{-1} (13 TeV)"; }
+  //if (path2file.Contains("2016")) { longstring = "16.81 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("2017")) { longstring = "41.53 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("2018")) { longstring = "59.74 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("test")) { longstring = "35.9 fb^{-1} (13 TeV)"; }
