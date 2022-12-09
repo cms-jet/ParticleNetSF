@@ -2,11 +2,11 @@ Installing Combine (lpc)
 ------------------------
 link: https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/
 
-'voms-proxy-init --voms cms'
+voms-proxy-init --voms cms
 
-'setenv SCRAM_ARCH slc7_amd64_gcc700   (export SCRAM_ARCH=slc7_amd64_gcc700)'
+setenv SCRAM_ARCH slc7_amd64_gcc700   (export SCRAM_ARCH=slc7_amd64_gcc700)
 
-'cmsrel CMSSW_10_2_13'
+cmsrel CMSSW_10_2_13
 
 'cd CMSSW_10_2_13/src'
 
