@@ -8,18 +8,21 @@ setenv SCRAM_ARCH slc7_amd64_gcc700   (export SCRAM_ARCH=slc7_amd64_gcc700)
 
 cmsrel CMSSW_10_2_13
 
-'cd CMSSW_10_2_13/src'
+cd CMSSW_10_2_13/src
 
-'cmsenv'
+cmsenv
 
-'git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit'
+git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 
-'git clone https://github.com/cms-analysis/CombineHarvester.git'
+git clone https://github.com/cms-analysis/CombineHarvester.git
 
-'cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit'
-'git fetch origin'
-'git checkout v8.2.0'
-'scramv1 b clean; scramv1 b' 
+cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
+
+git fetch origin
+
+git checkout v8.2.0
+
+scramv1 b clean; scramv1 b 
 
 Clone specific branch from gitlab (top/W tagging framework):
 -----------------------------------------------------------
