@@ -169,7 +169,7 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp,  TSt
   if (score.Contains("DeepAK8MD"))     { name0 = "dak8md"; }
   if (score.Contains("DeepAK8DDT"))    { name0 = "dak8ddt"; }
   if (score.Contains("ParticleNetMD")) { name0 = "particlenetmd"; }
-  TString nameoutfile = name0+"_zqq_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates";
+  TString nameoutfile = name0+"_zqq_"+cat+"_"+wp+"_"+era+"_"+cutmin+"to"+cutmax+"_templates"; 
   
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
@@ -295,7 +295,7 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
  
   TFile *fout = new TFile("./"+dirname1+"/"+nameoutfile+".root","RECREATE");
 
-
+  
   // Cuts and matching definition
   TString cut_ = "(passmetfilters && passMuTrig && fj_1_pt>="+cutmin+" && fj_1_pt<"+cutmax+")";
 

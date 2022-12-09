@@ -88,44 +88,39 @@ double rewgtfuncDAK8DDT_w_0p30(double rho, double pt){
 
 void HeavyFlavourZCandleStudies(TString era, TString sample, TString category, TString wpmin, TString wpmax, bool postfit=false, TString passOrFail="pass", TString category_extra="") {
   conf::configuration(sample);
-    
+  
   std::vector<TString> name  = conf::name;
   std::vector<double>  ptmin = conf::ptmin;
   std::vector<double>  ptmax = conf::ptmax;    
-
   if (postfit) {
-
     if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") || (sample == "comb")) { 
       std::cout << "postfit: " << sample << " " << category << " " << wpmin << "to" << wpmax << " " << passOrFail << "\n";
       for (int i0=0; i0<name.size(); ++i0) { 
 	makeDataMCPlotFromCombine(conf::algo,era,category,category_extra,wpmin,wpmax,name[i0],passOrFail,conf::minX,conf::maxX,conf::binsX,"m_{SD} [GeV]",false,sample); 
       }
     }
-
   }
-
   if (!postfit) {
-
-    if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) { std::cout << sample << "\n";
-
-      for (int i0=0; i0<name.size(); ++i0) { std::cout << sample<< "\n";
-	makeDataMCFrom2DTemplatesTop("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_200to1200_templates.root",                      
+    if ( (sample == "tt1L") || (sample=="ttbar1L") || (sample=="ttbar1l") || (sample == "tt1l") ) { 
+      std::cout << sample << "\n";
+      for (int i0=0; i0<name.size(); ++i0) { 
+	std::cout << sample<< "\n";
+	makeDataMCFrom2DTemplatesTop("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_200to1200_templates.root",                       
 				     conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
       } 
     }
-  
-    if (sample == "zqq") { std::cout << sample<< "\n";
+    if (sample == "zqq") { 
+      std::cout << sample<< "\n";
       for (int i0=0; i0<name.size(); ++i0) {
 	makeDataMCFrom2DTemplates("templates2D/"+conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_200to1200_templates.root",
 				  conf::algo+"_"+sample+"_"+category+"_"+wpmin+"to"+wpmax+"_"+era,name[i0],category,ptmin[i0],ptmax[i0]);
       } 
     }
   }
-
 }
 
 void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString name, TString sample, double ymin, double ymax) {
-
+  
   TH1::SetDefaultSumw2(kTRUE);
   setTDRStyle();
   gROOT->SetBatch(true);
@@ -463,7 +458,6 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
 
 
 void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TString name, TString sample, double ymin, double ymax) {
-
   TH1::SetDefaultSumw2(kTRUE);
   setTDRStyle();
   gROOT->SetBatch(true);
@@ -483,7 +477,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
   nameoutfile = nameoutfile+"_"+name;
-
 
   // Data templates 
   TH1D *h_data_p  = h1DHistoFrom2DTemplates(path2file,"data_obs_pass",name,ymin,ymax,1,true);
@@ -509,11 +502,9 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   std::vector<TString> category; 
   category.push_back("pass"); 
   category.push_back("fail");
-  
   // LG: this part needs to be cleaned
   for (unsigned int ic=0; ic<category.size(); ++ic) {
     TString catstr_; if (category[ic] == "pass") { catstr_ = "pass"; } else { catstr_ = "fail"; }
-    
     for (unsigned int is=0; is<syst.size(); ++is) {
       //cout<<"syst[is]: "<<syst[is]<<endl;
       int count = 0;
@@ -888,7 +879,6 @@ TCanvas *makeCanvasWithRatio(TH1D* hdata, std::vector<TH1D*> h1d, TString dir, T
 
 
 TH1D *h1DHistoFrom2DTemplates(TString path2file,TString h2dname, TString name, double ymin, double ymax,int color,bool isdata) {
-
   TH1::SetDefaultSumw2(kTRUE);
   setTDRStyle();
   gROOT->SetBatch(false);
@@ -1323,7 +1313,6 @@ TGraphAsymmErrors *getSFGraph(TString dir, TString algo, TString cat, TString wp
 
 void getSampleComposition(TString path2file, TString filename, TString score, TString year, TString ptrange, TString category) {
   TH1::SetDefaultSumw2(kTRUE);
-
   const int dir_err = system("mkdir -p ./"+(TString)path2file+"/plots_datamc");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
   //particlenet_bb_t_2016/particlenet_bb_t_2016_lowpt_templates_p.root

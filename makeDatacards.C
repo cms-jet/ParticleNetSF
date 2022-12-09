@@ -260,7 +260,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
 
   std::cout << "\n";
 
-
+  
   std::cout << "tp3jms       shapeU    1 - - -     1 - - - \n";  
   std::cout << "vqqjms       shapeU    - 1 - -     - 1 - - \n";
   std::cout << "tp1jms       shapeU    - - 1 -     - - 1 - \n";
@@ -278,7 +278,7 @@ void makeOneDatacardTop(TString inputname, TString category, TString wpmin, TStr
   std::cout << "lhescalemuf shape    1 1 1 1     1 1 1 1 \n";
   std::cout << "lhescalemur shape    1 1 1 1     1 1 1 1 \n";
   //std::cout << "lhepdf      shape    1 1 1 1     1 1 1 1 \n";
-
+  
 
 
   //  std::cout << "herwig         shape    1 1 1 -     1 1 1 -\n";
