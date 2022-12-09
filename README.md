@@ -26,11 +26,11 @@ scramv1 b clean; scramv1 b
 
 Clone specific branch from gitlab (top/W tagging framework):
 -----------------------------------------------------------
-'cd ../../../../'
+cd ../../../../
 
-'git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/particlenet-top-w-calibration.git'
+git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/particlenet-top-w-calibration.git
 
-'cd particlenet-top-w-calibration/'
+cd particlenet-top-w-calibration/
 
 Run the full chain for SF extraction:
 ------------------------------------
