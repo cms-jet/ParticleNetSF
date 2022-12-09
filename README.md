@@ -2,27 +2,32 @@ Installing Combine (lpc)
 ------------------------
 link: https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/
 
-1)voms-proxy-init --voms cms
+'voms-proxy-init --voms cms'
 
-2)
-setenv SCRAM_ARCH slc7_amd64_gcc700   (export SCRAM_ARCH=slc7_amd64_gcc700)
-cmsrel CMSSW_10_2_13
-cd CMSSW_10_2_13/src
-cmsenv
-git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-git clone https://github.com/cms-analysis/CombineHarvester.git
+'setenv SCRAM_ARCH slc7_amd64_gcc700   (export SCRAM_ARCH=slc7_amd64_gcc700)'
 
-3)
-cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
-git fetch origin
-git checkout v8.2.0
-scramv1 b clean; scramv1 b 
+'cmsrel CMSSW_10_2_13'
+
+'cd CMSSW_10_2_13/src'
+
+'cmsenv'
+
+'git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit'
+
+'git clone https://github.com/cms-analysis/CombineHarvester.git'
+
+'cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit'
+'git fetch origin'
+'git checkout v8.2.0'
+'scramv1 b clean; scramv1 b' 
 
 Clone specific branch from gitlab (top/W tagging framework):
 -----------------------------------------------------------
-cd ../../../../
-git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/particlenet-top-w-calibration.git
-cd particlenet-top-w-calibration/
+'cd ../../../../'
+
+'git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/particlenet-top-w-calibration.git'
+
+'cd particlenet-top-w-calibration/'
 
 Run the full chain for SF extraction:
 ------------------------------------
