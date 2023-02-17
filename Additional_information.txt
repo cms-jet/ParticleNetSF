@@ -1,0 +1,39 @@
+Important variables and files that need changes if we want to run for a different tagger or year.
+
+Change Tagger:
+-------------
+
+1) Taggers:
+   a) Top Nominal
+   b) W Nominal
+   c) W MD
+	
+2) configuration.h
+   a) category
+   b) algo
+   c) score_def
+   d) binsY, minY, maxY
+   e) pT range 
+
+3) makeFits.C
+   a) txt2workspace
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2016 Pre/Post VFP:
+------------------
+
+1) configuration.h
+   a) path
+
+2) runFullChain.sh
+   a) WPs_FullVer_vs_QCD
+
+3) makeTemplatesTop
+   a) Function: makeTemplatesTop -> intLumi
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Working Point Selection:
+-----------------------
+
+1) runFullChain.sh
+   a) WPs_FullVer_vs_QCD
