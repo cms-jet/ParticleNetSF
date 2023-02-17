@@ -32,6 +32,8 @@ git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/
 
 cd particlenet-top-w-calibration/
 
+cp TagAndProbeExtended.py ../CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit/python
+
 Run the full chain for SF extraction:
 ------------------------------------
 
@@ -57,7 +59,6 @@ gitlab link: https://gitlab.cern.ch/lpaizano/particlenet-top-w-calibration/-/tre
 ## Create the datacards:
 The Datacards will be produced under particlenet_sf/fitdir 
 [if one keeps the default naming/settings]
-
 
 `root [0] .L makeDatacards.C` 
 

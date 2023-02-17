@@ -54,11 +54,10 @@ namespace conf {
       jetCone    = "ak8";
       jet_prefix = "fj_1_";
       
-      // brX = jet_prefix+"regressed_mass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
-      brX = jet_prefix+"sdmass"; // brX = "ak8_1_mass" "ak8_corr_sdmass";
+      brX = jet_prefix+"sdmass"; 
       brY = jet_prefix+"pt";
       category = "top";
-      //category = "w";
+      //category = "w"; 
  
      // for make2DTemplates
       processes.push_back("ttbar-powheg"); process_names.push_back("tt"); 
@@ -83,25 +82,27 @@ namespace conf {
 
     if (sample == "zqq") {
       jet_prefix = "fj_1_";
-      brX = jet_prefix+"sdmass"; // brX = "ak8_1_corr_sdmass";
+      brX = jet_prefix+"sdmass";
       brY = jet_prefix+"pt";
     }
-
-    //algo      = "particlenetmd"; // deepak8ddt particlenetmd 
-    algo      = "particlenet"; // deepak8ddt particlenetmd //leo
-    score_def = jet_prefix+"ParticleNet_TvsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD
-    //score_def = jet_prefix+"ParticleNet_WvsQCD"; // DeepAK8DDT ParticleNetMD_XbbVsQCD //leo
-    //score_def = "(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq)/(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq+fj_1_ParticleNetMD_QCD)";
+    
+    algo      = "particlenet"; //Nominal
+    //algo      = "particlenetmd";  //MD
+    score_def = jet_prefix+"ParticleNet_TvsQCD"; 
+    //score_def = jet_prefix+"ParticleNet_WvsQCD"; //W-Nominal
+    //score_def = "(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq)/(fj_1_ParticleNetMD_Xcc+fj_1_ParticleNetMD_Xqq+fj_1_ParticleNetMD_QCD)"; //W-MD
     binsX = 34; minX = 50;  maxX = 220.;
-    binsY = 40; minY = 200; maxY = 1200.; //leo
+    binsY = 40; minY = 200; maxY = 1200.;
+    //binsY = 40; minY = 200; maxY = 800.;
        
      // Top
     //name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);
-    //name.push_back("pt400to480"); ptmin.push_back(400.); ptmax.push_back(480.);  
+    name.push_back("pt400to480"); ptmin.push_back(400.); ptmax.push_back(480.);  
     //name.push_back("pt480to600"); ptmin.push_back(480.); ptmax.push_back(600.);   
-    name.push_back("pt600to1200"); ptmin.push_back(600.); ptmax.push_back(1200.);
+    //name.push_back("pt600to1200"); ptmin.push_back(600.); ptmax.push_back(1200.);
     //name.push_back("200to1200"); ptmin.push_back(200.); ptmax.push_back(1200.);
-     //W
+     
+    //W
     //name.push_back("pt200to300"); ptmin.push_back(200.); ptmax.push_back(300.);
     //name.push_back("pt300to400"); ptmin.push_back(300.); ptmax.push_back(400.);  
     //name.push_back("pt400to800"); ptmin.push_back(400.); ptmax.push_back(800.);   

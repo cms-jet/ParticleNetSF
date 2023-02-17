@@ -141,14 +141,10 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp,  TSt
   TString path;
   float intLumi;
   if (era == "2016") { 
-    //    path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/2016/"; 
-    //    path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs_NEW_30Jan/2016/";
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2016/20200505/";
-  //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
     intLumi= 36.8;
   }
   if (era == "2017") { 
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2017_Muon_Channel/"; 
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/inclusive/2017/20201029_ak8/";
     intLumi= 44.98;
   }
@@ -241,10 +237,7 @@ void makeTemplates(TString path2file, TString era, TString cat, TString wp,  TSt
 
   // MC templates
   makeMCHistos(name,path,path2file,"nom","nom",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  //  makeMCHistos(name,path,path2file,"pu","puUp",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-  //  makeMCHistos(name,path,path2file,"pu","puDown",lumi,cuts,brX,binsX,minX,maxX,brY,binsY,minY,maxY,fout);
-
-
+ 
   fout->Close();
   std::cout << "\n\n";
 }
@@ -260,9 +253,6 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   gStyle->SetPalette(1);
   TH1::SetDefaultSumw2(kTRUE);
   conf::configuration(path2file);
-
-  // hack - it will not be needed in the new verison of ntuples
-  //if (score == "ak8_1_ParticleNetMD_XbbVsQCD") { score = "ak8_1_ParticleNetMD_Xbb/(ak8_1_ParticleNetMD_Xbb+ak8_1_ParticleNetMD_QCD)"; }
 
   // Processes, paths and lumi for each era
   vector<TString> processes     = conf::processes;
@@ -300,21 +290,8 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
   TString cut_ = "(passmetfilters && passMuTrig && fj_1_pt>="+cutmin+" && fj_1_pt<"+cutmax+")";
 
   TString c_base     = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.) && ("+cut_+")";
-  //TString c_base     = "(abs(fj_1_eta)>1.4 && abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.) && ("+cut_+")";  
-  //
-  //TString c_base_ext = "(abs(fj_1_eta)>1.4 && abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.)";
   TString c_base_ext = "(abs(fj_1_eta)<2.4 && fj_1_pt>=200. && leptonicW_pt>150.)";
   TString c_incl     = c_base+" && "+cut_;
-  /*  
-  TString c_p3 = "( (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b<jetR) )";
-  TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_fj_top_wqmax<jetR) && (fj_1_dr_fj_top_b>jetR) )";
-  TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
-  
-  TString c_p3 = "( (fj_1_dr_T<0.8) && (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b<0.8) )";
-  TString c_p2 = "( (!"+c_p3+") && (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b>0.8) )";
-  //TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<0.8) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=0.8 && fj_1_dr_T_Wq_max<0.8))";
-  TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
-  */
 
   TString c_p3 = "( (fj_1_dr_T_Wq_max<0.8) && (fj_1_dr_T_b<0.8) )";
   TString c_p2 = "((fj_1_T_Wq_max_pdgId==0 && fj_1_dr_W_daus<0.8) || (fj_1_T_Wq_max_pdgId!=0 && fj_1_dr_T_b>=0.8 && fj_1_dr_T_Wq_max<0.8))";     
@@ -329,9 +306,7 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
 
 
   // DDT maps ddt_dec2020
-  //  TFile *f_dak8ddt_w_0p05 = TFile::Open("./corrections/WvsQCD_ddt_0p05rho.root" , "READONLY");
   TFile *f_dak8ddt_w_0p05 = TFile::Open("./corrections/ddt_dec2020/myDeepBoostedMap_0p05rho.root" , "READONLY");
-  //TH2D *h_dak8ddt_w_0p05 = (TH2D*)f_dak8ddt_w_0p05->Get("DeepBoosted_WvsQCD_v_rho_v_pT_scaled_yx");
   TH2D *h_dak8ddt_w_0p05 = (TH2D*)f_dak8ddt_w_0p05->Get("DeepBoosted_WvsQCD_MD_v_rho_v_pT_scaled_yx_0p05");
   hrwgt_dak8ddt_w_0p05 = (TH2D*)h_dak8ddt_w_0p05->Clone("hrwgt_dak8ddt_w_0p05");
 
@@ -431,34 +406,6 @@ void makeTemplatesTop(TString path2file, TString era, TString cat, TString wpmin
     }
   }
 
-  /*
-  // tt-herwig
-  TFile *f_tt_h  = TFile::Open(path+"ttbar-herwig_tree.root" , "READONLY");
-  TTree *t_tt_h  = (TTree*)f_tt_h->Get("Events");
-  
-  TH2D *h_tt_h_p1_p = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[3]+"&&"+cuts[4],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p1_p",false);
-  TH2D *h_tt_h_p2_p = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[2]+"&&"+cuts[4],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p2_p",false);
-  TH2D *h_tt_h_p3_p = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[1]+"&&"+cuts[4],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p3_p",false);
-
-  TH2D *h_tt_h_p1_f = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[3]+"&&"+cuts[5],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p1_f",false);
-  TH2D *h_tt_h_p2_f = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[2]+"&&"+cuts[5],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p2_f",false);
-  TH2D *h_tt_h_p3_f = create2Dhisto(name,t_tt_h,lumi,cuts[0]+"&&"+cuts[1]+"&&"+cuts[5],brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h_"+name+"_tt_h_p3_f",false);
-  
-  // avoid zero bins in mc
-  for (unsigned int i0=0; i0<h_tt_h_p1_p->GetNbinsX(); ++i0) {
-    if (h_tt_h_p1_p->GetBinContent(i0)<=0) { h_tt_h_p1_p->SetBinContent(i0,0.001);  h_tt_h_p1_p->SetBinError(i0,0.001); }
-    if (h_tt_h_p2_p->GetBinContent(i0)<=0) { h_tt_h_p2_p->SetBinContent(i0,0.001);  h_tt_h_p2_p->SetBinError(i0,0.001); }
-    if (h_tt_h_p3_p->GetBinContent(i0)<=0) { h_tt_h_p3_p->SetBinContent(i0,0.001);  h_tt_h_p3_p->SetBinError(i0,0.001); }
-
-    if (h_tt_h_p1_f->GetBinContent(i0)<=0) { h_tt_h_p1_f->SetBinContent(i0,0.001);  h_tt_h_p1_f->SetBinError(i0,0.001); }
-    if (h_tt_h_p2_f->GetBinContent(i0)<=0) { h_tt_h_p2_f->SetBinContent(i0,0.001);  h_tt_h_p2_f->SetBinError(i0,0.001); }
-    if (h_tt_h_p3_f->GetBinContent(i0)<=0) { h_tt_h_p3_f->SetBinContent(i0,0.001);  h_tt_h_p3_f->SetBinError(i0,0.001); }  
-  }
- 
-  // Write to root file
-  h_tt_h_p1_p->Write("tt_herwig_p1_pass"); h_tt_h_p2_p->Write("tt_herwig_p2_pass"); h_tt_h_p3_p->Write("tt_herwig_p3_pass"); 
-  h_tt_h_p1_f->Write("tt_herwig_p1_fail"); h_tt_h_p2_f->Write("tt_herwig_p2_fail"); h_tt_h_p3_f->Write("tt_herwig_p3_fail");
-  */
   fout->Close();
   std::cout << "\n\n";
 }
@@ -478,7 +425,6 @@ void makeMCHistos(TString name, TString path, TString path2file, TString sys, TS
   if ( sysType == "Up" ) { sys_type = "_up/"; } if ( sysType == "Down" ) { sys_type ="_down/"; }
 		    
   TString sys_dir;  
-  //if      ( (sys == "nom") || (sys == "pu") )               { sys_dir = "mc_nom/"; } 
   if      ( (sys == "nom") || (sys == "pu") )               { sys_dir = "/"; } 
   else if ( (sys.Contains("lhe")) || (sys.Contains("ps")) ) { sys_dir = "/LHEWeight/"; }
   else                                                      { sys_dir = "/"+sys+sys_type; }
@@ -650,9 +596,6 @@ void makeMCHistos(TString name, TString path, TString path2file, TString sys, TS
   for (unsigned int i0=0; i0<h2ds.size(); ++i0) { h2ds[i0]->Write(h2ds_names[i0]); }
 
 }
-
-
-
 
 void makeMCHistosTop(TString name, TString path, std::vector<TString> processes, std::vector<TString> process_names, TString sys, TString sysType, TString wgts, std::vector<TString> cuts,
 		     TString brX, int binsX, float minX, float maxX, TString brY, int binsY, float minY, float maxY, TFile *f_) { 
@@ -837,7 +780,6 @@ std::vector<TH2D*> getLHPDFRmsAndSigma(std::vector<TH2D*> input) {
 
 
 TH2D *correct_2dext_norm(TH2D *h_nom, TH2D *h_ext) {
-  //std::cout << h_ext->GetNbinsX() << "  " << h_ext->GetNbinsY() << "\n";
   for (int iy=1; iy<=h_ext->GetNbinsY(); ++iy) {
     float int_nom = h_nom->Integral(1,h_nom->GetNbinsX(),iy,iy); //std::cout << " nom = " << int_nom << "\n";
     float int_ext = h_ext->Integral(1,h_ext->GetNbinsX(),iy,iy); //std::cout << " ext = " << int_ext << "\n";
@@ -881,8 +823,6 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   if (data) { cut ="("+cuts+")"; } 
   else {
     if (name.Contains("qcd"))           { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+")"; }
-    //if (name.Contains("qcd_0"))         { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType==0)"; }
-    //if (name.Contains("qcd_1") || name.Contains("qcd_2") ) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+qcdWgt+")*("+cuts+" && qcdSampleType>0)"; }
     else if (name.Contains("qcherwig")) { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+")*("+cuts+")"; }
     else if (name.Contains("wboson"))   { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+wBosonWgt+")*("+cuts+")"; }
     else if (name.Contains("zboson"))   { cut = "("+intLumi+"*"+puWgt+"*"+genWgt+"*"+zBosonWgt+")*("+cuts+")"; }
@@ -903,16 +843,8 @@ TH2D *create2Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,
   TString massScaleVal_ = "1.05"; if (name.Contains("Down")) { massScaleVal_ = "0.95"; }
   TString massSmearVal_ = "0.10"; if (name.Contains("Down")) { massSmearVal_ = "0."; }
   if (name.Contains("jms")) { std::cout << tree->Project(name,branchY+":(massScale("+branchX+","+massScaleVal_+"))",cut); }
-  //if (name.Contains("jms"))      { std::cout << " In jms \n"; tree->Project(name,branchY+":(*"+branchX+")",cut); }
   else if (name.Contains("jmr")) { std::cout << " In jmr \n"; tree->Project(name,branchY+":(massSmear("+branchX+",luminosityBlock,event,"+massSmearVal_+"))",cut); }
   else                           { std::cout << " In else \n"; tree->Project(name,branchY+":"+branchX,cut); }
-  
-  // ad overflow bin
-  /*for (unsigned int i0y=0; i0y<hTemp->GetNbinsY(); ++i0y) {
-    double error =0.; double integral = hTemp->IntegralAndError(hTemp->GetNbinsX(),hTemp->GetNbinsX()+1,i0y+1,i0y+1,error);
-    hTemp->SetBinContent(hTemp->GetNbinsX(),i0y+1,integral);
-    hTemp->SetBinError(hTemp->GetNbinsX(),i0y+1,error);
-    }*/
   
   for (unsigned int i0x=0; i0x<hTemp->GetNbinsX(); ++i0x) {
     double error =0.; double integral = hTemp->IntegralAndError(i0x+1,i0x+1,hTemp->GetNbinsY(),hTemp->GetNbinsY()+1,error);
@@ -990,8 +922,6 @@ TH1D *create1Dhisto(TString sample,TTree *tree,TString intLumi,TString cuts,TStr
   // additinal weights
   TString wBosonWgt = "(w_qcdnlo_wgt_func(fj_1_pt)*w_ewknlo_wgt_func(fj_1_pt))"; //NLOQCD=1.35 for 2016
   TString zBosonWgt = "(z_qcdnlo_wgt_func(fj_1_pt)*z_ewknlo_wgt_func(fj_1_pt))"; //NLOQCD=1.45 for 2016
-  //TString qcdWgt    = "qcd_incl_mass_wgt(fj_1_sdmass)";
-  //TString qcdWgt    = "qcd_incl_mass_wgt(fj_1_pt)";
   TString qcdWgt    = "1.";
   TString ttWgt     = "1."; if (sample.Contains("tt1L") || sample.Contains("ttbar1L")) { ttWgt = "topptWeight"; };
   // ttbar: add top-pt reweighting
@@ -1088,32 +1018,20 @@ void testarea() {
   TString c_incl     = c_base+" && "+cut_;
 
   TString brX = "fj_1_sdmass"; int binsX=30; float minX = 50;  float maxX=200;
-  //TString brX = "fj_1_sdmass"; int binsX=15; float minX = 50;  float maxX=200;
   TString brY = "fj_1_pt";     int binsY=40;  float minY = 200; float maxY=1200;
   
   TH1D *h_histo       = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& fj_1_isZ<0.8 && ht>1000 && (fj_1_pt>=450 && fj_1_pt<500)",brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
   h_histo->SetMarkerSize(0.);
   TH2D *h_histo2d_ext = create2Dhisto("zboson2d_ext",t,lumi,c_base_ext+"&& fj_1_isZ<0.8 &&"+c_p_ext,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
   TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& fj_1_isZ<0.8 && ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);
-  /*
-  TH1D *h_histo     = create1Dhisto("zboson",t,lumi,c_incl+"&&"+c_p+"&& ht>1000 && "+cut_,brX,binsX,minX,maxX,false,8,1,"h_zboson",false,false); h_histo->SetFillColor(0);
-  TH2D *h_histo2d   = create2Dhisto("zboson2d",t,lumi,c_incl+"&& 0==0 &&"+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_i",false);
-  TH2D *h_histo2d_b = create2Dhisto("zboson2d_b",t,lumi,c_incl+"&& ht>1000 && "+c_p,brX,binsX,minX,maxX,brY,binsY,minY,maxY,false,"h2d_zboson_m_p_b",false);  
-  */
-
-  //TH2D *h_histo2d_ext_b = correct_2dext_norm(h_histo2d, h_histo2d_ext);
+  
   h_histo2d_ext = correct_2dext_norm(h_histo2d, h_histo2d_ext);
 
   TH1D *h1dfrom2d   = h_histo2d->ProjectionX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.),"e");
-  //TH1D *h1dfrom2d   = h_histo2d->ProfileX("h1dfrom2d",h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(500.),"e");
   h1dfrom2d->SetLineColor(2); h1dfrom2d->SetMarkerSize(0.);
   TH1D *h1dfrom2d_ext = h_histo2d_ext->ProjectionX("h1dfrom2d_ext",h_histo2d_ext->GetYaxis()->FindBin(450.),h_histo2d_ext->GetYaxis()->FindBin(499.),"e");
   h1dfrom2d_ext->SetLineColor(1); h1dfrom2d_ext->SetMarkerSize(0.);
-  //h1dfrom2d_ext->Scale(h_histo2d->Integral()/h1dfrom2d_ext->Integral());
-  //TH1D *h1dfrom2d_ext_b = h_histo2d_ext_b->ProjectionX("h1dfrom2d_ext_b",h_histo2d_ext_b->GetYaxis()->FindBin(450.),h_histo2d_ext_b->GetYaxis()->FindBin(499.),"e");
-  //h1dfrom2d_ext_b->SetLineColor(4); h1dfrom2d_ext_b->SetMarkerSize(0.);
-
-
+  
   std::cout << h_histo->Integral() << " " << h1dfrom2d->Integral() << " " << h1dfrom2d_ext->Integral() << " " << h_histo2d->Integral() <<  " " 
 	    << h_histo2d->Integral(1,30,h_histo2d->GetYaxis()->FindBin(450.),h_histo2d->GetYaxis()->FindBin(499.)) << " " 
     
@@ -1123,6 +1041,5 @@ void testarea() {
   h_histo->Draw("HIST E0");
   h1dfrom2d_ext->Draw("HIST E0 sames");
   h1dfrom2d->Draw("HIST E0 sames");
-  //h1dfrom2d_ext->Draw("HIST E0 sames");
 }
 

@@ -143,17 +143,14 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
 
   // MC templates           
   std::vector<TString> syst = {"_","pu","jes","jer","met","lhescalemuf","lhescalemur","lhepdf"};
-  //  std::vector<TString> syst = {"_"};
   std::vector<TString> processes_in = {"tt_p3","st_p3","ttv_p3","tt_p2","st_p2","ttv_p2","tt_p1","st_p1","ttv_p1","wqq","vv"};
 
 
   TH1D *h_data_p = h1DHistoFrom2DTemplates(path2file,"data_obs_pass",name,ymin,ymax,1,true);
-  //  TH1D *h_qcd_p  = h1DHistoFrom2DTemplates(path2file,"h_qcd_pass",name,ymin,ymax,conf::qcd.color,false);
   TH1D *h_qcd_0_p = h1DHistoFrom2DTemplates(path2file,"h_qcd_0_pass",name,ymin,ymax,conf::qcd.color,false);
   TH1D *h_qcd_1_p = h1DHistoFrom2DTemplates(path2file,"h_qcd_1_pass",name,ymin,ymax,conf::qcd.color,false);
   TH1D *h_qcd_2_p = h1DHistoFrom2DTemplates(path2file,"h_qcd_2_pass",name,ymin,ymax,conf::qcd.color,false);
   TH1D *h_qcd_p = (TH1D*)h_qcd_0_p->Clone("h_qcd_p"); h_qcd_p->Add(h_qcd_1_p); h_qcd_p->Add(h_qcd_2_p);
-  //h_qcd_p->Smooth();
   TH1D *h_tqq_p  = h1DHistoFrom2DTemplates(path2file,"h_tt_pass",name,ymin,ymax,conf::tqq.color,false);
   TH1D *h_wcx_p  = h1DHistoFrom2DTemplates(path2file,"h_wbosoncx_pass",name,ymin,ymax,conf::wcx.color,false);
   TH1D *h_wll_p  = h1DHistoFrom2DTemplates(path2file,"h_wbosonll_pass",name,ymin,ymax,conf::wll.color,false);
@@ -199,37 +196,26 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   qcdScaleFactor = 1.;
   h_qcd_p->Scale(qcdScaleFactor);
   
-  //  float tqqNormFactor = 0.85;
   float tqqNormFactor = 1.;
-  //  if (name.Contains("pt600to800"))  { tqqNormFactor = 0.85; }
-  //  if (name.Contains("pt800to1200")) { tqqNormFactor = 0.80; }
   std::cout << " TQQ norm factor = " << tqqNormFactor << "\n";
   h_tqq_p->Scale(tqqNormFactor);
   h_tqq_f->Scale(tqqNormFactor);
 
   std::vector<TH1D*> histos_p; histos_p.clear();
   histos_p.push_back(h_data_p); histos_p.push_back(h_qcd_p); histos_p.push_back(h_tqq_p); histos_p.push_back(h_wqq_p); 
-  // LG: this part may have to be revisited 
-  // depends on the purity and if we need to add syst
+  
   if (nameoutfile.Contains("bb")) { histos_p.push_back(h_zqq_p); }
   if (nameoutfile.Contains("cc")) { 
     histos_p.push_back(h_zqq_p);
-    //    histos_p.push_back(h_zbb_p); 
-    //    histos_p.push_back(h_zcc_p);
-    //    histos_p.push_back(h_zoo_p);
   }
   
 
   std::vector<TH1D*> histos_f; histos_f.clear();
   histos_f.push_back(h_data_f); histos_f.push_back(h_qcd_f); histos_f.push_back(h_tqq_f); histos_f.push_back(h_wqq_f); 
-  // LG: this part may have to be revisited 
-  // depends on the purity and if we need to add syst
+  
   if (nameoutfile.Contains("bb")) { histos_f.push_back(h_zqq_f); }
   if (nameoutfile.Contains("cc")) { 
     histos_f.push_back(h_zqq_f);
-    //histos_f.push_back(h_zbb_f); 
-    //histos_f.push_back(h_zcc_f);
-    //histos_f.push_back(h_zoo_f);
   }
 
   TLegend* leg = new TLegend(0.75,0.55,0.92,0.88);
@@ -240,9 +226,6 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   if (nameoutfile.Contains("bb")) { leg->AddEntry(histos_p[4],"Z","L"); }
   if (nameoutfile.Contains("cc")) {     
     leg->AddEntry(histos_p[4],"Z","L");
-    //  leg->AddEntry(histos_p[4],"Z #rightarrow bb","L");
-    //leg->AddEntry(histos_p[5],"Z #rightarrow cc","L");
-    //leg->AddEntry(histos_p[6],"Z #rightarrow other","L"); 
   }
   leg->AddEntry(histos_p[3],"W","L");
   leg->AddEntry(histos_p[2],"Top","L");
@@ -281,11 +264,9 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
 
   TH1D *h_qcd_pred_p = (TH1D*)h_data_nonQCD_f->Clone("h_qcd_pred_p"); 
   h_qcd_pred_p->Multiply(f_pol3);
-  //h_qcd_pred_p->Multiply(h_povf_qcd);
   h_qcd_pred_p->SetMarkerSize(0);
   h_qcd_pred_p->SetLineColor(92); h_qcd_pred_p->SetFillColor(92);
-  //h_qcd_pred_p->Scale(h_qcd_p->Integral()/h_qcd_pred_p->Integral());
-
+  
   std::vector<TH1D*> histos_pred_p; histos_pred_p.clear();
   histos_pred_p.push_back(h_data_p); histos_pred_p.push_back(h_qcd_pred_p); histos_pred_p.push_back(h_tqq_p); histos_pred_p.push_back(h_wqq_p); histos_pred_p.push_back(h_zqq_p);
   TCanvas *c_pred_pass = makeCanvasWithRatio(histos_pred_p,"fit_templates",name+"_pred_pass","m_{SD} [GeV]","Enetries / bin",leg);  
@@ -300,13 +281,11 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
 
   float qcdHerwigNormFactor = (h_data_p->Integral()+h_data_f->Integral())/(h_qcd_h_p_up->Integral()+h_qcd_h_f_up->Integral());
   std::cout << " QCD herwig norm factor = " << qcdHerwigNormFactor << "\n";
-  //  qcdHerwigNormFactor = 1.;
   h_qcd_h_p_up->Scale(qcdHerwigNormFactor);
   h_qcd_h_f_up->Scale(qcdHerwigNormFactor);
 
   float qcdHerwigScaleFactor = (h_data_p->Integral()/(h_data_p->Integral()+h_data_f->Integral()))/(h_qcd_h_p_up->Integral()/(h_qcd_h_p_up->Integral()+h_qcd_h_f_up->Integral()));
   std::cout << " QCD herwig scale factor = " << qcdHerwigScaleFactor << "\n";
-  //qcdHerwigScaleFactor = 1.;
   h_qcd_h_p_up->Scale(qcdHerwigScaleFactor);
 
   // symmetrize Herwig ; d = QCD- QCD_herwig(Up)
@@ -362,8 +341,6 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   TFile *fout_p = new TFile("./"+dirname1+"/"+nameoutfile+"_templates_p.root","RECREATE");
   h_data_p->Write("data_obs");
   h_qcd_pred_p->Write("qcd");
-  //h_qcd_p->Smooth();
-  //h_qcd_p->Write("qcd");
   h_tqq_p->Write("tqq"); 
   h_wqq_p->Write("wqq"); 
   h_wcx_p->Write("wcx");
@@ -398,8 +375,6 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   
   TFile *fout_f = new TFile("./"+dirname1+"/"+nameoutfile+"_templates_f.root","RECREATE");
   h_data_f->Write("data_obs");
-  //h_data_nonQCD_f->Scale(h_qcd_f->Integral()/h_data_nonQCD_f->Integral());
-  //h_data_nonQCD_f->Write("qcd");
   h_qcd_f->Write("qcd");
   h_tqq_f->Write("tqq"); 
   h_wqq_f->Write("wqq"); 
@@ -419,7 +394,7 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   h_zcc_massscale_down_f->Write("zcc_jmsDown");
   h_zll_massscale_up_f->Write("zll_jmsUp");
   h_zll_massscale_down_f->Write("zll_jmsDown");
-  h_zqq_massscale_up_f->Write("zqq_jmspUp"); // was h_w here
+  h_zqq_massscale_up_f->Write("zqq_jmspUp"); 
   h_zqq_massscale_down_f->Write("zqq_jmspDown");
   h_wqq_massscale_up_f->Write("wqq_wjmsUp");
   h_wqq_massscale_down_f->Write("wqq_wjmsDown");
@@ -454,8 +429,6 @@ void makeDataMCFrom2DTemplates(TString path2file, TString nameoutfile, TString n
   system("python jetMassSmearing.py "+inFileNameF+" wll f");
 
 }
-
-
 
 void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TString name, TString sample, double ymin, double ymax) {
   TH1::SetDefaultSumw2(kTRUE);
@@ -502,11 +475,10 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   std::vector<TString> category; 
   category.push_back("pass"); 
   category.push_back("fail");
-  // LG: this part needs to be cleaned
+  
   for (unsigned int ic=0; ic<category.size(); ++ic) {
     TString catstr_; if (category[ic] == "pass") { catstr_ = "pass"; } else { catstr_ = "fail"; }
     for (unsigned int is=0; is<syst.size(); ++is) {
-      //cout<<"syst[is]: "<<syst[is]<<endl;
       int count = 0;
       for (unsigned int ip=0; ip<processes_in.size(); ip+=1) {
 	if (syst[is]=="_") {
@@ -527,11 +499,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
           }
           
           /////////////////////////////////////////////////////////////////////////
-          //
-	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
-	  //  TH1D *h___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+catstr_,name,ymin,ymax,1,false);
-	  //  h_->Add(h___);
-	  //}
 	  h_->SetName(processes_out[count]); h_->SetLineColor(colors[count]); h_->SetFillColor(colors[count]);
 	 
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_); hist_out_nom_p.push_back(h_); }
@@ -564,82 +531,27 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
 	  TH1D *h_up_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_up__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  h_up_->Add(h_up__);
-	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
 	  TH1D *h_up___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Up_"+catstr_,name,ymin,ymax,1,false);
 	  h_up_->Add(h_up___); 
-	  //}
 	  h_up_->SetName(processes_out[count]+"_"+nameSyst+"Up"); h_up_->SetLineColor(colors[count]); h_up_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_up_); } else { hist_out_f.push_back(h_up_); }
 
 	  TH1D *h_down_   = h1DHistoFrom2DTemplates(path2file,processes_in[ip]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
 	  TH1D *h_down__  = h1DHistoFrom2DTemplates(path2file,processes_in[ip+1]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
 	  h_down_->Add(h_down__); 
-	  //if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) {
 	  TH1D *h_down___ = h1DHistoFrom2DTemplates(path2file,processes_in[ip+2]+"_"+syst[is]+"Down_"+catstr_,name,ymin,ymax,1,false);
 	  h_down_->Add(h_down___);
-	  //}
 	  h_down_->SetName(processes_out[count]+"_"+nameSyst+"Down"); h_down_->SetLineColor(colors[count]); h_down_->SetFillColor(colors[count]);
 	  if (category[ic] == "pass") { hist_out_p.push_back(h_down_); } else { hist_out_f.push_back(h_down_); }
-	}
+	  }
         }
-	//if ( (processes_in[ip].Contains("tt_")) || (processes_in[ip].Contains("ttv_")) || (processes_in[ip].Contains("st_")) ) { ip = ip+2; }
-	//if ( (processes_in[ip].Contains("wqq")) || (processes_in[ip].Contains("vv")) )                                         { ip = ip+1; }
 	ip = ip+2;
-
-      ++count;
+	++count;
       }
     } // end of looping over the syst 
   } // end of category loop 
 
 
-  /*
-  // Additional systematics: Herwig
-  TH1D *h_tt_herwig_p1_p_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p1_pass",name,ymin,ymax,4,false); h_tt_herwig_p1_p_up->SetName("h_tt_herwig_p1_p_up"); 
-  TH1D *h_tt_herwig_p2_p_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p2_pass",name,ymin,ymax,4,false); h_tt_herwig_p2_p_up->SetName("h_tt_herwig_p2_p_up");
-  TH1D *h_tt_herwig_p3_p_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p3_pass",name,ymin,ymax,4,false); h_tt_herwig_p3_p_up->SetName("h_tt_herwig_p3_p_up");
-  h_tt_herwig_p1_p_up->Add(h_st_p1_p);
-  h_tt_herwig_p2_p_up->Add(h_st_p2_p);
-  h_tt_herwig_p3_p_up->Add(h_st_p3_p);
-
-  TH1D *h_tt_herwig_p1_f_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p1_fail",name,ymin,ymax,4,false); h_tt_herwig_p1_f_up->SetName("h_tt_herwig_p1_f_up"); 
-  TH1D *h_tt_herwig_p2_f_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p2_fail",name,ymin,ymax,4,false); h_tt_herwig_p2_f_up->SetName("h_tt_herwig_p2_f_up");
-  TH1D *h_tt_herwig_p3_f_up = h1DHistoFrom2DTemplates(path2file,"tt_herwig_p3_fail",name,ymin,ymax,4,false); h_tt_herwig_p3_f_up->SetName("h_tt_herwig_p3_f_up");
-  h_tt_herwig_p1_f_up->Add(h_st_p1_f);
-  h_tt_herwig_p2_f_up->Add(h_st_p2_f);
-  h_tt_herwig_p3_f_up->Add(h_st_p3_f);
-
-  // symmetrize Herwig ; d = tt- tt_herwig(Up)
-  TH1D *h_tt_p1_diff_p = (TH1D*)h_top_p1_p->Clone("h_tt_p1_diff_p"); h_tt_p1_diff_p->Add(h_tt_herwig_p1_p_up,-1.);
-  TH1D *h_tt_p2_diff_p = (TH1D*)h_top_p2_p->Clone("h_tt_p2_diff_p"); h_tt_p2_diff_p->Add(h_tt_herwig_p2_p_up,-1.);
-  TH1D *h_tt_p3_diff_p = (TH1D*)h_top_p3_p->Clone("h_tt_p3_diff_p"); h_tt_p3_diff_p->Add(h_tt_herwig_p3_p_up,-1.);
-
-  TH1D *h_tt_p1_diff_f = (TH1D*)h_top_p1_f->Clone("h_tt_p1_diff_f"); h_tt_p1_diff_f->Add(h_tt_herwig_p1_f_up,-1.);
-  TH1D *h_tt_p2_diff_f = (TH1D*)h_top_p2_f->Clone("h_tt_p2_diff_f"); h_tt_p2_diff_f->Add(h_tt_herwig_p2_f_up,-1.);
-  TH1D *h_tt_p3_diff_f = (TH1D*)h_top_p3_f->Clone("h_tt_p3_diff_f"); h_tt_p3_diff_f->Add(h_tt_herwig_p3_f_up,-1.);
-
-  TH1D *h_tt_herwig_p1_p_down = (TH1D*)h_tt_herwig_p1_p_up->Clone("h_tt_herwig_p1_p_down"); h_tt_herwig_p1_p_down->Add(h_tt_p1_diff_p,2.);
-  TH1D *h_tt_herwig_p2_p_down = (TH1D*)h_tt_herwig_p2_p_up->Clone("h_tt_herwig_p2_p_down"); h_tt_herwig_p2_p_down->Add(h_tt_p2_diff_p,2.);
-  TH1D *h_tt_herwig_p3_p_down = (TH1D*)h_tt_herwig_p3_p_up->Clone("h_tt_herwig_p3_p_down"); h_tt_herwig_p3_p_down->Add(h_tt_p3_diff_p,2.);  
-
-  TH1D *h_tt_herwig_p1_f_down = (TH1D*)h_tt_herwig_p1_f_up->Clone("h_tt_herwig_p1_f_down"); h_tt_herwig_p1_f_down->Add(h_tt_p1_diff_f,2.);
-  TH1D *h_tt_herwig_p2_f_down = (TH1D*)h_tt_herwig_p2_f_up->Clone("h_tt_herwig_p2_f_down"); h_tt_herwig_p2_f_down->Add(h_tt_p2_diff_f,2.);
-  TH1D *h_tt_herwig_p3_f_down = (TH1D*)h_tt_herwig_p3_f_up->Clone("h_tt_herwig_p3_f_down"); h_tt_herwig_p3_f_down->Add(h_tt_p3_diff_f,2.);  
-
-  // correct errors in down
-  for (int i0=0; i0<h_tt_herwig_p1_p_down->GetNbinsX()+1; ++i0) { 
-    h_tt_herwig_p1_p_down->SetBinError(i0,h_tt_herwig_p1_p_up->GetBinError(i0)); 
-    h_tt_herwig_p2_p_down->SetBinError(i0,h_tt_herwig_p2_p_up->GetBinError(i0));
-    h_tt_herwig_p3_p_down->SetBinError(i0,h_tt_herwig_p3_p_up->GetBinError(i0));
-  }
-
-  for (int i0=0; i0<h_tt_herwig_p1_f_down->GetNbinsX()+1; ++i0) { 
-    h_tt_herwig_p1_f_down->SetBinError(i0,h_tt_herwig_p1_f_up->GetBinError(i0)); 
-    h_tt_herwig_p2_f_down->SetBinError(i0,h_tt_herwig_p2_f_up->GetBinError(i0));
-    h_tt_herwig_p3_f_down->SetBinError(i0,h_tt_herwig_p3_f_up->GetBinError(i0));
-  }
-  */  
-  
-  
   TLegend* leg = new TLegend(0.75,0.55,0.92,0.88);
   leg->SetFillStyle(0);
   leg->SetFillColor(0);
@@ -671,23 +583,6 @@ void makeDataMCFrom2DTemplatesTop(TString path2file, TString nameoutfile, TStrin
   hist_out_p.clear(); hist_out_nom_p.clear();
   hist_out_f.clear(); hist_out_nom_f.clear();
 
-  /*
-  // alternative implementation; remove it now for consistency with VHcc analysis
-  TString inFileNameP = "./"+dirname1+"/"+nameoutfile+"_templates_p.root";
-  TString inFileNameF = "./"+dirname1+"/"+nameoutfile+"_templates_f.root";    
-
-  // JMS and JMR
-  TString smearVal = "0.15";
-  TString scaleVal = "5."; // GeV
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF 1 --suffix p3");
-  system("python jetMassSandR.py --ifile "+inFileNameP+" --sample "+processes_out[0]+" --smear "+smearVal+" --scale "+scaleVal+" --pOrF -1 --suffix p3");
-
-  system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameP+"'\")\'");
-  system("root -l -q \'convertTH1FtoTH1D.C(\"'"+inFileNameF+"'\")\'");
-
-  fout_p->Close();
-  fout_f->Close();
-  */
 }
 
 
@@ -709,10 +604,6 @@ TCanvas *makeCanvasWithRatio(std::vector<TH1D*> h1d, TString dir, TString name, 
 
   TH1D *h_sm = (TH1D*)h1d[1]->Clone("h_sm");
   h_sm->Reset("ICES");
-
-
-
-  //  TString logstr = "lin"; if (logy) { logstr = "log"; }
 
   TCanvas *c_ = new TCanvas("c_"+name,"c_"+name,600,600); c_->SetName("c_"+name);
   TPad *pMain  = new TPad("pMain_"+name,"pMain+"+name,0.0,0.25,1.0,1.0);
@@ -748,12 +639,6 @@ TCanvas *makeCanvasWithRatio(std::vector<TH1D*> h1d, TString dir, TString name, 
   // data mc ratio
   TH1F *h_r = (TH1F*)h1d[0]->Clone("h_"+name+"_r"); h_r->Divide(h1d[0],h_sm);
 
-  /*
-  TList *histos = hs->GetHists();
-  TIter next(histos);
-  TH1F *hist;
-  while ((hist =(TH1F*)next())) { hist->Scale(normVal); }
-  */
   // continue drawing
   hs->Draw("HIST E0 sames");
   h_tqq_lin->Draw("HIST E0 sames");
@@ -776,15 +661,6 @@ TCanvas *makeCanvasWithRatio(std::vector<TH1D*> h1d, TString dir, TString name, 
   h_r->GetYaxis()->SetRangeUser(0.6,1.3);
   h_r->Draw("P E0");
 
-  /*
-  const int dir_err = system("mkdir -p ./"+dir);
-  if (-1 == dir_err) {
-    printf("Error creating directory!n");
-    exit(1);
-  }
-  // c_->Print(dir+"/"+name+"_"+logstr+".png");
-  // c_->Print(dir+"/"+name+"_"+logstr+".pdf");
-  */
   return c_;
 }
 
@@ -810,8 +686,6 @@ TCanvas *makeCanvasWithRatio(TH1D* hdata, std::vector<TH1D*> h1d, TString dir, T
   TH1D *h_sm = (TH1D*)h1d[0]->Clone("h_sm");
   h_sm->Reset("ICES");
 
-
-  //  TString logstr = "lin"; if (logy) { logstr = "log"; }
   TCanvas *c_ = new TCanvas("c_"+name,"c_"+name,600,600); c_->SetName("c_"+name);
   TPad *pMain  = new TPad("pMain_"+name,"pMain+"+name,0.0,0.25,1.0,1.0);
   pMain->SetRightMargin(0.05);
@@ -839,12 +713,6 @@ TCanvas *makeCanvasWithRatio(TH1D* hdata, std::vector<TH1D*> h1d, TString dir, T
   // data mc ratio
   TH1F *h_r = (TH1F*)hdata->Clone("h_"+name+"_r"); h_r->Divide(hdata,h_sm);
 
-  /*
-  TList *histos = hs->GetHists();
-  TIter next(histos);
-  TH1F *hist;
-  while ((hist =(TH1F*)next())) { hist->Scale(normVal); }
-  */
   // continue drawing
   hs->Draw("HIST E0 sames");
   for (unsigned int i0=0; i0<histos.size(); ++i0) { histos[i0]->Draw("HIST E0 sames"); }
@@ -865,15 +733,6 @@ TCanvas *makeCanvasWithRatio(TH1D* hdata, std::vector<TH1D*> h1d, TString dir, T
   h_r->GetYaxis()->SetRangeUser(0.6,1.3);
   h_r->Draw("P E0");
 
-  /*
-  const int dir_err = system("mkdir -p ./"+dir);
-  if (-1 == dir_err) {
-    printf("Error creating directory!n");
-    exit(1);
-  }
-  // c_->Print(dir+"/"+name+"_"+logstr+".png");
-  // c_->Print(dir+"/"+name+"_"+logstr+".pdf");
-  */
   return c_;
 }
 
@@ -890,10 +749,7 @@ TH1D *h1DHistoFrom2DTemplates(TString path2file,TString h2dname, TString name, d
   TFile *f2d = TFile::Open(path2file,"READONLY");
   TH2D  *h2d = (TH2D*)f2d->Get(h2dname); h2d->SetDirectory(0);
   TH1D  *h1d = h2d->ProjectionX("h1d_"+h2dname,h2d->GetYaxis()->FindBin(ymin),h2d->GetYaxis()->FindBin(ymax),"e"); h1d->SetDirectory(0);
-  //TH1D  *h1d = h2d->ProfileX("h1d_"+h2dname,h2d->GetYaxis()->FindBin(ymin),h2d->GetYaxis()->FindBin(ymax),"e");
   h1d->SetName(h2dname+"_"+name);
-  //h1d->Rebin(2);
-  
   h1d->SetLineColor(color);
   if (isdata) {
     h1d->SetFillColor(0); 
@@ -911,44 +767,11 @@ TH1D *h1DHistoFrom2DTemplates(TString path2file,TString h2dname, TString name, d
   return h1d;
 }
 
-/*
-TH1D *h2DHistoFrom2DTemplates(TString path2file,TString h2dname, TString name, double ymin, double ymax,int color,bool isdata) {
-
-  TH1::SetDefaultSumw2(kTRUE);
-  setTDRStyle();
-  gROOT->SetBatch(false);
-  gStyle->SetOptStat(0);
-  gStyle->SetOptFit(0);
-  gStyle->SetPalette(1);
-
-  TFile *f2d = TFile::Open(path2file,"READONLY");
-  TH2D  *h2d = (TH2D*)f2d->Get(h2dname);
-  TH2D  *h2d = h2d->ProjectionX("h1d_"+h2dname,h2d->GetYaxis()->FindBin(ymin),h2d->GetYaxis()->FindBin(ymax),"e");
-  h1d->SetName(h2dname+"_"+name);
-  //h1d->Rebin(2);
-  
-  h1d->SetLineColor(color);
-  if (isdata) {
-    h1d->SetFillColor(0); 
-    h1d->SetMarkerStyle(20); h1d->SetMarkerSize(1.2); 
-    h1d->SetLineWidth(3); h1d->SetLineColor(color);
-  }
-  else {
-    h1d->SetFillColor(color);
-    h1d->SetMarkerStyle(20); h1d->SetMarkerSize(0.);
-    h1d->SetLineWidth(3); h1d->SetLineColor(color);
-  }
-
-  return h1d;
-}
-*/
 
 TH1D *h1dShift(TString name, TH1D* inputh1d, int numOfBins, bool up) {
   // need to be fixed for case with numOfBins>1 
  
   TH1D *hshifted = (TH1D*)inputh1d->Clone("hshifted_"+name);
-  
-  //hshifted->Reset("ICES");
   hshifted->SetName("hshifted_"+name);
   
   if (up) { 
@@ -1014,16 +837,8 @@ void compTemplateShapes() {
   
   // bb working points
   std::vector<TString> c_bb; c_bb.clear();
-  /*c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD>0.40");
-    c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD>0.54"); c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD>0.84"); c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD>0.93");*/
   c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD<0.54");
   c_bb.push_back("fj_1_ParticleNetMD_XbbVsQCD<0.93 && fj_1_pt>600.");
-  //c_bb.push_back("fj_1_pt>200 && fj_1_pt<300"); c_bb.push_back("fj_1_pt>600 && fj_1_pt<800"); c_bb.push_back("fj_1_pt>800 && fj_1_pt<1200");
-  //c_bb.push_back("fj_1_pt>400 && fj_1_pt<500 && ht>200 && fj_1_ParticleNetMD_XbbVsQCD>0.93"); c_bb.push_back("fj_1_pt>400 && fj_1_pt<500 && ht>800 && fj_1_ParticleNetMD_XbbVsQCD>0.93");
-  
-  //trees.push_back(t_w_ht200); names.push_back("wboson"); isdata.push_back(false); colors.push_back(1); styles.push_back(1); cuts.push_back(c_inc+"&& fj_1_nbhadrons>=0 && (fj_1_isW<0.8)");
-  //trees.push_back(t_z_ht200); names.push_back("zboson"); isdata.push_back(false); colors.push_back(1); styles.push_back(1); cuts.push_back(c_inc+"&& fj_1_nbhadrons>=0 && (fj_1_isZ<0.8)");
-
 
   trees.push_back(t_w_ht200); names.push_back("wboson"); isdata.push_back(false); colors.push_back(6); styles.push_back(1); cuts.push_back(c_inc+"&& fj_1_nbhadrons>=0 && (fj_1_isW<0.8)");
   trees.push_back(t_z_ht200); names.push_back("zboson"); isdata.push_back(false); colors.push_back(8); styles.push_back(2); cuts.push_back(c_inc+"&& fj_1_nbhadrons>=2 && (fj_1_isZ<0.8)");
@@ -1046,8 +861,6 @@ void compTemplateShapes() {
       csf.push_back(cuts[it]+" && !("+c_bb[ic]+")");
     }
 
-    //TCanvas *c_p = c_comp1Dhistos("c_massshape_bbloose_jetpt600to800_"+names[it]+"_p","36.1",nm,tr,isd,"fj_1_sdmass",csp,cl,ss,"m_{SD} [GeV]","a. u.",44,30.,250,false,true);
-    //TCanvas *c_f = c_comp1Dhistos("c_massshape_bbloose_jetpt600to800_"+names[it]+"_f","36.1",nm,tr,isd,"fj_1_sdmass",csf,cl,ss,"m_{SD} [GeV]","a. u.",44,30.,250,false,true);
     TCanvas *c_f = c_comp1Dhistos("c_massshape_extrapolation_"+names[it]+"_f","36.1",nm,tr,isd,"fj_1_sdmass",csp,cl,ss,"m_{SD} [GeV]","a. u.",20,50.,250,false,true);
   }
  
@@ -1097,7 +910,6 @@ void compDiscShapes(TString year, TString cat, TString score="fj_1_ParticleNetMD
   std::vector<int>     styles; styles.size();
   std::vector<TString> cuts;   cuts.clear();
   
-  //trees.push_back(t_h); names.push_back("higgs");  isdata.push_back(false); colors.push_back(2); styles.push_back(1); cuts.push_back(c_inc+"&&"+c_match+"&& (fj_1_isH<0.8)");
   trees.push_back(t_z); names.push_back("zboson"); isdata.push_back(false); colors.push_back(8); styles.push_back(1); cuts.push_back(c_inc+"&&"+c_match+"&& (fj_1_isZ<0.8)");
   trees.push_back(t_w); names.push_back("wboson"); isdata.push_back(false); colors.push_back(6); styles.push_back(1); cuts.push_back(c_inc+"&& fj_1_nchadrons>=1 && (fj_1_isW<0.8)");
                                                                                              
@@ -1105,8 +917,6 @@ void compDiscShapes(TString year, TString cat, TString score="fj_1_ParticleNetMD
 					    score,"a. u.",20,0.,1.,false,true);
 
 }
-
-
 
 void compDataMC(TString era, TString cat, TString wp, TString score="fj_1_ParticleNetMD_XbbVsQCD", TString cut="0==0", TString suffix="none") {
 
@@ -1127,21 +937,14 @@ void compDataMC(TString era, TString cat, TString wp, TString score="fj_1_Partic
   TString path;
   float intLumi;
   if (era == "2016") {
-    //path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/2016/";
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs_NEW_30Jan/2016/";
-    //    path = "/uscmst1b_scratch/lpc1/3DayLifetime/loukas/particlenet_ak8_20200914_muon_2016/";
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2016_20200914_muon/";
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2016_Muon_Channel/";
-    //    path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
     intLumi= 36.8;
   }
   if (era == "2017") {
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2017_Muon_Channel/";
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2017_20200914_muon/";
     intLumi= 44.98;
   }
   if (era == "2018") {
-    //path = "/eos/uscms/store/user/pakontax/V2_Training_Official_nanoAODs/2018_Muon_Channel/";
     path = "/eos/uscms/store/user/lpcjme/noreplica/loukas/particlenet/trees/ttbar1l/20200914/particlenet_ak8_2018_20200914_muon/";
     intLumi= 63.67;
   }
@@ -1197,8 +1000,6 @@ void compDataMC(TString era, TString cat, TString wp, TString score="fj_1_Partic
     if (wp == "0p30") { var = "(ak8_1_DeepAK8_WvsQCD-rewgtfuncDAK8DDT_w_0p30((2.*log(ak8_1_corr_sdmass/ak8_1_pt)),ak8_1_pt))"; }
   }
 
-  //  var = "ak8_1_DeepAK8MD_WvsQCD";
-
   std::vector<TTree*> trees; trees.clear();
   std::vector<TString> names; names.clear();
   std::vector<bool>    isdata; isdata.clear();
@@ -1212,37 +1013,12 @@ void compDataMC(TString era, TString cat, TString wp, TString score="fj_1_Partic
   trees.push_back(t_data); names.push_back("data"); isdata.push_back(true); colors.push_back(1); styles.push_back(1); cuts.push_back(c_inc); legends.push_back("Data");
 
   for (int i0=0; i0<processes.size(); ++i0) {
-    //TFile *f_ = TFile::Open(path+"/REPO_mc/mc_nom/"+processes[i0]+"_tree.root" , "READONLY");
     TFile *f_ = TFile::Open(path+"/mc_nom/"+processes[i0]+"_tree.root" , "READONLY");
     TTree *t_ = (TTree*)f_->Get("Events");
     trees.push_back(t_); names.push_back(process_names[i0]); isdata.push_back(false); colors.push_back(process_color[i0]); styles.push_back(1); cuts.push_back(c_inc); legends.push_back(process_legend[i0]);
   }
-
-  //  TString cutB = "leptonicW_pt>175. && ak8_1_mass>50. && ak8_1_mass<250. && ("+var+">0.) && ak8_1_pt>400. && ak8_1_pt<800."; 
   TString cutB = "leptonicW_pt>175. && ak8_1_mass>50. && ak8_1_mass<250."; 
   makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,cutB,var,20,-1.,1.,"DeepAK8-DDT "+wp+"_b_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,"0==0","leptonicW_pt",20,0.,500.,"leptonicW_pt_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,cutB,"muon_pt",50,0.,500.,"muon_pt_b_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,cutB,"ak8_1_pt",20,0.,1000.,"ak8_1_pt_b_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,cutB,"ak8_1_mass",50,0.,250.,"ak8_1_mass_b_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,cutB,"ak8_1_corr_sdmass",50,0.,250.,"ak8_1_corr_sdmass_b_"+era,legends,colors,false,0);
-  //  makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,"0==0","ak8_1_eta",12,-3.,3.,"ak8_1_eta_"+era,legends,colors,false,0);
-  // makePlotDataMC(nameoutfile,dirname1,trees,names,lumi,c_inc,"0==0",var,20,-1.,1.,"DeepAK8-DDT "+wp+"_"+era,legends,colors,false,0);
-  
-  // makePlotDataMC("particlenet_ht","testplotdir",trees,names,lumi,cuts,"0==0","ht",30,1000.,2500.,"H_{T} [GeV]",legends,colors,false,true);
-  //makePlotDataMC(,"testplotdir",trees,names,lumi,cuts,"fj_1_ParticleNetMD_XccVsQCD>=0.76","fj_1_sdmass",30,50.,200.,"m_{SD} [GeV]",legends,colors,false,true);
-  // makePlotDataMC("particlenet_xbbvsqcdt_pass","testplotdir",trees,names,lumi,cuts,"fj_1_ParticleNetMD_XccVsQCD>=0.94","fj_1_sdmass",30,50.,200.,"m_{SD} [GeV]",legends,colors,false,true);
-  //makePlotDataMC("particlenet_xbbvsqcd_fail","testplotdir",trees,names,lumi,cuts,"fj_1_ParticleNetMD_XbbVsQCD<0.93","fj_1_sdmass",30,50.,200.,"m_{SD} [GeV]",legends,colors,false,true);
-  /*
-  TH1F *h_passovfail_qcd  = createRatioPassOvFail(trees[1],names[1],lumi,cuts[1],"fj_1_ParticleNetMD_XbbVsQCD>=0.93","fj_1_sdmass",30,50.,200.,"m_{SD} [GeV]",colors[1],styles[1],false,true,isdata[1]);
-  TH1F *h_passovfail_data = createRatioPassOvFail(trees[0],names[0],lumi,cuts[0],"fj_1_ParticleNetMD_XbbVsQCD>=0.93","fj_1_sdmass",30,50.,200.,"m_{SD} [GeV]",colors[0],styles[0],false,true,isdata[0]);
-  TCanvas *c_passovfail = new TCanvas("c_passovfail","c_passovfail",500,500);
-  h_passovfail_qcd->GetYaxis()->SetTitle("N_{pass}/N_{fail}");
-  h_passovfail_qcd->GetYaxis()->SetRangeUser(0.4,1.6);
-  h_passovfail_qcd->GetXaxis()->SetTitle("m_{SD} [GeV]");
-  h_passovfail_qcd->Draw("L E0");
-  h_passovfail_data->Draw("P E0 sames");
-  */
 }
 
 void getSF(TString dir, TString algo, TString cat, TString wp, TString era) {
@@ -1259,11 +1035,9 @@ void getSF(TString dir, TString algo, TString cat, TString wp, TString era) {
   ptranges.push_back("medpt");
   ptranges.push_back("medhipt");
   ptranges.push_back("hipt");
-  //particlenet_bb_t_2016_nom/fitDiagnostics_particlenet_bb_t_2016_lowpt.root
   TGraphAsymmErrors *sfs = getSFGraph(dir,algo,cat,wp,era,ptranges,1,2,1);
 
 }
-
 
 
 TGraphAsymmErrors *getSFGraph(TString dir, TString algo, TString cat, TString wp, TString era, std::vector<TString> ptrange, int ialgo, int nalgos, int color) {
@@ -1289,7 +1063,6 @@ TGraphAsymmErrors *getSFGraph(TString dir, TString algo, TString cat, TString wp
     yval[iptrange]    = h_sf_cat->GetMean();
     yvalerrlo[iptrange] = h_sf_catLoErr->GetMean();
     yvalerrhi[iptrange] = h_sf_catHiErr->GetMean();
-    //   if (algos[ialgo]=="sdtau21" && ptrange[iptrange]=="low") { yvalerrlo[iptrange] = 0.01; yvalerrhi[iptrange] = 0.01; }
     
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
@@ -1308,18 +1081,14 @@ TGraphAsymmErrors *getSFGraph(TString dir, TString algo, TString cat, TString wp
   return gr_sf_tmp;
 }
 
-
-
-
 void getSampleComposition(TString path2file, TString filename, TString score, TString year, TString ptrange, TString category) {
   TH1::SetDefaultSumw2(kTRUE);
   const int dir_err = system("mkdir -p ./"+(TString)path2file+"/plots_datamc");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
-  //particlenet_bb_t_2016/particlenet_bb_t_2016_lowpt_templates_p.root
   TFile *fdiag = TFile::Open("./"+path2file+"/"+filename+"_"+score+"_"+year+"_"+ptrange+"_templates_"+category+".root", "READONLY" );
 
   // get prefit histograms
-  TString prefitstr = "shapes_prefit";//h_particlenet_bb_t_2016_h_p
+  TString prefitstr = "shapes_prefit";
   TH1F *h_prefit_h_     = (TH1F*)fdiag->Get("h");     h_prefit_h_->SetName("h_h_");
   TH1F *h_prefit_zbb_   = (TH1F*)fdiag->Get("zbb");   h_prefit_zbb_->SetName("h_zbb_");
   TH1F *h_prefit_zcc_   = (TH1F*)fdiag->Get("zcc");   h_prefit_zcc_->SetName("h_zcc_");
@@ -1481,7 +1250,6 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   leg->SetFillStyle(0);
   leg->SetFillColor(0);
   leg->SetLineWidth(0);
-  //leg->AddEntry(h_postfit_h,"Higgs","L");
   for (unsigned int i0=0; i0<h_prefit.size(); ++i0) { leg->AddEntry(h_postfit[i0],legends[i0],"L"); }
 
   TLegend* legfit = new TLegend(0.4,0.7,0.65,0.86);
@@ -1516,7 +1284,6 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   TLatex pt_lumi;
   const char *longstring;
   if (path2file.Contains("2016")) { longstring = "19.52 fb^{-1} (13 TeV)"; }
-  //if (path2file.Contains("2016")) { longstring = "16.81 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("2017")) { longstring = "41.53 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("2018")) { longstring = "59.74 fb^{-1} (13 TeV)"; }
   if (path2file.Contains("test")) { longstring = "35.9 fb^{-1} (13 TeV)"; }
@@ -1556,8 +1323,6 @@ void makeDataMCPlotFromCombine(TString path2file, TString era, TString category,
   pt_cms->Draw("sames");
   pt_preliminary->Draw("sames");
   std::cout << " i m here 12-d\n";
-  //pt_lumi.DrawLatexNDC(0.64,0.93,longstring);
-  //pt_lumi.DrawLatex(0.64,0.93,longstring);
   std::cout << " i m here 12-e\n";
   c->RedrawAxis();
   pRatio->cd();
@@ -1657,7 +1422,6 @@ TCanvas *c_comp1Dhistos(TString c_name, TString lumi, std::vector<TString> names
       histos[ihisto]->Draw("HIST E0 sames");
     }
   }
-  //gSystem->cd("/uscms_data/d3/loukas/ParticleNetInData/CMSSW_10_2_18/src/PhysicsTools/NanoHRTTools/plotting/plots/particlenet/");
   c_comp1Dhistos->Print("./plots/"+c_name+".pdf");
   return c_comp1Dhistos;
 }
@@ -1713,7 +1477,6 @@ TCanvas *c_ratioOf1Dhistos(TString c_name, TString lumi, std::vector<TString> na
       if ( (ihistos==0) && (ihisto==0) ) {
 	ratios[ihistos][ihisto]->GetXaxis()->SetTitle(xname);
 	ratios[ihistos][ihisto]->GetYaxis()->SetTitle(yname);
-	//ratios[ihistos][ihisto]->GetYaxis()->SetRangeUser(0.,2.);
 	ratios[ihistos][ihisto]->Draw("HIST E0");
       }
       else { ratios[ihistos][ihisto]->Draw("HIST E0 sames"); }
@@ -2030,69 +1793,12 @@ TH1F *create1Dhisto(TString sample_,TTree *tree,TString intLumi,TString cuts,TSt
 
   std::cout << "sample = " << sample_ << " " << name << "\n";
   TString sample;
-  /* 
- if (sample_.Contains("signal"))     { sample = "qcd"; }
-  if (sample_.Contains("higgs"))      { sample = "qcd"; }
-  if (sample_.Contains("zboson"))     { sample = "qcd"; }
-  if (sample_.Contains("wboson"))     { sample = "qcd"; }
-  if (sample_.Contains("top"))        { sample = "qcd"; }
-  if (sample_.Contains("tt"))        { sample = "qcd"; }
-  if (sample_.Contains("st"))        { sample = "qcd"; }
-  if (sample_.Contains("wqq"))        { sample = "qcd"; }
-  if (sample_.Contains("vv"))        { sample = "qcd"; }
-  if (sample_.Contains("sm"))         { sample = "qcd"; }
-  if (sample_.Contains("znunu"))      { sample = "qcd"; }
-  if (sample_.Contains("znunu-rwgt")) { sample = "qcd-rwgt"; }
-  if (sample_.Contains("data"))       { sample = "qcd"; }
-  if (sample_.Contains("qcd"))        { sample = "qcd"; }
-  if (sample_.Contains("qcd-norwgt")) { sample = "qcd-norwgt"; }
-*/
-
   TString cut;
-  /*
-  if (sample == "photons") {
-    if (data) { cut ="(passPhoton165_HE10 && "+cuts+")"; }
-    else      { cut ="(xsecWeight*puWeight*"+intLumi+")*(passPhoton165_HE10 &&"+cuts+")"; }
-  }
-  */
-  /*
-  if (sample == "qcd") {
-    if (data) { cut ="(passHTTrig && "+cuts+")"; }
-    else      { cut ="(xsecWeight*puWeight*"+intLumi+")*(passHTTrig &&"+cuts+")"; }
-  }
-  */
-  /*
-  if (sample == "qcd-norwgt") {
-    if (data) { cut ="("+cuts+")"; }
-    else      { cut ="(xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }                                                                                                             
-  }
-  
-  if (sample == "qcd") {
-    if (data) { cut ="("+cuts+")"; }
-    //    else      { cut ="(rewgtfunc(fj_1_pt)*xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }
-    else      { cut ="(xsecWeight*puWeight*topptWeight*"+intLumi+")*("+cuts+")"; }
-    //else      { cut ="(rewgtfunc(fj_1_sdmass)*xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }
-    //else      { cut ="(rewgtfunc(sqrt((fj_1_sj1_eta-fj_1_sj2_eta)*(fj_1_sj1_eta-fj_1_sj2_eta) + (fj_1_sj1_eta-fj_1_sj2_phi)*(fj_1_sj1_eta-fj_1_sj2_phi)))*xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }                                                                                                             
-  }
-*/
-   if (data) { cut ="("+cuts+")"; }
-    //    else      { cut ="(rewgtfunc(fj_1_pt)*xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }
-   else      { cut ="(genWeight*xsecWeight*puWeight*topptWeight*"+intLumi+")*("+cuts+")"; }
-   //   else      { cut ="(xsecWeight*"+intLumi+")*("+cuts+")"; }
-   /*
-  if (sample == "signal") {
-    if (data) { cut ="("+cuts+")"; }
-    else      { cut ="(xsecWeight*puWeight*"+intLumi+")*("+cuts+")"; }
-  }
-   */
-   /*
-   std::cout << " get xsec weight\n" << "\n";
-   TH1F *hxsec = new TH1F("hxsec_"+name,"hxsec_"+name,10000,0.,100);
-   tree->Project("hxsec_"+name,"xsecWeight",cut);
-   std::cout << hxsec->GetMean() << "\n";
-   */
-   std::cout << " cut = " << cut << "\n";
+  if (data) { cut ="("+cuts+")"; }
+  else      { cut ="(genWeight*xsecWeight*puWeight*topptWeight*"+intLumi+")*("+cuts+")"; }
 
+  std::cout << " cut = " << cut << "\n";
+   
   TH1F *hTemp = new TH1F(name,name,bins,xmin,xmax);
   tree->Project(name,branch,cut);
 

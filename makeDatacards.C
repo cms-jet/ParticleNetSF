@@ -1,5 +1,4 @@
-//#include <iostream>   // std::cout
-#include <string>     // std::string, std::stof
+#include <string>
 #include "configuration.h"
 
 void makeOneDatacard(TString inputname, TString category, TString wpmin, TString wpmax, std::string name_, TString sample, TString era);
@@ -31,7 +30,6 @@ void makeDatacards(TString era, TString sample, TString category, TString wpmin,
 
 
 void makeOneDatacard(TString inputname, TString category, TString wpmin, TString wpmax, std::string name_, TString sample, TString era) {
-//void makeOneDatacard(TString inputname, TString category, TString wp, std::string name, TString sample, TString era) {
   conf::configuration(sample);
 
   TString label0;
@@ -81,7 +79,6 @@ void makeOneDatacard(TString inputname, TString category, TString wpmin, TString
   TH1D  *h_tt_f  = (TH1D*)f_f->Get("tqq");
   TH1D  *h_w_f  = (TH1D*)f_f->Get("wqq");
   TH1D  *h_z_f  = (TH1D*)f_f->Get("zqq");
-  //TH1D  *h_h_f  = (TH1D*)f_f->Get("higgs");
   
   std::cout << "imax 2  number of channels\n";
   std::cout << "jmax 3  number of processes -1\n";
