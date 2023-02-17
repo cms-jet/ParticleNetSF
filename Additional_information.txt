@@ -28,7 +28,7 @@ Change Tagger:
 2) runFullChain.sh
    a) WPs_FullVer_vs_QCD
 
-3) makeTemplatesTop
+3) make2DTemplates.C
    a) Function: makeTemplatesTop -> intLumi
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,3 +37,10 @@ Working Point Selection:
 
 1) runFullChain.sh
    a) WPs_FullVer_vs_QCD
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Selections and Matching Criteria:
+---------------------------------
+
+1) make2DTemplates.C
+   a) Function: makeTemplatesTop
