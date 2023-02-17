@@ -50,8 +50,8 @@ void makeOneFit(std::string era, std::string category, std::string wpmin, std::s
 
 void makeOneFitTop(std::string era, std::string category, std::string wpmin, std::string wpmax, std::string name, std::string name1) {
   
-  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=tp3,tp2,tp1,other"; //For top-tag SFs
-  //std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=tp2,tp3,tp1,other"; //For W-tag SFs
+  //std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=tp3,tp2,tp1,other"; //For top-tag SFs
+  std::string txt2workspace     = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".txt --PO categories=tp2,tp3,tp1,other"; //For W-tag SFs
   
   std::string multidimfit       = "combine -M MultiDimFit -m 125 "+name1+"_sf/fitdir/datacard_"+name1+"_tt1l_"+category+"_"+wpmin+"to"+wpmax+"_"+era+"_"+name+".root  --algo=singles --robustFit=1 --cminDefaultMinimizerTolerance 5.";
   
