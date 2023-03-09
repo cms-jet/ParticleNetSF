@@ -17,7 +17,7 @@ namespace conf {
     TString legend_name;
     int     color;
     
-  } zqq, zbb, zcc, zll, wqq, wcx, wll, tqq, qcd, tp2, tp3, tp1, other;
+  } qcd, tp2, tp3, tp1, other;
   
   TString brX; int binsX; float minX, maxX;
   TString brY; int binsY; float minY, maxY;
@@ -80,12 +80,6 @@ namespace conf {
     }
 
 
-    if (sample == "zqq") {
-      jet_prefix = "fj_1_";
-      brX = jet_prefix+"sdmass";
-      brY = jet_prefix+"pt";
-    }
-    
     //algo      = "particlenet"; //Nominal
     algo      = "particlenetmd";  //MD
     //score_def = jet_prefix+"ParticleNet_TvsQCD"; 
@@ -109,39 +103,6 @@ namespace conf {
     
     // =================== end of area to modify - tune ===================== //
 
-
-    zqq.name        = "zboson";
-    zqq.legend_name = "Z";
-    zqq.color       = 8;
-
-    zbb.name        = "zbosonbb";
-    zbb.legend_name = "Z#rightarrow bb";
-    zbb.color       = 8;
-
-    zcc.name        = "zbosoncc";
-    zcc.legend_name = "Z #rightarrow cc";
-    zcc.color       = 843;
-    
-    zll.name        = "zbosonll";
-    zll.legend_name = "Z #rightarrow ll";
-    zll.color       = 432;
-
-    wqq.name        = "wboson";
-    wqq.legend_name = "W";
-    wqq.color       = 6; 
-
-    wcx.name        = "wbosoncx";
-    wcx.legend_name = "W #rightarrow cX";
-    wcx.color       = 6; 
-    
-    wll.name        = "wbosonll";
-    wll.legend_name = "W #rightarrow ll";
-    wll.color       = 606;
-    
-    tqq.name        = "tt";
-    tqq.legend_name = "Top";
-    tqq.color       = 4;
-    
     qcd.name        = "qcd";
     qcd.legend_name = "QCD";
     qcd.color       = 92;
