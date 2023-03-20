@@ -28,7 +28,7 @@ Clone specific branch from gitlab (top/W tagging framework):
 -----------------------------------------------------------
 cd ../../../../
 
-git clone -b ParticleNet_TopW_SFs_NanoV9 ssh://git@gitlab.cern.ch:7999/lpaizano/particlenet-top-w-calibration.git
+git clone -b ParticleNet_TopW_SFs_NanoV9 https://github.com/cms-jet/ParticleNetSF.git
 
 cd particlenet-top-w-calibration/
 
@@ -41,7 +41,7 @@ Run the full chain for SF extraction:
 
 N.B.: Small tweaks are needed to be done inside the "configuration.h" and "makeFits.C" according to the object/version selected for the SF extraction.
 
-gitlab link: https://gitlab.cern.ch/lpaizano/particlenet-top-w-calibration/-/tree/ParticleNet_TopW_SFs_NanoV9/
+github link: https://github.com/cms-jet/ParticleNetSF
 
 ## Create 2D histograms pT(jet) vs m(jet) from the trees
  [this is to speed up the process]:
