@@ -24,7 +24,7 @@ git checkout v8.2.0
 
 scramv1 b clean; scramv1 b 
 
-Clone specific branch from gitlab (top/W tagging framework):
+Clone specific branch (top/W tagging framework):
 -----------------------------------------------------------
 cd ../../../../
 
