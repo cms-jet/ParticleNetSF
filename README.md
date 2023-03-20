@@ -30,7 +30,7 @@ cd ../../../../
 
 git clone -b ParticleNet_TopW_SFs_NanoV9 https://github.com/cms-jet/ParticleNetSF.git
 
-cd particlenet-top-w-calibration/
+cd ParticleNetSF/
 
 cp TagAndProbeExtended.py ../CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit/python
 
